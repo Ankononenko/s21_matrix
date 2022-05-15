@@ -10,9 +10,17 @@ void d_specifier(char *buffer, int *index, va_list argp);
 void choose_return_type(char *buffer, const char *format, int *index, va_list argp);
 
 int main() {
+    const int input_int = 2147483648;
+    const char *format = "%d%d Hello, World %d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
     char buffer[100];
-    int number = 2147483647;
-    s21_sprintf(buffer, "Hello world! %d\n", number);
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int);
+    puts(s21_buffer);
     puts(buffer);
     return 0;
 }
