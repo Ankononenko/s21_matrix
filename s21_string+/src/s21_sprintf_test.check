@@ -1,0 +1,179 @@
+#include <string.h>
+#include <stdio.h>
+#include "../s21_string.h"
+
+// CHAR Regular value test
+#test s21_sprintf_test1
+    const char input = '!';
+    const char *format = "Hello, World%c!%c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input, input);
+    const int result = sprintf(buffer, format, input, input);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+ 
+// CHAR Test with a few of char variables
+#test s21_sprintf_test2
+    const char first_input = '!';
+    const char second_input = '?';
+    const char *format = "%c%c%cHello, World%c!%c%c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input, first_input, first_input, second_input, second_input, second_input);
+    const int result = sprintf(buffer, format, first_input, first_input, first_input, second_input, second_input, second_input);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+
+// CHAR Try to print out %c as a %d value
+#test s21_sprintf_test3
+    const char input = '!';
+    const char *format = "Hello, World%d%d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input, input, input);
+    const int result = sprintf(buffer, format, input, input, input);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// CHAR DECIMAL Try to print both %c and %d
+#test s21_sprintf_test4
+    const char input_char = '!';
+    const int input_int = 15;
+    const char *format = "Hello, World%c%c%c %d%d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_char, input_char, input_char, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_char, input_char, input_char, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// DECIMAL Minimum value test
+#test s21_sprintf_test5
+    const int input_int = 0;
+    const char *format = "%d%d Hello, World %d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// DECIMAL Maximum range of int test
+#test s21_sprintf_test6
+    const int input_int = 2147483647;
+    const char *format = "%d%d Hello, World %d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// DECIMAL Maximum negative value test
+#test s21_sprintf_test7
+    const int input_int = -2147483647;
+    const char *format = "%d%d Hello, World %d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// DECIMAL Normal value test
+#test s21_sprintf_test8
+    const int input_int = 47483648;
+    const char *format = "%d%d Hello, World %d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// DECIMAL Normal negative value test
+#test s21_sprintf_test9
+    const int input_int = -47483648;
+    const char *format = "%d%d Hello, World %d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// DECIMAL Normal value test - a lot of variables
+#test s21_sprintf_test10
+    const int input_int = 947483648;
+    const char *format = "%d%d%d%d Hello, World %d%d%d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// DECIMAL Abnormal value - zero in the begging of the number
+#test s21_sprintf_test11
+    const int input_int = 012;
+    const char *format = "%d%d%d%d Hello, World %d%d%d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
