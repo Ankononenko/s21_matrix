@@ -12,6 +12,11 @@ What to return - number of characters written to buffer
 +           Itoa function
 +           Put the argp in the array of chars and append to the buffer
         i, 
+            Find out the difference between the %d and %i: 
+            %d takes integer value as signed decimal integer i.e. it takes negative values along with positive values but values should be in decimal
+            otherwise it will print garbage value.( Note: if input is in octal format like:012 then %d will ignore 0 and take input as 12).
+            %i takes integer value as integer value with decimal, hexadecimal or octal type.
+            To enter a value in hexadecimal format – value should be provided by preceding “0x” and value in octal format – value should be provided by preceding “0”.
         f, 
         s, 
         u, 
@@ -104,6 +109,9 @@ void choose_return_type(char *buffer, const char *format, int *index, va_list ar
     if ('d' == *format) {
         d_specifier(buffer, index, argp);
     }
+    if ('i' == *format) {
+        d_specifier(buffer, index, argp);
+    }
 }
 
 void c_specifier(char *buffer, int *index, va_list argp) {
@@ -121,3 +129,25 @@ void d_specifier(char *buffer, int *index, va_list argp) {
         ++*index;
     }
 }
+
+void i_specifier(char *buffer, int *index, va_list argp) {
+    char array_for_int[12];
+    int int_array_index = 0;
+    // Use const variable that is equal to va_arg(argp, int). I need to check the cases in the notebook and then use that const value to pass to itoa with a needed base
+    const int va_arg_const = va_arg(argp, int); 
+    s21_itoa(va_arg_const, array_for_int, 10);
+    while (array_for_int[int_array_index] != '\0') {
+        buffer[*index] = array_for_int[int_array_index];
+        ++int_array_index;
+        ++*index;
+    }
+}
+
+// 1. Flip the va_arg_const. I need to do this so I could access '0x'-like values in the begging of the va_arg number
+// 2. Implement choose_base function after I flip the va_arg_const to an array of chars
+// Here I should choose the base on itoa based on the last chars of the flipped array of chars
+// int choose_base(int va_arg_const, ) {
+//     int base = 10;
+
+//     return base;
+// }
