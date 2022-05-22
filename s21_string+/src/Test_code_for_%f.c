@@ -1,3 +1,7 @@
+// Testing file for small functions
+// double lowest = -340282346638528859811704183484516925440.000000;
+// double max = 340282346638528859811704183484516925440.000000;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -13,9 +17,9 @@ int find_dot_index(double number);
 void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable);
 
 int main() {
-    char buffer[100];
-    double double_value = 112345.789;
-    s21_sprintf(buffer, "Hello world! %f", double_value);
+    char buffer[200];
+    double double_value = 748364.123;
+    s21_sprintf(buffer, "test %f %f %f Hello, World %f %f %f test", double_value, double_value, double_value, double_value, double_value, double_value);
     puts(buffer);
     return 0;
 }
@@ -80,7 +84,7 @@ int find_dot_index(double number) {
 }
 
 void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable) {
-    long long int double_without_floating_point = temp_arpg_variable * pow(10, 5);
+    long long int double_without_floating_point = temp_arpg_variable * pow(10, 6);
     int index = 0, flip_index = 0;
     char temp_array_for_double[49] = {'\0'};
     while (double_without_floating_point > 0) {
@@ -93,4 +97,3 @@ void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_v
         ++flip_index;
     }
 }
-
