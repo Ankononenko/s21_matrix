@@ -17,9 +17,9 @@ int find_dot_index(double number);
 void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable);
 
 int main() {
-    char buffer[200];
-    double double_value = 748364.123;
-    s21_sprintf(buffer, "test %f %f %f Hello, World %f %f %f test", double_value, double_value, double_value, double_value, double_value, double_value);
+    char buffer[500];
+    double double_value = 340282346638528859811704183484516925440.000000;
+    s21_sprintf(buffer, "Hello, World %f", double_value, double_value, double_value, double_value, double_value, double_value);
     puts(buffer);
     return 0;
 }
