@@ -1,5 +1,5 @@
 // Testing file for small functions
-// double lowest = -340282346638528859811704183484516925440.000000;
+// double lowest = -340 282 346 638 528 859 811 704 183 484 516 925 440.000000;
 // double max = 340282346638528859811704183484516925440.000000;
 
 #include <stdio.h>
@@ -17,8 +17,8 @@ int find_dot_index(double number);
 void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable);
 
 int main() {
-    char buffer[500];
-    double double_value = 340282346638528859811704183484516925440.000000;
+    char buffer[5000];
+    double double_value = 34028234663815678.000000;
     s21_sprintf(buffer, "Hello, World %f", double_value, double_value, double_value, double_value, double_value, double_value);
     puts(buffer);
     return 0;
@@ -51,7 +51,8 @@ void choose_return_type(char *buffer, const char *format, int *index, va_list ar
 }
 
 void f_specifier(char *buffer, int *index, va_list argp) {
-    char array_for_double[49] = {'\0'};
+    // char array_for_double[49] = {'\0'};
+    char array_for_double[490] = {'\0'};
     char *pointer_array_for_double = array_for_double;
     const double temp_arpg_variable = va_arg(argp, double);
     int dot_index = find_dot_index(temp_arpg_variable);
@@ -84,9 +85,11 @@ int find_dot_index(double number) {
 }
 
 void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable) {
-    long long int double_without_floating_point = temp_arpg_variable * pow(10, 6);
+    // HERE I NEED TO ROUND THE NUMBER BEFORE THE DEVISION BY 10
+    long long int double_without_floating_point = temp_arpg_variable * pow(10, 6); // Breaks here
     int index = 0, flip_index = 0;
-    char temp_array_for_double[49] = {'\0'};
+    // char temp_array_for_double[49] = {'\0'};
+    char temp_array_for_double[490] = {'\0'};
     while (double_without_floating_point > 0) {
         temp_array_for_double[index] = (char)((double_without_floating_point % 10) + 48);
         double_without_floating_point /= 10;
