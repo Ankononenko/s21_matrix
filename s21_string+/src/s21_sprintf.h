@@ -10,7 +10,7 @@
 // Include the itoa to convert int to string 
 #include "s21_itoa.h"
 // Include s21_memset.h to fill the empty arrays with value to escape unnecessary errors
-// #include "../s21_memset/s21_memset.h"
+#include "../s21_memset/s21_memset.h"
 //#include <assert.h>
 
 int s21_sprintf(char *buffer, const char *format, ...);
@@ -18,12 +18,12 @@ void choose_return_type(char *buffer, const char *format, int *index, va_list ar
 void c_specifier(char *buffer, int *index, va_list argp);
 void d_i_specifier(char *buffer, int *index, va_list argp);
 void f_specifier(char *buffer, int *index, va_list argp);
-
 int find_dot_index(double number);
 void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable);
+void s_specifier(char *buffer, int *index, va_list argp);
 
-// void *s21_memset(void *string, int symbol, s21_size_t size);
-// char *s21_memset_uchar(char *string, unsigned char symbol, s21_size_t size);
+void *s21_memset(void *string, int symbol, s21_size_t size);
+char *s21_memset_uchar(char *string, unsigned char symbol, s21_size_t size);
 
 // enum is_true{
 //     FALSE,
