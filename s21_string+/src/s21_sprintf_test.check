@@ -385,3 +385,53 @@
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
+
+// %f Regular double test - multiple values in the begging and at the end of the string with string in between
+#test s21_sprintf_test25
+    const double input_int = 748364.123;
+    const char *format = "test %f test %f test %f Hello, World %f test %f test %f test";
+
+    char s21_buffer[200];
+    memset(s21_buffer, 0, 200);
+    char buffer[200];
+    memset(buffer, 0, 200);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %f Regular double test - multiple values in the row
+#test s21_sprintf_test26
+    const double input_int = 748364.123;
+    const char *format = "test %f%f%f Hello, World %f%f%f test";
+
+    char s21_buffer[200];
+    memset(s21_buffer, 0, 200);
+    char buffer[200];
+    memset(buffer, 0, 200);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_int, input_int, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_int, input_int, input_int, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %s Regular value test
+#test s21_sprintf_test27
+    char test_string[100] = "hello world";
+    char *pointer = test_string;
+    const char *format = "%s";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, test_string);
+    const int result = sprintf(buffer, format, test_string);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
