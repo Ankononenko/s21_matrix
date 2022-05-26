@@ -228,14 +228,11 @@ void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_v
 }
 
 void s_specifier(char *buffer, int *index, va_list argp) {
-    char temp_argp_array[1024] = "\0";
-    char *pointer_temp_argp_array = temp_argp_array;
-    pointer_temp_argp_array = va_arg(argp, char*);
     int temp_argp_array_index = 0;
-    while (*pointer_temp_argp_array != '\0') {
-        buffer[*index] = temp_argp_array[temp_argp_array_index];
+    char *pointer_temp_argp_array = va_arg(argp, char*);
+    while (pointer_temp_argp_array[temp_argp_array_index] != '\0') {
+        buffer[*index] = pointer_temp_argp_array[temp_argp_array_index];
         ++*index;
         ++temp_argp_array_index;
-        ++pointer_temp_argp_array;
     }
 }
