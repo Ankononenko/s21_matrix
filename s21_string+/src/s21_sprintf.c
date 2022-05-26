@@ -17,20 +17,20 @@ What to return - number of characters written to buffer
 +            otherwise it will print garbage value.( Note: if input is in octal format like:012 then %d will ignore 0 and take input as 12).
 +            %i takes integer value as integer value with decimal, hexadecimal or octal type.
 +            To enter a value in hexadecimal format – value should be provided by preceding “0x” and value in octal format – value should be provided by preceding “0”.
-        f, 
++-        f, 
 +            Find out what %f does:
 +            %f converts floating-point number to the decimal notation in the style [-]ddd.ddd.
 +-           Value range of %f: -340282346638528859811704183484516925440.000000 to 340282346638528859811704183484516925440.000000, precision - 6 decimal places
 -            Precision specifies the exact number of digits to appear after the decimal point character. The default precision is 6.
 -            if the precision is explicitly zero, no decimal-point character appears. If a decimal point appears, at least one digit appears before it.
 
-        s,
-            Find out what %s does: 
-            Writes a character string
-            The argument must be a pointer to the initial element of an array of characters. Precision specifies the maximum number of bytes to be written. 
-            If Precision is not specified, writes every byte up to and not including the first null terminator. 
-            If a precision is given, no null character need be present; if the precision is not specified, or is greater than the size of the array, 
-            the array must contain a terminating NUL character.
++-        s,
++            Find out what %s does: 
++            Writes a character string
+-            The argument must be a pointer to the initial element of an array of characters. Precision specifies the maximum number of bytes to be written. 
+-            If Precision is not specified, writes every byte up to and not including the first null terminator. 
+-            If a precision is given, no null character need be present; if the precision is not specified, or is greater than the size of the array, 
++            the array must contain a terminating NUL character.
         u, 
 +        %
     b. Flags: 
