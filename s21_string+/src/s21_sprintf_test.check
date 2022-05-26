@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include "../s21_string.h"
 
+// Used here to remove the following warning - "warning: implicit declaration of function s21_sprintf"
+int s21_sprintf(char *buffer, const char *format, ...);
+
 // %c Regular value test
 #test s21_sprintf_test1
     const char input = '!';
@@ -434,4 +437,3 @@
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
-
