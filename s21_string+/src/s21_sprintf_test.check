@@ -437,3 +437,55 @@ int s21_sprintf(char *buffer, const char *format, ...);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
+
+// %s Regular value test - duplicate in a row
+#test s21_sprintf_test28
+    char test_string[100] = "hello world";
+    char *pointer = test_string;
+    const char *format = "%s %s %s hello %s %s %s world %s %s %s";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string);
+    const int result = sprintf(buffer, format, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %s Regular value test - duplicate in a row
+#test s21_sprintf_test29
+    char test_string[100] = "hello world";
+    char *pointer = test_string;
+    const char *format = "%s %s %s hello %s %s %s world %s %s %s";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string);
+    const int result = sprintf(buffer, format, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %s Empty string test
+#test s21_sprintf_test30
+    char test_string[100] = "\0";
+    char *pointer = test_string;
+    const char *format = "%s %s %s hello %s %s %s world %s %s %s";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string);
+    const int result = sprintf(buffer, format, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string, test_string);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
