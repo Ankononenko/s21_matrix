@@ -129,6 +129,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
     va_list argp;
     // After calling va_start argp points at the first vararg argument
     va_start(argp, format);
+    // Number of specifiers variable isn't used right now. Can be removed. Wanted to use it but looks like it's not going to get handy
     int index = 0, number_of_specifires = 0;
     while (*format != '\0') {
         if (*format == '%') {
@@ -164,6 +165,9 @@ void choose_return_type(char *buffer, const char *format, int *index, va_list ar
     }
     if ('u' == *format) {
         u_specifier(buffer, index, argp);
+    }
+    if ('%' == *format) {
+        percent_specifier(buffer, index);
     }
 }
 
@@ -260,4 +264,9 @@ void u_specifier(char *buffer, int *index, va_list argp) {
         ++unsigned_int_array_index;
         ++*index;
     }
+}
+
+void percent_specifier(char *buffer, int *index) {
+    buffer[*index] = '%';
+    ++*index;
 }
