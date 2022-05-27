@@ -21,6 +21,8 @@ void f_specifier(char *buffer, int *index, va_list argp);
 int find_dot_index(double number);
 void double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable);
 void s_specifier(char *buffer, int *index, va_list argp);
+void u_specifier(char *buffer, int *index, va_list argp);
+void percent_specifier(char *buffer, int *index);
 
 void *s21_memset(void *string, int symbol, s21_size_t size);
 char *s21_memset_uchar(char *string, unsigned char symbol, s21_size_t size);
