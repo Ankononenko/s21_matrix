@@ -32,6 +32,17 @@ What to return - number of characters written to buffer
 -            If a precision is given, no null character need be present; if the precision is not specified, or is greater than the size of the array, 
 +            the array must contain a terminating NUL character.
         u, 
+            Find out what %u does:
+            Unsigned decimal integer. 
+                What is unsigned? 
+                Unsigned int can hold only integers without a sign (minus). Only positive values and zero can be stored
+                Signed int can store postive and negative values
+                Maximum value for a variable of type unsigned int - 4 294 967 295
+                If I enter a negative value for the %u specifierm, it will go the opposite way. Ex = %u -3 == 4 294 967 293
+                (^In that case variable is repeatedly converted by adding or subtracting one or more than a maximum value until the value is in the range of the new type)
+                The floating point value gets cut off. 3.3 == 3
+                Value bigger than the max value that the unsigned int can store again goes through the range of 0 to 4 294 967 295
+                For example: 4 294 967 296 -> 0, 4 294 967 297 -> 1, 4 294 967 298 ->3, 8 589 934 590 -> 4 294 967 294
 +        %
     b. Flags: 
         -, 
@@ -151,6 +162,9 @@ void choose_return_type(char *buffer, const char *format, int *index, va_list ar
     if ('s' == *format) {
         s_specifier(buffer, index, argp);
     }
+    if ('u' == *format) {
+        u_specifier(buffer, index, argp);
+    }
 }
 
 void c_specifier(char *buffer, int *index, va_list argp) {
@@ -234,5 +248,16 @@ void s_specifier(char *buffer, int *index, va_list argp) {
         buffer[*index] = pointer_temp_argp_array[temp_argp_array_index];
         ++*index;
         ++temp_argp_array_index;
+    }
+}
+
+void u_specifier(char *buffer, int *index, va_list argp) {
+    char array_for_unsigned_int[12];
+    int unsigned_int_array_index = 0;
+    s21_itoa_unsigned(va_arg(argp, unsigned int), array_for_unsigned_int, 10);
+    while (array_for_unsigned_int[unsigned_int_array_index] != '\0') {
+        buffer[*index] = array_for_unsigned_int[unsigned_int_array_index];
+        ++unsigned_int_array_index;
+        ++*index;
     }
 }
