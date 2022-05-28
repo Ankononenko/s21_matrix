@@ -53,6 +53,87 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
 
+// % Invalid chars after the percent
+// If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
+#test s21_sprintf_test03
+    const char misc_char = '@';
+    const char *format = "%%c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, misc_char);
+    const int result = sprintf(buffer, format, misc_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % Invalid chars after the percent
+// If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
+#test s21_sprintf_test04
+    const char *format = "%@!%(%)%{%}%%==";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format);
+    const int result = sprintf(buffer, format);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % More invalid chars after the percent
+// If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
+#test s21_sprintf_test05
+    const char *format = "%^%$%^&$#%@%!1234566543%{dfghjdf%±";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format);
+    const int result = sprintf(buffer, format);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % More invalid chars after the percent
+// If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
+#test s21_sprintf_test06
+    const char *format = "%%%@!12345665()[]{}{{***43dfghjdf";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format);
+    const int result = sprintf(buffer, format);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % More invalid chars after the percent
+// If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
+#test s21_sprintf_test07
+    const char *format = "р%%о%л%д%%@%!%%2345665()[вавава]{привет мир}{{***43вававаdfghjdf";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format);
+    const int result = sprintf(buffer, format);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
 // %c Regular value test
 #test s21_sprintf_test1
     const char input = '!';
@@ -686,7 +767,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // %u Abnormal value - bigger than max range value
 #test s21_sprintf_test40
-    const unsigned int input_unsigned_int = 8589934590;
+    const long int input_unsigned_int = 8589934590;
     const char *format = "%u %u %u Hello, World %u%u%u Hello, World %u %u %u";
 
     char s21_buffer[200];
