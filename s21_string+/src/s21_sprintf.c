@@ -31,19 +31,21 @@ What to return - number of characters written to buffer
 -            If Precision is not specified, writes every byte up to and not including the first null terminator. 
 -            If a precision is given, no null character need be present; if the precision is not specified, or is greater than the size of the array, 
 +            the array must contain a terminating NUL character.
-        u, 
-            Find out what %u does:
-            Unsigned decimal integer. 
-                What is unsigned? 
-                Unsigned int can hold only integers without a sign (minus). Only positive values and zero can be stored
-                Signed int can store postive and negative values
-                Maximum value for a variable of type unsigned int - 4 294 967 295
-                If I enter a negative value for the %u specifierm, it will go the opposite way. Ex = %u -3 == 4 294 967 293
-                (^In that case variable is repeatedly converted by adding or subtracting one or more than a maximum value until the value is in the range of the new type)
-                The floating point value gets cut off. 3.3 == 3
-                Value bigger than the max value that the unsigned int can store again goes through the range of 0 to 4 294 967 295
-                For example: 4 294 967 296 -> 0, 4 294 967 297 -> 1, 4 294 967 298 ->3, 8 589 934 590 -> 4 294 967 294
++        u, 
++            Find out what %u does:
++            Unsigned decimal integer. 
++                What is unsigned? 
++                Unsigned int can hold only integers without a sign (minus). Only positive values and zero can be stored
++                Signed int can store postive and negative values
++                Maximum value for a variable of type unsigned int - 4 294 967 295
++                If I enter a negative value for the %u specifierm, it will go the opposite way. Ex = %u -3 == 4 294 967 293
++                (^In that case variable is repeatedly converted by adding or subtracting one or more than a maximum value until the value is in the range of the new type)
++                The floating point value gets cut off. 3.3 == 3
++                Value bigger than the max value that the unsigned int can store again goes through the range of 0 to 4 294 967 295
++                For example: 4 294 967 296 -> 0, 4 294 967 297 -> 1, 4 294 967 298 ->3, 8 589 934 590 -> 4 294 967 294
 +        %
++            To print a percent sign character, use %%.
++            If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
     b. Flags: 
         -, 
         +, 
@@ -129,11 +131,9 @@ int s21_sprintf(char *buffer, const char *format, ...) {
     va_list argp;
     // After calling va_start argp points at the first vararg argument
     va_start(argp, format);
-    // Number of specifiers variable isn't used right now. Can be removed. Wanted to use it but looks like it's not going to get handy
-    int index = 0, number_of_specifires = 0;
+    int index = 0;
     while (*format != '\0') {
         if (*format == '%') {
-            ++number_of_specifires;    
             ++format;
             // Here we can call another function to which we can pass variable arguments by passing a single va_list pointer
             choose_return_type(buffer, format, &index, argp);
@@ -153,22 +153,22 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 void choose_return_type(char *buffer, const char *format, int *index, va_list argp) {
     if ('c' == *format) {
         c_specifier(buffer, index, argp);
-    }
-    if ('d' == *format || 'i' == *format) {
+    } else if ('d' == *format || 'i' == *format) {
         d_i_specifier(buffer, index, argp);
-    }
-    if ('f' == *format) {
+    } else if ('f' == *format) {
         f_specifier(buffer, index, argp);
-    }
-    if ('s' == *format) {
+    } else if ('s' == *format) {
         s_specifier(buffer, index, argp);
-    }
-    if ('u' == *format) {
+    } else if ('u' == *format) {
         u_specifier(buffer, index, argp);
+    } else {
+        percent_specifier(buffer, index, *format);
     }
-    if ('%' == *format) {
-        percent_specifier(buffer, index);
-    }
+}
+
+void percent_specifier(char *buffer, int *index, const char format) {
+    buffer[*index] = format;
+    ++*index;
 }
 
 void c_specifier(char *buffer, int *index, va_list argp) {
@@ -266,7 +266,3 @@ void u_specifier(char *buffer, int *index, va_list argp) {
     }
 }
 
-void percent_specifier(char *buffer, int *index) {
-    buffer[*index] = '%';
-    ++*index;
-}
