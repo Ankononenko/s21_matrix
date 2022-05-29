@@ -26,6 +26,5 @@ int s21_atoi(char *format) {
         result += (temp_array_of_numbers[i] - char_int_step) * pow(10, temp_index - 1);
         --temp_index;
     }
-    ++format;
     return result;
 }

@@ -144,16 +144,16 @@ int s21_sprintf(char *buffer, const char *format, ...) {
             ++format;
             // The variable number_of_spaces is used to store the number of spaces the are going to be left or right justified later
             // int number_of_spaces = 0;
-            int are_there_flags = FALSE;
-            if ((are_there_flags = check_if_there_are_any_flags(&index, *format)) == TRUE) {
+            // int are_there_flags = FALSE;
+            // if ((are_there_flags = check_if_there_are_any_flags(*format, &index)) == TRUE) {
                 
                 // Probably the best way to do this would be to call this inside the function of a flag
                 // number_of_spaces = s21_atoi(format);
-            } else {
+            // } else {
                 // Here we can call another function to which we can pass variable arguments by passing a single va_list pointer
                 choose_return_type(buffer, format, &index, argp);
                 ++format;
-            }
+            // }
         } else {
             buffer[index] = *format;
             ++index;
@@ -187,8 +187,7 @@ void choose_return_type(char *buffer, const char *format, int *index, va_list ar
     } else if ('u' == *format) {
         u_specifier(buffer, index, argp);
     } else if ('0' <= *format && '9' >= *format) {
-        right_justify_flag(buffer, format, index);
-        // choose_return_type(buffer, format, index, argp);
+        right_justify_flag(buffer, format, index, argp);
     } else {
         percent_specifier(buffer, index, *format);
     }
@@ -295,16 +294,17 @@ void percent_specifier(char *buffer, int *index, const char format) {
     ++*index;
 }
 
-int check_if_there_are_any_flags(char format, int *index) {
-    int are_there_flags = FALSE;
-    if ('-' == format || '+' == format || ' ' == format) {
-        are_there_flags = TRUE;
-        ++*index;
-    }
-    return are_there_flags;
-}
+// int check_if_there_are_any_flags(char format, int *index) {
+//     int are_there_flags = FALSE;
+//     if ('-' == format || '+' == format || ' ' == format ||
+//     (format >= '0' && format <= '9')) {
+//         are_there_flags = TRUE;
+//         ++*index;
+//     }
+//     return are_there_flags;
+// }
 
-void right_justify_flag(char *buffer, const char *format, int *index) {
+void right_justify_flag(char *buffer, char *format, int *index, va_list argp) {
     if (check_if_the_end(format)) {
         return;
     }
@@ -313,6 +313,10 @@ void right_justify_flag(char *buffer, const char *format, int *index) {
     for (int i = 0; i < number_of_spaces - 2; ++i) {
         buffer[*index] = ' ';
         ++*index;
+    }
+    ++format;
+    if ('d' == *format) {
+        choose_return_type(buffer, format, index, argp);
     }
 }
 // Function for right_justify. It's going to check if we are near the end of the string
