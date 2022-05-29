@@ -8,8 +8,9 @@
 //                         "right-justify third number = %5d, right-justify third char = % c\n"
 //                         "blank number = %     d, blank char = %     c\n"
 //                         "blank number + override = %     +d, blank char + override = %     +c\n"
-//                         "test %-34mom";
-//     const int number = 42;
+//                         "test left no variables%-6mom\n"
+//                         "test right no variables%6mom";
+//     const int number = 6;
 //     const char character = 'd';
 //     char s21_buffer[500];
 //     sprintf(s21_buffer, format, number, character, number, character, number, character, number, character, number, character);

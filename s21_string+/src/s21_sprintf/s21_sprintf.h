@@ -29,6 +29,7 @@ int check_if_there_are_any_flags(char format, int *index);
 void choose_flag_type(char *buffer, const char *format, int *index);
 void left_justify_flag(char *buffer, const char *format, int *index);
 void right_justify_flag(char *buffer, const char *format, int *index);
+int check_if_the_end(char *format);
 
 // Can be removed if not used in the code to fill the arrays with default values
 void *s21_memset(void *string, int symbol, s21_size_t size);

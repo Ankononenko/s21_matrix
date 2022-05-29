@@ -1053,7 +1053,7 @@ END_TEST
 START_TEST(s21_sprintf_test43)
 {
 #line 801
-    const char *format = "%42 Hello, %42 World %42";
+    const char *format = "%4 Hello, %4 World %4";
 
     char s21_buffer[300];
     memset(s21_buffer, 0, 300);
@@ -1152,6 +1152,46 @@ START_TEST(s21_sprintf_test47)
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
+
+// %6 - Right-justify flag, a couple in a row
+}
+END_TEST
+
+START_TEST(s21_sprintf_test48)
+{
+#line 883
+    const char *format = "%3%3%3Hello, %3%3%3World";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format);
+    const int result = sprintf(buffer, format);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %6 - Right-justify flag, a couple in a row and a couple in the end
+}
+END_TEST
+
+START_TEST(s21_sprintf_test49)
+{
+#line 898
+    const char *format = "%3%3%3Hello, %6%7%8World%5%5%5";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format);
+    const int result = sprintf(buffer, format);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
 }
 END_TEST
 
@@ -1217,6 +1257,8 @@ int main(void)
     tcase_add_test(tc1_1, s21_sprintf_test45);
     tcase_add_test(tc1_1, s21_sprintf_test46);
     tcase_add_test(tc1_1, s21_sprintf_test47);
+    tcase_add_test(tc1_1, s21_sprintf_test48);
+    tcase_add_test(tc1_1, s21_sprintf_test49);
 
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);

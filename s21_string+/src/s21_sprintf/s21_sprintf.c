@@ -305,12 +305,29 @@ int check_if_there_are_any_flags(char format, int *index) {
 }
 
 void right_justify_flag(char *buffer, const char *format, int *index) {
+    if (check_if_the_end(format)) {
+        return;
+    }
     int number_of_spaces = 0;
     number_of_spaces = s21_atoi(format);
     for (int i = 0; i < number_of_spaces - 2; ++i) {
         buffer[*index] = ' ';
         ++*index;
     }
+}
+// Function for right_justify. It's going to check if we are near the end of the string
+// If right_justify is the last, it doesn't print the spaces
+int check_if_the_end(char *format) {
+    int is_end = TRUE;
+    char *temp_format = format;
+    while(*temp_format != '\0') {
+        if (*temp_format < '0' || *temp_format > '9') {
+            is_end = FALSE;
+            break;
+        }
+        ++temp_format;
+    }
+    return is_end;
 }
 
 // void left_justify_flag(char *buffer, const char *format, int *index) {
