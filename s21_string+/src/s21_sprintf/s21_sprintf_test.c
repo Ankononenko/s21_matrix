@@ -1192,6 +1192,28 @@ START_TEST(s21_sprintf_test49)
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
+
+// %6 - Right-justify flag, long variable
+}
+END_TEST
+
+START_TEST(s21_sprintf_test50)
+{
+#line 913
+    const int input_int = 12345;
+    const char input_char = 'W';
+    const char *format = "%10d Hello, %10c %10d Hello, %10c";
+
+    char s21_buffer[300];
+    memset(s21_buffer, 0, 300);
+    char buffer[300];
+    memset(buffer, 0, 300);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_int, input_char, input_int, input_char);
+    const int result = sprintf(buffer, format, input_int, input_char, input_int, input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
 }
 END_TEST
 
@@ -1259,6 +1281,7 @@ int main(void)
     tcase_add_test(tc1_1, s21_sprintf_test47);
     tcase_add_test(tc1_1, s21_sprintf_test48);
     tcase_add_test(tc1_1, s21_sprintf_test49);
+    tcase_add_test(tc1_1, s21_sprintf_test50);
 
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);

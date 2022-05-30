@@ -310,17 +310,12 @@ void right_justify_flag(char *buffer, const char **format, int *index, va_list a
     }
     int number_of_spaces = 0;
     number_of_spaces = s21_atoi(format);
-    for (int i = 0; i < number_of_spaces - 2; ++i) {
+    // Here I need to substract the length of argp
+    for (int i = 0; i < number_of_spaces - 1; ++i) {
         buffer[*index] = ' ';
         ++*index;
     }
-    if ('d' == **format) {
-        d_i_specifier(buffer, index, argp);
-    }
-    if ('c' == **format) {
-        c_specifier(buffer, index, argp);
-    }
-    // choose_return_type(buffer, format, index, argp);
+    choose_return_type(buffer, format, index, argp);
 }
 // Function for right_justify. It's going to check if we are near the end of the string
 // If right_justify is the last, it doesn't print the spaces
