@@ -151,7 +151,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
                 // number_of_spaces = s21_atoi(format);
             // } else {
                 // Here we can call another function to which we can pass variable arguments by passing a single va_list pointer
-                choose_return_type(buffer, format, &index, argp);
+                choose_return_type(buffer, &format, &index, argp);
                 ++format;
             // }
         } else {
@@ -174,22 +174,22 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 //     }
 // }
 
-void choose_return_type(char *buffer, const char *format, int *index, va_list argp) {
+void choose_return_type(char *buffer, const char **format, int *index, va_list argp) {
     // Maybe I can specify flags here. It may be easier
-    if ('c' == *format) {
+    if ('c' == **format) {
         c_specifier(buffer, index, argp);
-    } else if ('d' == *format || 'i' == *format) {
+    } else if ('d' == **format || 'i' == **format) {
         d_i_specifier(buffer, index, argp);
-    } else if ('f' == *format) {
+    } else if ('f' == **format) {
         f_specifier(buffer, index, argp);
-    } else if ('s' == *format) {
+    } else if ('s' == **format) {
         s_specifier(buffer, index, argp);
-    } else if ('u' == *format) {
+    } else if ('u' == **format) {
         u_specifier(buffer, index, argp);
-    } else if ('0' <= *format && '9' >= *format) {
+    } else if ('0' <= **format && '9' >= **format) {
         right_justify_flag(buffer, format, index, argp);
     } else {
-        percent_specifier(buffer, index, *format);
+        percent_specifier(buffer, index, **format);
     }
 }
 
@@ -304,8 +304,8 @@ void percent_specifier(char *buffer, int *index, const char format) {
 //     return are_there_flags;
 // }
 
-void right_justify_flag(char *buffer, char *format, int *index, va_list argp) {
-    if (check_if_the_end(format)) {
+void right_justify_flag(char *buffer, const char **format, int *index, va_list argp) {
+    if (check_if_the_end(*format)) {
         return;
     }
     int number_of_spaces = 0;
@@ -314,10 +314,13 @@ void right_justify_flag(char *buffer, char *format, int *index, va_list argp) {
         buffer[*index] = ' ';
         ++*index;
     }
-    ++format;
-    if ('d' == *format) {
-        choose_return_type(buffer, format, index, argp);
+    if ('d' == **format) {
+        d_i_specifier(buffer, index, argp);
     }
+    if ('c' == **format) {
+        c_specifier(buffer, index, argp);
+    }
+    // choose_return_type(buffer, format, index, argp);
 }
 // Function for right_justify. It's going to check if we are near the end of the string
 // If right_justify is the last, it doesn't print the spaces

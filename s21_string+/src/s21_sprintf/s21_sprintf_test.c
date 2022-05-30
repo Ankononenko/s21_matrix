@@ -1074,7 +1074,7 @@ START_TEST(s21_sprintf_test44)
 {
 #line 816
     const int input_int = 42;
-    const char *format = "%42d Hello, %42d World %42d";
+    const char *format = "%11d Hello, %11d World %11d";
 
     char s21_buffer[300];
     memset(s21_buffer, 0, 300);

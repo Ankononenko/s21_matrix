@@ -9,16 +9,16 @@
 //     return 0;
 // }
 
-int s21_atoi(char *format) {
+int s21_atoi(char **format) {
     // Note for later - Do I need to use index from sprintf here or not? The index of buffer doesn't move if while I parse the number from string
     // So probably I don't need it. Need to look into it after a while. Now too sleepy.
     int result = 0, index = 0;
     char temp_array_of_numbers[12] = {'\0'};
     // We write to the temp array each number in the sequence
-    while (*format <= '9' && *format >= '0') {
-        temp_array_of_numbers[index] = *format;
+    while (**format <= '9' && **format >= '0') {
+        temp_array_of_numbers[index] = **format;
         ++index;
-        ++format;
+        ++*format;
     }
     // Here we sum all the numbers in the array and return the sum
     int temp_index = index, char_int_step = 48;
