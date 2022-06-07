@@ -15,7 +15,7 @@ char *s21_strstr(const char *string, const char* substring) {
     if (string_length < substring_length)
         return s21_NULL;
 
-    if (string_length == 0ul && substring_length == 0ul)
+    if (string_length == 0ul || substring_length == 0ul)
          return (char*)(string);
 
     for (s21_size_t index = 0ul; index < string_length - substring_length; ++index)

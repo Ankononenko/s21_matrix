@@ -2,7 +2,7 @@
 #include "../s21_memchr/s21_memchr.h"
 #include "../s21_strlen/s21_strlen.h"
 
-//  this function may not be optimal in terms of time complexity
+//  this function may not be optimal in terms of the time complexity
 char *s21_strpbrk(const char *string, const char *symbols) {
     const s21_size_t string_length = s21_strlen(string);
     const s21_size_t symbols_length = s21_strlen(symbols);

@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -Werror -Wextra -std=c11 -c
-CFLAGS=-std=c11 -c
+#CFLAGS=-std=c11 -c
 CFLAGS_GCOV=-fprofile-arcs -ftest-coverage
 LIBS=-lcheck -lgcov
 
@@ -51,6 +51,9 @@ leaks: run_test
 
 leaks_short: run_test
 		leaks -atExit -- $(TARGET_TEST) | grep LEAK
+
+valgrind: test
+		valgrind --trace-children=yes --leak-check=full --show-leak-kinds=all --track-origins=yes $(TARGET_TEST)
 
 $(TEST_FILE_GENERATED): $(TEST_FILE)
 		checkmk $< > $@

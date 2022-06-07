@@ -80,7 +80,7 @@ clean:
 
 
 print:
-		#echo $(OBJECT_FILES_IN_BUILD_DIRECTORIES)
+		#echo $(SOURCE_FILES_ALL)
 		
 
 include $(wildcard $(DEPENDENCY_FILES_ALL_IN_DEPENDENCY_DIRECTORIES))

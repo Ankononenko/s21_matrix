@@ -4,6 +4,6 @@
 #include <stdio.h>
 #include <math.h>
 
-int s21_atoi(char **format);
+int s21_atoi(const char **format);
 
 #endif //  S21_ATOI_H

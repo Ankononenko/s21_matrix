@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -Werror -Wextra -std=c11 -c
-CFLAGS=-std=c11 -c
+#CFLAGS=-std=c11 -c
 CFLAGS_GCOV=-fprofile-arcs -ftest-coverage
 LIBS=-lcheck -lgcov
 
@@ -40,7 +40,8 @@ test: $(TARGET_TEST)
 rerun_test: clean run_test
 
 gcov_report: run_test
-		gcovr -r . --html --html-details -o coverage_report.html
+		$(foreach directory,$(SOURCE_DIRECTORIES),gcovr $(subst ../,,$(directory)) -r $(directory) --html-details -o coverage_report.html ;)
+		gcovr . --html --html-details -o coverage_report.html
 
 leaks: run_test
 		leaks -atExit -- $(TARGET_TEST)

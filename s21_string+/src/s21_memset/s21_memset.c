@@ -12,6 +12,6 @@ void *s21_memset(void *string, int symbol, s21_size_t size) {
     unsigned char *string_uchar = (unsigned char*)string;
     unsigned char symbol_uchar = (unsigned char)symbol;
  
-    char * result = s21_memset_uchar(string_uchar, symbol_uchar, size);
+    char *result = s21_memset_uchar(string_uchar, symbol_uchar, size);
     return result;
 }
