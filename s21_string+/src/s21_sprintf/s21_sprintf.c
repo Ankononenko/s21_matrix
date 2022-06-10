@@ -167,8 +167,6 @@ void choose_precision(const char **format, Specifiers* specifiers) {
         specifiers->precision = 0;
 }
 
-
-
 void write_argument_to_buffer(char *buffer, int *index, const Specifiers* specifiers, const Argument* argument) {
     assert(argument->length >= 0 && "Length should not be negative!");
     if (specifiers->c) {
@@ -184,11 +182,11 @@ void write_argument_to_buffer(char *buffer, int *index, const Specifiers* specif
                 s21_memcpy(buffer + specifiers->width - argument->length, argument->data, argument->length);
                 *index += specifiers->width;  //  rearrange
             }
-        } else {
+        } 
+        else {
             s21_memcpy(buffer, argument->data, argument->length);
             *index += argument->length;
         }
-        s21_memcpy(buffer, argument->data, argument->length);
     }
     // s21_memcpy(buffer, argument->data, (s21_size_t)(argument->length));
     if (specifiers->d || specifiers->i) {
@@ -291,7 +289,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
             // char **old_format = format;
 
             choose_flag(&format, &specifiers);   //  +- and space or their combination
-            choose_width(&format, &specifiers);  //  picks width - amount of spaces to be printed minus symbol width 
+            choose_width(&format, &specifiers);  //  picks width - amount of spaces to be printed minus symbol width (the lenth of the argument gets substracted in the write function)
             choose_precision(&format, &specifiers);
             // assert(format == old_format);
             choose_return_type(buffer, &format, &index, argp, &specifiers, &argument);
