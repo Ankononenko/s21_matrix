@@ -6,7 +6,7 @@
 int s21_sprintf(char *buffer, const char *format, ...);
 
 // %% Single percent sign test
-#test s21_sprintf_test00
+#test s21_sprintf_percent_test01
     const char percent = '%';
     const char *format = "%%c";
 
@@ -22,7 +22,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_int_eq(s21_result, result);
 
 // %% Multiple percent sign test
-#test s21_sprintf_test01
+#test s21_sprintf_percent_test02
     const char percent = '%';
     const char *format = "%%c%%%c%%%%c%%%%%c%%%%%%c";
 
@@ -38,7 +38,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_int_eq(s21_result, result);
 
 // %% Multiple percent sign test with string inbetween
-#test s21_sprintf_test02
+#test s21_sprintf_percent_test03
     const char percent = '%';
     const char *format = "%%c%%%c%%%%c%%%%%c%%%%%%c Hello world %%c%%%c%%%%c%%%%%c%%%%%%c Hello world %%c%%%c%%%%c%%%%%c%%%%%%c";
 
@@ -55,7 +55,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // % Invalid chars after the percent
 // If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
-#test s21_sprintf_test03
+#test s21_sprintf_percent_test04
     const char misc_char = '@';
     const char *format = "%%c";
 
@@ -72,7 +72,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // % Invalid chars after the percent
 // If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
-#test s21_sprintf_test04
+#test s21_sprintf_percent_test05
     const char *format = "%@!%(%)%{%}%%==";
 
     char s21_buffer[100];
@@ -88,7 +88,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // % More invalid chars after the percent
 // If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
-#test s21_sprintf_test05
+#test s21_sprintf_percent_test06
     const char *format = "%^%$%^&$#%@%!1234566543%{dfghjdf%±";
 
     char s21_buffer[100];
@@ -104,7 +104,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // % More invalid chars after the percent
 // If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
-#test s21_sprintf_test06
+#test s21_sprintf_percent_test07
     const char *format = "%%%@!12345665()[]{}{{***43dfghjdf";
 
     char s21_buffer[100];
@@ -120,7 +120,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // % More invalid chars after the percent
 // If a percent sign (%) is followed by a character that has no meaning as a format field, the character is simply copied to the buffer
-#test s21_sprintf_test07
+#test s21_sprintf_percent_test08
     const char *format = "р%%о%л%д%%@%!%%2345665()[вавава]{привет мир}{{***43вававаdfghjdf";
 
     char s21_buffer[100];
@@ -135,7 +135,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_int_eq(s21_result, result);
 
 // %c Regular value test
-#test s21_sprintf_test1
+#test s21_sprintf_cspecifier_test01
     const char input = '!';
     const char *format = "Hello, World%c!%c";
 
@@ -148,9 +148,10 @@ int s21_sprintf(char *buffer, const char *format, ...);
     const int result = sprintf(buffer, format, input, input);
     
     ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
  
 // %c Test with a few of char variables
-#test s21_sprintf_test2
+#test s21_sprintf_cspecifier_test02
     const char first_input = '!';
     const char second_input = '?';
     const char *format = "%c%c%cHello, World%c!%c%c";
@@ -164,9 +165,10 @@ int s21_sprintf(char *buffer, const char *format, ...);
     const int result = sprintf(buffer, format, first_input, first_input, first_input, second_input, second_input, second_input);
     
     ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
 
 // %c Try to print out %c as a %d value
-#test s21_sprintf_test3
+#test s21_sprintf_cspecifier_test03
     const char input = '!';
     const char *format = "Hello, World%d%d%d";
 
@@ -182,7 +184,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_int_eq(s21_result, result);
 
 // %c %d Try to print both %c and %d
-#test s21_sprintf_test4
+#test s21_sprintf_cspecifier_test04
     const char input_char = '!';
     const int input_int = 15;
     const char *format = "Hello, World%c%c%c %d%d%d";
@@ -194,6 +196,236 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
     const int s21_result = s21_sprintf(s21_buffer, format, input_char, input_char, input_char, input_int, input_int, input_int);
     const int result = sprintf(buffer, format, input_char, input_char, input_char, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c %d Try to print both %c and %d
+#test s21_sprintf_cspecifier_test05
+    const char input_char = '!';
+    const int input_int = 15;
+    const char *format = "Hello, World%c%c%c %d%d%d";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_char, input_char, input_char, input_int, input_int, input_int);
+    const int result = sprintf(buffer, format, input_char, input_char, input_char, input_int, input_int, input_int);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Right-justify flag test - single value is at the end of the string
+#test s21_sprintf_cspecifier_test06
+    const char input_char = '!';
+    const char *format = "Hello, World%3c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_char);
+    const int result = sprintf(buffer, format, input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Right-justify flag test - multiple values is at the end of the string, in the middle and at the start
+#test s21_sprintf_cspecifier_test07
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "%3c%3c%3c Hello,%3cWorld%3c%3c%3c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Right-justify flag test - multiple values is at the end of the string, in the middle and at the start with two spaces before and after the variable
+#test s21_sprintf_cspecifier_test08
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %3c  %3c  %3c  Hello,  %3c  World  %3c  %3c  %3c  ";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Left-justify flag test - single value is at the end of the string and at the begging
+#test s21_sprintf_cspecifier_test09
+    const char first_input_char = '>';
+    const char second_input_char = '!';
+    const char *format = "%-3c Hello, World%-3c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char);
+    const int result = sprintf(buffer, format, first_input_char, second_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Left-justify flag test - multiple values is at the end of the string, in the middle and at the start
+#test s21_sprintf_cspecifier_test10
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "%-3c%-3c%-3c Hello,%-3cWorld%-3c%-3c%-3c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Left-justify flag test - multiple values is at the end of the string, in the middle and at the start with two spaces before and after the variable
+#test s21_sprintf_cspecifier_test11
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %-3c  %-3c  %-3c  Hello,  %-3c  World  %-3c  %-3c  %-3c  ";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Right-justify flag test double-digit values - multiple values is at the end of the string, in the middle and at the start with two spaces before and after the variable
+#test s21_sprintf_cspecifier_test12
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %11c  %22c  %33c  Hello,  %55c  World  %33c  %22c  %11c  ";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Left-justify flag test double-digit values - multiple values is at the end of the string, in the middle and at the start with two spaces before and after the variable
+#test s21_sprintf_cspecifier_test13
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %-11c  %-22c  %-33c  Hello,  %-55c  World  %-33c  %-22c  %-11c  ";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Right-justify flag minimum value multiple variables
+#test s21_sprintf_cspecifier_test14
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %1c Hello,%1cWorld %1c";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Left-justify flag minimum value multiple variables
+#test s21_sprintf_cspecifier_test15
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %-1c Hello,%-1cWorld %-1c";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Right-justify flag big value multiple variables
+#test s21_sprintf_cspecifier_test16
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %111c Hello,%111cWorld %111c";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// %c Left-justify flag big value multiple variables
+#test s21_sprintf_cspecifier_test17
+    const char first_input_char = '>';
+    const char second_input_char = '_';
+    const char third_input_char = '!';
+    const char *format = "  %-111c Hello,%-111cWorld %-111c";
+
+    char s21_buffer[500];
+    memset(s21_buffer, 0, 500);
+    char buffer[500];
+    memset(buffer, 0, 500);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -553,7 +785,6 @@ int s21_sprintf(char *buffer, const char *format, ...);
 // %s Regular value test
 #test s21_sprintf_test27
     char test_string[100] = "hello world";
-    char *pointer = test_string;
     const char *format = "%s";
 
     char s21_buffer[500];
@@ -570,7 +801,6 @@ int s21_sprintf(char *buffer, const char *format, ...);
 // %s Regular value test - duplicate in a row
 #test s21_sprintf_test28
     char test_string[100] = "hello world";
-    char *pointer = test_string;
     const char *format = "%s %s %s hello %s %s %s world %s %s %s";
 
     char s21_buffer[500];
@@ -587,7 +817,6 @@ int s21_sprintf(char *buffer, const char *format, ...);
 // %s Regular value test - duplicate in a row
 #test s21_sprintf_test29
     char test_string[100] = "hello world";
-    char *pointer = test_string;
     const char *format = "%s %s %s hello %s %s %s world %s %s %s";
 
     char s21_buffer[500];
@@ -604,7 +833,6 @@ int s21_sprintf(char *buffer, const char *format, ...);
 // %s Empty string test
 #test s21_sprintf_test30
     char test_string[100] = "\0";
-    char *pointer = test_string;
     const char *format = "%s %s %s hello %s %s %s world %s %s %s";
 
     char s21_buffer[500];
