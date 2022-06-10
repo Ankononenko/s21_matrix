@@ -246,7 +246,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 100);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -264,7 +264,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 100);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -299,7 +299,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 100);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -317,7 +317,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 100);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -335,7 +335,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 500);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -353,7 +353,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 500);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, first_input_char, first_input_char, second_input_char, third_input_char, third_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -371,7 +371,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 500);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, second_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -389,7 +389,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 500);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, second_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -407,7 +407,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 500);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, second_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
@@ -425,7 +425,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
     memset(buffer, 0, 500);
 
     const int s21_result = s21_sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
-    const int result = sprintf(s21_buffer, format, first_input_char, second_input_char, third_input_char);
+    const int result = sprintf(buffer, format, first_input_char, second_input_char, third_input_char);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
