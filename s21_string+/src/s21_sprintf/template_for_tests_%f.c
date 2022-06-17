@@ -1071,8 +1071,220 @@ int main() {
     // Width (left-justify) less than the precision with max positive value
     sprintf(buffer, "[#317: %-215.311f]", 340282346638528859811704183484516925440.000000);
     puts(buffer);
-
     // !!! End of sign and precision together tests
+
+    // !!! Start of sign, precision and width together tests
+    // Sign, precision and width being zero with max negative value
+    sprintf(buffer, "[#318: %+0.0f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, precision and width being zero with negative value
+    sprintf(buffer, "[#319: %+0.0f]", -516925439.3758943345);
+    puts(buffer);
+    // Sign, precision and width being zero with zero
+    sprintf(buffer, "[#320: %+0.0f]", 0.0);
+    puts(buffer);
+    // Sign, precision and width being zero with positive value
+    sprintf(buffer, "[#321: %+0.0f]", 516925439.8758943345);
+    puts(buffer);
+    // Sign, precision and width being zero with max positive value
+    sprintf(buffer, "[#322: %+0.0f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to the argp and precision zero with max negative value
+    sprintf(buffer, "[#323: %+40.0f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to the argp and precision zero with negative value
+    sprintf(buffer, "[#324: %+9.0f]", -12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to the argp and width being zero with zero
+    sprintf(buffer, "[#325: %+1.0f]", 0.0);
+    puts(buffer);
+    // Sign, width (right-justify) equal to the argp and precision zero with positive value
+    sprintf(buffer, "[#326: %+8.0f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to the argp and precision zero with max positive value
+    sprintf(buffer, "[#327: %+39.0f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the argp and precision zero with max negative value
+    sprintf(buffer, "[#328: %+50.0f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the argp and precision zero with negative value
+    sprintf(buffer, "[#329: %+21.0f]", -12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the argp and width being zero with zero
+    sprintf(buffer, "[#330: %+15.0f]", 0.0);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the argp and precision zero with positive value
+    sprintf(buffer, "[#331: %+78.0f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the argp and precision zero with max positive value
+    sprintf(buffer, "[#332: %+89.0f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) equal to the argp and precision zero with max negative value
+    sprintf(buffer, "[#333: %+-40.0f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) equal to the argp and precision zero with negative value
+    sprintf(buffer, "[#334: %+-9.0f]", -12346487.2355467865);
+    puts(buffer);
+    // Sign, width (left-justify) equal to the argp and width being zero with zero
+    sprintf(buffer, "[#335: %+-1.0f]", 0.0);
+    puts(buffer);
+    // Sign, width (left-justify) equal to the argp and precision zero with positive value
+    sprintf(buffer, "[#336: %+-8.0f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (left-justify) equal to the argp and precision zero with max positive value
+    sprintf(buffer, "[#337: %+-39.0f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the argp and precision zero with max negative value
+    sprintf(buffer, "[#338: %+-50.0f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the argp and precision zero with negative value
+    sprintf(buffer, "[#339: %+-21.0f]", -12346487.2355467865);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the argp and width being zero with zero
+    sprintf(buffer, "[#340: %+-15.0f]", 0.0);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the argp and precision zero with positive value
+    sprintf(buffer, "[#341: %+-78.0f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the argp and precision zero with max positive value
+    sprintf(buffer, "[#342: %+-89.0f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision less than max negative value
+    sprintf(buffer, "[#343: %+0.1f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision less than negative value
+    sprintf(buffer, "[#344: %+0.2f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision less than zero
+    sprintf(buffer, "[#345: %+0.3f]", 0.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision less than positive value
+    sprintf(buffer, "[#346: %+0.4f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision less than max positive value
+    sprintf(buffer, "[#347: %+0.5f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision equal to max negative value
+    sprintf(buffer, "[#348: %+0.6f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision equal to negative value
+    sprintf(buffer, "[#349: %+0.10f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision equal to zero
+    sprintf(buffer, "[#350: %+0.9f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision equal to positive value
+    sprintf(buffer, "[#351: %+0.10f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision equal to max positive value
+    sprintf(buffer, "[#352: %+0.6f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision bigger than to max negative value
+    sprintf(buffer, "[#353: %+0.8f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision bigger than negative value
+    sprintf(buffer, "[#354: %+0.115f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision bigger than zero
+    sprintf(buffer, "[#355: %+0.9f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision bigger than positive value
+    sprintf(buffer, "[#356: %+0.69f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to zero and precision bigger than max positive value
+    sprintf(buffer, "[#357: %+0.30f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to precision with max negative value
+    sprintf(buffer, "[#358: %+8.8f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to precision with negative value
+    sprintf(buffer, "[#359: %+11.11f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to precision with than zero
+    sprintf(buffer, "[#360: %+30.30f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (right-justify) equal to precision with positive value
+    sprintf(buffer, "[#361: %+40.40f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) equal to precision with max positive value
+    sprintf(buffer, "[#362: %+111.111f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) equal to precision with max negative value
+    sprintf(buffer, "[#363: %+-8.8f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, idth (left-justify) equal to precision with negative value
+    sprintf(buffer, "[#364: %+-11.11f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (left-justify) equal to precision with than zero
+    sprintf(buffer, "[#365: %+-30.30f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (left-justify) equal to precision with positive value
+    sprintf(buffer, "[#366: %+-40.40f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (left-justify) equal to precision with max positive value
+    sprintf(buffer, "[#367: %+-111.111f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the precision with max negative value
+    sprintf(buffer, "[#368: %+9.8f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the precision with negative value
+    sprintf(buffer, "[#369: %+13.11f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the precision with than zero
+    sprintf(buffer, "[#370: %+30.30f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the precision with positive value
+    sprintf(buffer, "[#371: %+41.40f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) bigger than the precision with max positive value
+    sprintf(buffer, "[#372: %+111.111f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the precision with max negative value
+    sprintf(buffer, "[#373: %+-9.8f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the precision with negative value
+    sprintf(buffer, "[#374: %+-13.11f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the precision with than zero
+    sprintf(buffer, "[#375: %+-36.30f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the precision with positive value
+    sprintf(buffer, "[#376: %+-49.40f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (left-justify) bigger than the precision with max positive value
+    sprintf(buffer, "[#377: %+-215.111f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) less than the precision with max negative value
+    sprintf(buffer, "[#378: %+9.11f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (right-justify) less than the precision with negative value
+    sprintf(buffer, "[#379: %+13.16f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (right-justify) less than the precision with than zero
+    sprintf(buffer, "[#380: %+30.33f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (right-justify) less than the precision with positive value
+    sprintf(buffer, "[#381: %+41.48f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (right-justify) less than the precision with max positive value
+    sprintf(buffer, "[#382: %+111.156f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) less than the precision with max negative value
+    sprintf(buffer, "[#383: %+-9.13f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Sign, width (left-justify) less than the precision with negative value
+    sprintf(buffer, "[#384: %+-13.18f]", -12346487.8355467865);
+    puts(buffer);
+    // Sign, width (left-justify) less than the precision with than zero
+    sprintf(buffer, "[#385: %+-36.46f]", 0.000000000);
+    puts(buffer);
+    // Sign, width (left-justify) less than the precision with positive value
+    sprintf(buffer, "[#386: %+-49.78f]", 12346487.2355467865);
+    puts(buffer);
+    // Sign, width (left-justify) less than the precision with max positive value
+    sprintf(buffer, "[#387: %+-215.311f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // !!! End of sign, precision and width together tests
 
     return 0;
 }
