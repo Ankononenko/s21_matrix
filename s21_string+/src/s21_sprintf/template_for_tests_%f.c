@@ -10,7 +10,7 @@
 + 4. Test how precision behavess in %f - Min, average, max with different amount of digits after the dot
 + 5. Test how sign behaves with different values - negative, zero, positive, max
 + 6. Test with sign and width
-7. Test with sign and precision
++ 7. Test with sign and precision
 8. Test with width and precision
 9. Test with sign, width and precision
 */
@@ -735,6 +735,131 @@ int main() {
     sprintf(buffer, "[#219: %+-666f]", 340282346638528859811704183484516925440.1234567890);
     puts(buffer);
     // !!! End of sign and width flags together
+
+    // !!! Begging of sign and precision together tests
+    // !!! Precision with minimum possible value
+    // Test with precision being zero
+    sprintf(buffer, "[#220: %+.0f]", -340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Test with precision being less than the amount of digits after the dot
+    sprintf(buffer, "[#221: %+.3f]", -340282346638528859811704183484516925439.123456);
+    puts(buffer);
+    // Test with precision being equal to the amount of digits after the dot
+    sprintf(buffer, "[#222: %+.6f]", -340282346638528859811704183484516925439.123456);
+    puts(buffer);
+    // Test with precision being bigger than the amount of digits after the dot
+    sprintf(buffer, "[#223: %+.9f]", -340282346638528859811704183484516925439.123456);
+    puts(buffer);
+    // Test with 2-digit precision
+    sprintf(buffer, "[#224: %+.14f]", -340282346638528859811704183484516925439.123456);
+    puts(buffer);
+    // Test with 3-digit precision
+    sprintf(buffer, "[#225: %+.114f]", -340282346638528859811704183484516925439.123456);
+    puts(buffer);
+    // !!! Precision with negative value
+    // Test with precision being zero
+    sprintf(buffer, "[#226: %+.0f]", -811704183484516925440.9876544321);
+    puts(buffer);
+    // Test with precision being less than the amount of digits after the dot
+    sprintf(buffer, "[#227: %+-.4f]", -811704183484516925440.9876544321);
+    puts(buffer);
+    // Test with precision being equal to the amount of digits after the dot
+    sprintf(buffer, "[#228: %+.10f]", -811704183484516925440.9876544321);
+    puts(buffer);
+    // Test with precision being more than the amount of digits after the dot
+    sprintf(buffer, "[#229: %+.11f]", -811704183484516925440.9876544321);
+    puts(buffer);
+    // Test with 2-digit width
+    sprintf(buffer, "[#230: %+.14f]", -811704183484516925440.9876544321);
+    puts(buffer);
+    // Test with 3-digit width
+    sprintf(buffer, "[#230: %+.114f]", -811704183484516925440.9876544321);
+    puts(buffer);
+    // !!! Sign with precision with zero value
+    // Test with precision being zero
+    sprintf(buffer, "[#231: %+.0f]", 0.0);
+    puts(buffer);
+    // Test with precision being equal to the amount of digits after the dot
+    sprintf(buffer, "[#232: %+.1f]", 0.0);
+    puts(buffer);
+    // Test with precision being more than the amount of digits after the dot
+    sprintf(buffer, "[#233: %+.5f]", 0.0);
+    puts(buffer);
+    // Test with 2-digit precision
+    sprintf(buffer, "[#234: %+.26f]", 0.0);
+    puts(buffer);
+    // !!! Sign with precision with regular value - less digits after the dot than 6
+    // Test with precision being zero
+    sprintf(buffer, "[#235: %+.0f]", 1234567890.098);
+    puts(buffer);
+    // Test with precision being less than the amount of digits after the dot
+    sprintf(buffer, "[#236: %+.2f]", 1234567890.098);
+    puts(buffer);
+    // Test with precision being equal to the amount of digits after the dot
+    sprintf(buffer, "[#237: %+.3f]", 1234567890.098);
+    puts(buffer);
+    // Test with precision being more than the amount of digits after the dot
+    sprintf(buffer, "[#238: %+.5f]", 1234567890.098);
+    puts(buffer);
+    // Test with 2-digit precision
+    sprintf(buffer, "[#239: %+.14f]", 1234567890.098);
+    puts(buffer);
+    // Test with 3-digit precision
+    sprintf(buffer, "[#240: %+.114f]", 1234567890.098);
+    puts(buffer);
+    // !!! Precision with regular value
+    // Test with precision being zero
+    sprintf(buffer, "[#241: %+.0f]", 1234567890.098765);
+    puts(buffer);
+    // Test with precision being less than the amount of digits after the dot
+    sprintf(buffer, "[#242: %+.2f]", 1234567890.098765);
+    puts(buffer);
+    // Test with precision being equal to the amount of digits after the dot
+    sprintf(buffer, "[#243: %+.4f]", 1234567890.098765);
+    puts(buffer);
+    // Test with precision being more than the amount of digits after the dot
+    sprintf(buffer, "[#244: %+.9f]", 1234567890.098765);
+    puts(buffer);
+    // Test with 2-digit precision
+    sprintf(buffer, "[#245: %+.24f]", 1234567890.098765);
+    puts(buffer);
+    // Test with 3-digit precision
+    sprintf(buffer, "[#246: %+.243f]", 1234567890.098765);
+    puts(buffer);
+    // !!! Sign with precision with regular value - more digits after the dot than 6
+    // Test with precision being zero
+    sprintf(buffer, "[#247: %+.0f]", 1234567890.0987654321);
+    puts(buffer);
+    // Test with precision being less than the amount of digits after the dot
+    sprintf(buffer, "[#248: %+.4f]", 1234567890.0987654321);
+    puts(buffer);
+    // Test with precision being equal to the amount of digits after the dot
+    sprintf(buffer, "[#249: %+.10f]", 1234567890.0987654321);
+    puts(buffer);
+    // Test with precision being more than the amount of digits after the dot
+    sprintf(buffer, "[#250: %+.25f]", 1234567890.0987654321);
+    puts(buffer);
+    // Test with 3-digit precision
+    sprintf(buffer, "[#251: %+.116f]", 1234567890.0987654321);
+    puts(buffer);
+    // !!! Sign with precisiom with max value
+    // Test with precision being zero
+    sprintf(buffer, "[#252: %+.0f]", 340282346638528859811704183484516925440.000000);
+    puts(buffer);
+    // Test with precision being less than the amount of digits after the dot
+    sprintf(buffer, "[#253: %+.2f]", 340282346638528859811704183484516925439.6758943345);
+    puts(buffer);
+    // Test with precision being equal to the amount of digits after the dot
+    sprintf(buffer, "[#254: %+.10f]", 340282346638528859811704183484516925439.6758943345);
+    puts(buffer);
+    // Test with precision being more than the amount of digits after the dot
+    sprintf(buffer, "[#255: %+.15f]", 340282346638528859811704183484516925439.6758943345);
+    puts(buffer);
+    // Test with 3-digit precision
+    sprintf(buffer, "[#256: %+.106f]", 340282346638528859811704183484516925439.6758943345);
+    puts(buffer);
+    // !!! End of sign and precision together tests
+
 
     return 0;
 }
