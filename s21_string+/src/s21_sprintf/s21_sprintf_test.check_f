@@ -6270,10 +6270,10 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
 
-// Test with width being more than the vrgp - same values
-#test s21_sprintf_test_lf_finchren_052_0
-    const double input_double = 340282346638528859811704183484516925440.000000);
-    const char *format = "%55f!%55f Hello, %55f%55f%55f World %55f!%55f";
+// Sign, precision and width being zero with positive value
+#test s21_sprintf_test_lf_finchren_331
+    const double input_double = 516925439.8758943345;
+    const char *format = "%+0.0f!%+0.0f Hello, %+0.0f%+0.0f%+0.0f World %+0.0f!%+0.0f";
 
     char s21_buffer[1000];
     memset(s21_buffer, 'a', 1000);
@@ -6286,106 +6286,10 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
 
-// Test with width being more than the vrgp - different values
-#test s21_sprintf_test_lf_finchren_052_1
-    const double input_double = 340282346638528859811704183484516925440.000000);
-    const char *format = "%55f!%65f Hello, %75f%55f%45f World %95f!%59f";
-
-    char s21_buffer[1000];
-    memset(s21_buffer, 'a', 1000);
-    char buffer[1000];
-    memset(buffer, 'a', 1000);
-
-    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    
-    ck_assert_str_eq(s21_buffer, buffer);
-    ck_assert_int_eq(s21_result, result);
-
-// Regular value test with no precision set
-#test s21_sprintf_test_lf_finchren_001
-    const double input_double = 1234567.123456;
-    const char *format = "%f!%f Hello, %f%f%f World %f!%f";
-
-    char s21_buffer[1000];
-    memset(s21_buffer, 'a', 1000);
-    char buffer[1000];
-    memset(buffer, 'a', 1000);
-
-    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    
-    ck_assert_str_eq(s21_buffer, buffer);
-    ck_assert_int_eq(s21_result, result);
-
-// Value after the decimal point that is bigger than defaul precision of 6, test with no precision set
-#test s21_sprintf_test_lf_finchren_002
-    const double input_double = 1234567.123456789;
-    const char *format = "%f!%f Hello, %f%f%f World %f!%f";
-
-    char s21_buffer[1000];
-    memset(s21_buffer, 'a', 1000);
-    char buffer[1000];
-    memset(buffer, 'a', 1000);
-
-    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    
-    ck_assert_str_eq(s21_buffer, buffer);
-    ck_assert_int_eq(s21_result, result);
-
-// Value after the decimal point that is less than defaul precision of 6, test with no precision set
-#test s21_sprintf_test_lf_finchren_003
-    const double input_double = 1234567.123;
-    const char *format = "%f!%f Hello, %f%f%f World %f!%f";
-
-    char s21_buffer[1000];
-    memset(s21_buffer, 'a', 1000);
-    char buffer[1000];
-    memset(buffer, 'a', 1000);
-
-    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    
-    ck_assert_str_eq(s21_buffer, buffer);
-    ck_assert_int_eq(s21_result, result);
-
-// No value after the decimal point, test with no precision set
-#test s21_sprintf_test_lf_finchren_004
-    const double input_double = 1234567.;
-    const char *format = "%f!%f Hello, %f%f%f World %f!%f";
-
-    char s21_buffer[1000];
-    memset(s21_buffer, 'a', 1000);
-    char buffer[1000];
-    memset(buffer, 'a', 1000);
-
-    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    
-    ck_assert_str_eq(s21_buffer, buffer);
-    ck_assert_int_eq(s21_result, result);
-
-// Zero value after the decimal point, test with no precision set
-#test s21_sprintf_test_lf_finchren_005
-    const double input_double = 1234567.0;
-    const char *format = "%f!%f Hello, %f%f%f World %f!%f";
-
-    char s21_buffer[1000];
-    memset(s21_buffer, 'a', 1000);
-    char buffer[1000];
-    memset(buffer, 'a', 1000);
-
-    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
-    
-    ck_assert_str_eq(s21_buffer, buffer);
-    ck_assert_int_eq(s21_result, result);
-
-// Maximum value, test with no precision set
-#test s21_sprintf_test_lf_finchren_006
+// Sign, precision and width being zero with max positive value
+#test s21_sprintf_test_lf_finchren_332
     const double input_double = 340282346638528859811704183484516925440.000000;
-    const char *format = "%f!%f Hello, %f%f%f World %f!%f";
+    const char *format = "%+0.0f!%+0.0f Hello, %+0.0f%+0.0f%+0.0f World %+0.0f!%+0.0f";
 
     char s21_buffer[1000];
     memset(s21_buffer, 'a', 1000);
@@ -6398,10 +6302,10 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
 
-// More than maximum value after the decimal point, test with no precision set
-#test s21_sprintf_test_lf_finchren_007
-    const double input_double = 340282346638528859811704183484516925440.123456;
-    const char *format = "%f!%f Hello, %f%f%f World %f!%f";
+// Sign, width (right-justify) equal to the argp and precision zero with max negative value
+#test s21_sprintf_test_lf_finchren_333
+    const double input_double = -340282346638528859811704183484516925440.000000;
+    const char *format = "%+40.0f!%+40.0f Hello, %+40.0f%+40.0f%+40.0f World %+40.0f!%+40.0f";
 
     char s21_buffer[1000];
     memset(s21_buffer, 'a', 1000);
@@ -6414,9 +6318,105 @@ int s21_sprintf(char *buffer, const char *format, ...);
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
 
-// More than maximum value, 50 digits after the decimal point, test with no precision set
-#test s21_sprintf_test_lf_finchren_008
-    const double input_double = 340282346638528859811704183484516925440.82345678901234567890123456789012345678901234567890;
+// Sign, width (right-justify) equal to the argp and precision zero with negative value
+#test s21_sprintf_test_lf_finchren_334
+    const double input_double = -12346487.2355467865;
+    const char *format = "%+9.0f!%+9.0f Hello, %f+9.0f%+9.0f%+9.0f World %+9.0f!%+9.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// Sign, width (right-justify) equal to the argp and width being zero with zero
+#test s21_sprintf_test_lf_finchren_335
+    const double input_double = 0.0;
+    const char *format = "%+1.0f!%+1.0f Hello, %+1.0f%+1.0f%+1.0f World %+1.0f!%+1.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// Sign, width (right-justify) equal to the argp and precision zero with positive value
+#test s21_sprintf_test_lf_finchren_336
+    const double input_double = 12346487.2355467865;
+    const char *format = "%+8.0f!%+8.0f Hello, %+8.0f%+8.0f%+8.0f World %+8.0f!%+8.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// Sign, width (right-justify) equal to the argp and precision zero with max positive value
+#test s21_sprintf_test_lf_finchren_337
+    const double input_double = 340282346638528859811704183484516925440.000000;
+    const char *format = "%+39.0f!%+39.0f Hello, %+39.0f%+39.0f%+39.0f World %+39.0f!%+39.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// Sign, width (right-justify) bigger than the argp and precision zero with max negative value
+#test s21_sprintf_test_lf_finchren_338
+    const double input_double = -340282346638528859811704183484516925440.000000;
+    const char *format = "%+50.0f!%+50.0f Hello, %+50.0f%+50.0f%+50.0f World %+50.0f!%+50.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// Sign, width (right-justify) bigger than the argp and precision zero with negative value
+#test s21_sprintf_test_lf_finchren_339
+    const double input_double = -12346487.2355467865;
+    const char *format = "%+21.0f!%+21.0f Hello, %+21.0f%+21.0f%+21.0f World %+21.0f!%+21.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// Sign, width (right-justify) bigger than the argp and width being zero with zero
+#test s21_sprintf_test_lf_finchren_340
+    const double input_double = 0.0;
     const char *format = "%f!%f Hello, %f%f%f World %f!%f";
 
     char s21_buffer[1000];
