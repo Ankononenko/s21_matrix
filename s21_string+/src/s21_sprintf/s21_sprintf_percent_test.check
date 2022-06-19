@@ -1,0 +1,96 @@
+// % Right-justify - spaces are printed if not the last in the string
+#test s21_sprintf_percent_test09
+    const double input_double = 12345.098;
+    const char *format = "[%5f Hello, World %5!";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double);
+    const int result = sprintf(buffer, format, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % Right-justify with sign - spaces are printed if not the last in the string
+#test s21_sprintf_percent_test10
+    const double input_double = 12345.098;
+    const char *format = "[%5f Hello, World %+5!";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double);
+    const int result = sprintf(buffer, format, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % Right-justify with sign and another percent - spaces are printed if not the last in the string
+#test s21_sprintf_percent_test11
+    const double input_double = 12345.098;
+    const char *format = "[%5f Hello, World %+5!%17";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double);
+    const int result = sprintf(buffer, format, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % Left-justify with sign and another percent and precision - spaces are printed if not the last in the string
+#test s21_sprintf_percent_test12
+    const double input_double = 12345.098;
+    const char *format = "[%5f Hello, World %+-5.8!%+7.8";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double);
+    const int result = sprintf(buffer, format, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % Left-justify with sign and another percent with left-justify and precision - spaces are printed if not the last in the string
+#test s21_sprintf_percent_test13
+    const double input_double = 12345.098;
+    const char *format = "[%5f Hello, World %+-5.8!%+-7.8";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double);
+    const int result = sprintf(buffer, format, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// % Left-justify with sign and another percent with left-justify and precision - spaces are printed if not the last in the string
+#test s21_sprintf_percent_test14
+    const double input_double = 12345.098;
+    const char test_char = 'f';
+    const char *format = "[%5f Hello, World %+-5.8!%+-7.8c";
+
+    char s21_buffer[100];
+    memset(s21_buffer, 0, 100);
+    char buffer[100];
+    memset(buffer, 0, 100);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, test_char);
+    const int result = sprintf(buffer, format, input_double, test_char);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
