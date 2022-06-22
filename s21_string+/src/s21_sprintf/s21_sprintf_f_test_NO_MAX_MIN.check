@@ -1,4 +1,1014 @@
 
+
+
+#include <string.h>
+#include <stdio.h>
+#include "../s21_string.h"
+
+// Used here to remove the following warning - "warning: implicit declaration of function s21_sprintf"
+int s21_sprintf(char *buffer, const char *format, ...);
+
+
+
+
+
+// ROUNDING ERRORS, PRINTING MORE THAN NUMBER GOT
+//#test s21_sprintf_test_lf_9
+//    const double input_double = -98765.123456789;
+//    const char *format = "%.10f!%.11f Hello, World %.11f!%.11f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+//
+//
+//#test s21_sprintf_test_lf_9_1
+//    const double input_double = -98765.123456789;
+//    const char *format = "%.10f!%.11f Hello, World %.12f!%.13f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+
+
+
+#test s21_sprintf_test_lf_width_precision_zeros_3
+    const double input_double = -0.001234567890123456789;
+    const char *format = "%5.8f!%5.9f Hello, World %4.10f!%6.11f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_precision_zeros_0
+    const double input_double = -00000.001234567890123456789;
+    const char *format = "%5.8f!%5.9f Hello, World %4.10f!%6.11f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// OVERFLAW
+//#test s21_sprintf_test_lf_range_0
+//    const double input_double = 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890.0; // 100 digits before '.'
+//    const char *format = "%5.f!%5.f Hello, World %4.f!%6.f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+//
+//
+//#test s21_sprintf_test_lf_range_1
+//    const double input_double = -1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890.0; // 100 digits before '.'
+//    const char *format = "%5.f!%5.f Hello, World %4.f!%6.f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_width_default_precision_0
+    const double input_double = 123.0123456789;
+    const char *format = "%5.f!%5.f Hello, World %4.f!%6.f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_space_0
+    const double input_double = 12.0;
+    const char *format = "%+ f!% f Hello, World % f!% 12f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_space_1
+    const double input_double = 12.0;
+    const char *format = "%+f!%f Hello, World %  f!% 12f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_space_2
+    const double input_double = 12.0;
+    const char *format = "% f!%  f Hello, World %   123     f!%   f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_space_3
+    const double input_double = 12.0;
+    const char *format = "% f!%  f Hello, World %   123.7 +-   -+    f!%   f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_0
+    const double input_double = 12.0;
+    const char *format = "%f!%f Hello, World %f!%f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_1
+    const double input_double = -12.0;
+    const char *format = "%f!%f Hello, World %f!%f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_2
+    const double input_double = -12.0123456789;
+    const char *format = "%f!%f Hello, World %f!%f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_2_1
+    const double input_double = -12.01234544444449;
+    const char *format = "%f!%f Hello, World %f!%f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_3
+    const double input_double = 98765.00123456789;
+    const char *format = "%f!%f Hello, World %f!%f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_4
+    const double input_double = 98765.123456789;
+    const char *format = "%f!%f Hello, World %.0f!%.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_5
+    const double input_double = 98765.123456789;
+    const char *format = "%.f!%.f Hello, World %.f!%.f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_6
+    const double input_double = 98765.123456789;
+    const char *format = "%.1f!%.3f Hello, World %.2f!%.4f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+
+#test s21_sprintf_test_lf_7
+    const double input_double = -98765.123456789;
+    const char *format = "%.1f!%.3f Hello, World %.2f!%.4f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+
+#test s21_sprintf_test_lf_8
+    const double input_double = -98765.123456789;
+    const char *format = "%.6f!%.9f Hello, World %.6f!%.9f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+
+
+
+
+
+
+
+
+
+
+#test s21_sprintf_test_lf_10
+    const double input_double = -12.01234567890123456;
+    const char *format = "%.13f!%.13f Hello, World %.13f!%.13f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+//  LONG LONG INT OVERFLAW
+
+
+//#test s21_sprintf_test_lf_11
+//    const double input_double = -9876543210.01234567890123456;
+//    const char *format = "%.13f!%.13f Hello, World %.13f!%.13f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_0
+    const double input_double = -12.01;
+    const char *format = "%0.4f!%0.5f Hello, World %0.6f!%0.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_1
+    const double input_double = 12.01;
+    const char *format = "%0.4f!%0.5f Hello, World %0.6f!%0.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_2
+    const double input_double = 12.013;
+    const char *format = "%2.4f!%1.5f Hello, World %2.6f!%1.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_3
+    const double input_double = 12.013;
+    const char *format = "%6.4f!%6.5f Hello, World %6.6f!%6.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_4
+    const double input_double = 12.013;
+    const char *format = "%10.4f!%16.5f Hello, World %26.6f!%36.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_5
+    const double input_double = 12.013;
+    const char *format = "%-10.4f!%-16.5f Hello, World %-26.6f!%-36.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_sign_0
+    const double input_double = 12.013;
+    const char *format = "%+-10.4f!%+-16.5f Hello, World %+-26.6f!%+-36.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_sign_1
+    const double input_double = -12.013;
+    const char *format = "%+-10.4f!%+-16.5f Hello, World %+-26.6f!%+-36.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_sign_2
+    const double input_double = -12.013;
+    const char *format = "%-+10.4f!%+-16.5f Hello, World %+-26.6f!%+-36.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_sign_3
+    const double input_double = -123456.0123456789;
+    const char *format = "%-+30.4f!%+-36.5f Hello, World %+-46.6f!%+-56.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_sign_4
+    const double input_double = 123456.0123456789;
+    const char *format = "%-+30.4f!%+-36.5f Hello, World %+-46.6f!%+-56.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+/////////////////////////////
+
+
+#test s21_sprintf_test_lf_width_precision_0
+    const double input_double = 123.012345;
+    const char *format = "%-+5.7f!%+-5.9f Hello, World %+-4.11f!%+-6.7f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_precision_1
+    const double input_double = 123.012345;
+    const char *format = "%5.12f!%5.13f Hello, World %4.11f!%6.11f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+
+// ROUNDING ERRORS, THEY DON'T MATCH EACH OTHER
+//#test s21_sprintf_test_lf_width_precision_zeros_4
+//    const double input_double = 0.0123456789012345678;
+//    const char *format = "%5.20f!%5.20f Hello, World %4.20f!%6.20f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+
+
+
+
+
+
+#test s21_sprintf_test_lf_width_precision_zeros_2
+    const double input_double = 0.001234567890123456789;
+    const char *format = "%5.8f!%5.9f Hello, World %4.10f!%6.11f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_precision_zeros_1
+    const double input_double = 00000.001234567890123456789;
+    const char *format = "%5.8f!%5.9f Hello, World %4.10f!%6.11f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#test s21_sprintf_test_lf_width_default_precision_1
+    const double input_double = 123.0123456789;
+    const char *format = "%5.0f!%5.0f Hello, World %4.0f!%6.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_default_precision_3
+    const double input_double = 123.0123456789;
+    const char *format = "%5f!%5f Hello, World %4f!%6f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_width_default_precision_4
+    const double input_double = 123.0123456789;
+    const char *format = "%25.f!%25.f Hello, World %24.f!%26.f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_default_precision_5
+    const double input_double = 123.0123456789;
+    const char *format = "%25.0f!%25.0f Hello, World %24.0f!%26.0f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_default_precision_6
+    const double input_double = 123.0123456789;
+    const char *format = "%25f!%25f Hello, World %24f!%26f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+// CAN NOT COMPILED WITH FLAGS
+//#test s21_sprintf_test_lf_width_default_precision_7
+//    const double input_double = 123.0123456789;
+//    const char *format = "%5.-10f!%5.-12f Hello, World %4.-15f!%6.-19f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+// CAN NOT COMPILED WITH FLAGS
+//#test s21_sprintf_test_lf_width_default_precision_8
+//    const double input_double = 123.0123456789;
+//    const char *format = "%5.-0f!%5.-0f Hello, World %4.-0f!%6.-0f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+// CAN NOT COMPILED WITH FLAGS
+//#test s21_sprintf_test_lf_width_default_precision_8_1
+//    const double input_double = 123.0123456789;
+//    const char *format = "%5.-f!%5.-f Hello, World %4.-f!%6.-f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+
+
+
+
+
+
+
+
+#test s21_sprintf_test_lf_width_default_precision_9
+    const double input_double = -123.0123456789;
+    const char *format = "%5f!%5f Hello, World %4f!%6f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_width_default_precision_10
+    const double input_double = -123.0123456789;
+    const char *format = "%25.f!%25.f Hello, World %24.f!%26.f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+#test s21_sprintf_test_lf_width_default_precision_12
+    const double input_double = -123.0123456789;
+    const char *format = "%25f!%25f Hello, World %24f!%26f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+// CAN NOT COMPILED WITH FLAGS
+//#test s21_sprintf_test_lf_width_default_precision_11
+//    const double input_double = 123.012345678901;
+//    const char *format = "%25.-0f!%25.-0f Hello, World %24.-0f!%26.-0f";
+//
+//    char s21_buffer[1000];
+//    memset(s21_buffer, 'a', 1000);
+//    char buffer[1000];
+//    memset(buffer, 'a', 1000);
+//
+//    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double);
+//    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double);
+//    
+//    ck_assert_str_eq(s21_buffer, buffer);
+//    ck_assert_int_eq(s21_result, result);
+
+
+
+
+
+
+#test s21_sprintf_test_lf_width_default_precision_round_0
+    const double input_double = 12345.038766;
+    const char *format = "%+.3f!%+.2f Hello, %+.2f%+.2f%+.4f World %+.5f!%+.1f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_default_precision_round_1
+    const double input_double = 12345.038764;
+    const char *format = "%+.3f!%+.2f Hello, %+.2f%+.2f%+.4f World %+.5f!%+.1f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_default_precision_round_2_0
+    const double input_double = 12345.038765;
+    const char *format = "%+.3f!%+.2f Hello, %+.2f%+.2f%+.4f World %+.5f!%+.1f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_default_precision_round_2_1
+    const double input_double = 12345.0387651;
+    const char *format = "%+.3f!%+.2f Hello, %+.2f%+.2f%+.4f World %+.5f!%+.1f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+#test s21_sprintf_test_lf_width_default_precision_round_2_2
+    const double input_double = 12345.0387652;
+    const char *format = "%+.3f!%+.2f Hello, %+.2f%+.2f%+.4f World %+.5f!%+.1f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
+
+#test s21_sprintf_test_lf_width_default_precision_round_2_3
+    const double input_double = 12345.0387652;
+    const char *format = "%+.3f!%+.2f Hello, %+.2f%+.2f%+.4f World %+.5f!%+.1f";
+
+    char s21_buffer[1000];
+    memset(s21_buffer, 'a', 1000);
+    char buffer[1000];
+    memset(buffer, 'a', 1000);
+
+    const int s21_result = s21_sprintf(s21_buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    const int result = sprintf(buffer, format, input_double, input_double, input_double, input_double, input_double, input_double, input_double);
+    
+    ck_assert_str_eq(s21_buffer, buffer);
+    ck_assert_int_eq(s21_result, result);
+
+
 #include <string.h>
 #include <stdio.h>
 #include "../s21_string.h"
@@ -1414,7 +2424,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 // Regular negative value
 #test s21_sprintf_test_lf_finchren_115
     const double input_double = -8117041.95690;
-    const char *format = "%.10f!%.10f Hello, %.10f%.10f%.10f World %.10f!%.10f";
+    const char *format = "%.7f!%.7f Hello, %.7f%.7f%.7f World %.7f!%.7f";
 
     char s21_buffer[10000];
     memset(s21_buffer, 'a', 10000);
@@ -3835,7 +4845,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 // Sign, idth (left-justify) equal to precision with negative value
 #test s21_sprintf_test_lf_finchren_374
     const double input_double = -12346487.83;
-    const char *format = "%+-11.11f!%+-11.11f Hello, %+-11.11f%+-11.11f%+-11.11f World %+-11.11f!%+-11.11f";
+    const char *format = "%+-10.10f!%+-10.10f Hello, %+-10.10f%+-10.10f%+-10.10f World %+-10.10f!%+-10.10f";
 
     char s21_buffer[10000];
     memset(s21_buffer, 'a', 10000);
