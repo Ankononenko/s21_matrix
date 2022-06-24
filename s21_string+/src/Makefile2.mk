@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra -std=c11 -c -fsanitize=address
+CFLAGS=-Wall -Werror -Wextra -std=c11 -c -fsanitize=address -g
 #CFLAGS=-std=c11 -c
 CFLAGS_GCOV=-fprofile-arcs -ftest-coverage
 LIBS=-lcheck -lgcov
@@ -53,6 +53,12 @@ run_test: test
 test: $(TARGET_TEST)
 
 rerun_test: clean run_test
+
+
+
+all_tests: 
+
+
 
 generate_all_tests: $(ALL_TESTS_IN_ONE_FILE_GENERATED)
 

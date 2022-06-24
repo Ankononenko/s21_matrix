@@ -1,8 +1,9 @@
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra -std=c11 -c
-#CFLAGS=-std=c11 -c
+CFLAGS=-Wall -Werror -Wextra -std=c11 -c $(shell pkg-config --cflags check) -g
+# CFLAGS=-Wall -Werror -Wextra -std=c11 -c -g
 CFLAGS_GCOV=-fprofile-arcs -ftest-coverage
-LIBS=-lcheck -lgcov
+LIBS=-lcheck -lgcov $(shell pkg-config --libs check) -g
+
 
 SOURCE_DIRECTORIES=../s21_strlen
 
@@ -54,6 +55,9 @@ leaks_short: run_test
 
 valgrind: test
 		valgrind --trace-children=yes --leak-check=full --show-leak-kinds=all --track-origins=yes $(TARGET_TEST)
+
+insert_line_to_make_leaks_work_fast:
+		sed -i.bak -r 's/srunner_run_all\(sr, CK_ENV\);/srunner_set_fork_status\(sr, CK_NOFORK\); srunner_run_all\(sr, CK_ENV\);/g' $(TEST_FILE_GENERATED)
 
 $(TEST_FILE_GENERATED): $(TEST_FILE)
 		checkmk $< > $@

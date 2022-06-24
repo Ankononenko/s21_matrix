@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra -std=c11 -c
-#CFLAGS=-std=c11 -c
-CFLAGS_GCOV=-fprofile-arcs -ftest-coverage
-LIBS=-lcheck -lgcov
+CFLAGS=-Wall -Werror -Wextra -std=c11 -c -g
+#CFLAGS=-std=c11 -c -g
+#CFLAGS_GCOV=-fprofile-arcs -ftest-coverage
+LIBS=-lcheck -lgcov -g
 
 SOURCE_DIRECTORIES=../s21_strlen ../s21_common/s21_memcpy_forward_backward ../s21_memcpy
 OBJECT_DIRECTORIES_TO_CLEAN=$(subst ../,,$(filter ../%, $(SOURCE_DIRECTORIES)))
@@ -49,6 +49,11 @@ leaks: run_test
 leaks_short: run_test
 		leaks -atExit -- $(TARGET_TEST) | grep LEAK
 
+
+insert_line_to_make_leaks_work_fast:
+		sed -i.bak -r 's/srunner_run_all\(sr, CK_ENV\);/srunner_set_fork_status\(sr, CK_NOFORK\); srunner_run_all\(sr, CK_ENV\);/g' $(TEST_FILE_GENERATED)
+
+
 $(TEST_FILE_GENERATED): $(TEST_FILE)
 		checkmk $< > $@
 
@@ -57,7 +62,7 @@ $(TARGET_TEST): $(OBJECT_FILES_IN_BUILD_DIRECTORIES) $(OBJECT_TEST_FILE_GENERATE
 		$(CC) -o $@ $^ $(LIBS)
 
 
-$(OBJECT_TEST_FILE_GENERATED): $(TEST_FILE_GENERATED) $(DEPENDENCY_FILE_TEST_FILE_GENERATED_IN_DEPENDENCY_DIRECTORY) | $(DEPENDENCY_DIRECTORY)
+$(OBJECT_TEST_FILE_GENERATED): $(TEST_FILE_GENERATED) insert_line_to_make_leaks_work_fast $(DEPENDENCY_FILE_TEST_FILE_GENERATED_IN_DEPENDENCY_DIRECTORY) | $(DEPENDENCY_DIRECTORY)
 		mkdir -p $(dir $@)
 		mkdir -p $(DEPENDENCY_DIRECTORY)/$(dir $*)
 		$(CC) $(CFLAGS) $< -o $@ $(DEPFLAGS)
