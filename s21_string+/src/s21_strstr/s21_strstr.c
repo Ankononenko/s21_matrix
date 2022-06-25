@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_strstr.h"
 #include "../s21_strlen/s21_strlen.h"
 

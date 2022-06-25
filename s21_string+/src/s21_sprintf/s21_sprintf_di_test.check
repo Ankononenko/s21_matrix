@@ -2006,7 +2006,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // %i Zero i test - left
 #test s21_sprintf_di_specifier_test62
-    const short int input_int = 0;
+    const int input_int = 0;
     const char *format = "%+-.3i%-.7i%-.10i Hello, Word %+-3.i%-7.i%-10.i";
 
     char s21_buffer[1000];
@@ -2022,7 +2022,7 @@ int s21_sprintf(char *buffer, const char *format, ...);
 
 // %d Zero d test - left
 #test s21_sprintf_di_specifier_test63
-    const short int input_int = 0;
+    const int input_int = 0;
     const char *format = "%+-.3d%-.7d%-.10d Hello, Word %+-3.d%-7.d%-10.d";
 
     char s21_buffer[1000];

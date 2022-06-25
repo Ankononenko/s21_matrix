@@ -61,16 +61,15 @@ What to return - number of characters written to buffer
     d. Precision description: .(number)
 
     e. Length description: h, l
-3. Memory testß
-4. Test
-5. Cpplint test
-6. Add and push
++ 3. Memory test
++ 4. Test
++ 5. Cpplint test
++ 6. Add and push
 */
 
 #include "s21_sprintf.h"
 #include <assert.h>
 #include "../s21_string.h"
-
 
 #include <stdio.h>
 
@@ -96,7 +95,6 @@ typedef struct Specifiers {
     char p;
     char n;
     char percent;
-    
     char plus;
     char minus;
     char space;
@@ -109,7 +107,7 @@ typedef struct Specifiers {
     char is_precision_default;
 
     char star;
-    
+
     char h;
     char l;
     char ll;
@@ -188,7 +186,8 @@ static void __s21_wmemmove(char* destination, const wchar_t *source, int size) {
         destination[index] = source[index];
 }
 
-static void write_wide_char_to_buffer(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static void write_wide_char_to_buffer(char *buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
     if (specifiers->width > 1) {
         if (specifiers->minus) {
             // left-justify
@@ -198,7 +197,8 @@ static void write_wide_char_to_buffer(char *buffer, int* index, const Specifiers
         } else {
             // right-justify
             s21_memset(buffer, ' ', specifiers->width - argument->length);
-            __s21_wmemmove(buffer+ specifiers->width - argument->length, (wchar_t*)(argument->data), argument->length);
+            __s21_wmemmove(buffer+ specifiers->width - argument->length,
+            (wchar_t*)(argument->data), argument->length);
             *index += specifiers->width;
         }
     } else {
@@ -208,8 +208,8 @@ static void write_wide_char_to_buffer(char *buffer, int* index, const Specifiers
 }
 
 
-static void write_char_to_buffer(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
-    
+static void write_char_to_buffer(char *buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
     if (specifiers->width > 1) {
         if (specifiers->minus) {
             // left-justify
@@ -228,20 +228,37 @@ static void write_char_to_buffer(char *buffer, int* index, const Specifiers* spe
     }
 }
 
-static void __write_no_precision_no_width(char *buffer, int* index, const Argument* argument) {
+static void __write_no_precision_no_width(char *buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
+    // if ((specifiers->d || specifiers->i || specifiers->u) &&
+    // (argument->data[0] == '0' || argument->data[1] == '0') && specifiers->precision < 1) {
+    //    if (argument->data[0] == '0')
+    //        ((char *)(argument->data))[0] = ' ';
+    //    if (argument->data[1] == '0') {
+    //        ((char *)(argument->data))[1] = ' ';
+    //    }
+    // }
+    UNUSED_SHIT(specifiers);
     s21_memcpy(buffer, argument->data, argument->length);
     *index += argument->length;
 }
 
-static void __write_no_precision_with_width(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static void __write_no_precision_with_width(char *buffer,
+int* index, const Specifiers* specifiers, const Argument* argument) {
+    if ((specifiers->d || specifiers->i || (specifiers->u && !specifiers->l)) &&
+    (argument->data[0] == '0' ||
+    ((argument->data[0] == '+' || argument->data[0] == '-') && argument->data[1] == '0'))
+    && specifiers->precision < 1) {
+        ((Argument*)(argument))->length -= 1;
+    }
+
     const int length_for_spaces = specifiers->width - argument->length;
-    assert(length_for_spaces > 0);
+    assert(length_for_spaces >= 0);
 
     if (specifiers->minus) {
        // assert(0 && "here");
         s21_memcpy(buffer, argument->data, argument->length);
         *index += argument->length;
-        
         s21_memset(buffer + argument->length, ' ', length_for_spaces);
         *index += length_for_spaces;
     } else {
@@ -253,7 +270,8 @@ static void __write_no_precision_with_width(char *buffer, int* index, const Spec
     }
 }
 
-static int __write_with_precision_no_width(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static int __write_with_precision_no_width(char *buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
     int symbols_assigned = 0;
     if ((argument->is_negative || specifiers->plus) && !(specifiers->u)) {
         static const int length_for_sign = 1;
@@ -266,14 +284,14 @@ static int __write_with_precision_no_width(char *buffer, int* index, const Speci
         *index += length_for_zeros;
         symbols_assigned += length_for_zeros;
 
-        s21_memcpy(buffer + length_for_zeros + length_for_sign, argument->data + length_for_sign, argument->length - length_for_sign);
+        s21_memcpy(buffer + length_for_zeros + length_for_sign,
+        argument->data + length_for_sign, argument->length - length_for_sign);
         *index += argument->length;
         symbols_assigned += argument->length;
     } else {  // no additional minus sign
         const int length_for_zeros = specifiers->precision - argument->length;
 
         assert(length_for_zeros >= 0);
-        
         s21_memset(buffer, '0', length_for_zeros);
         *index += length_for_zeros;
         symbols_assigned += length_for_zeros;
@@ -285,18 +303,18 @@ static int __write_with_precision_no_width(char *buffer, int* index, const Speci
     return symbols_assigned;
 }
 
-static void __write_with_precision_with_width(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static void __write_with_precision_with_width(char *buffer,
+int* index, const Specifiers* specifiers, const Argument* argument) {
     assert(specifiers->width >= argument->length);
     assert(specifiers->precision >= argument->length);
     assert(specifiers->width >= specifiers->precision);
 
 
-    const int length_for_spaces = specifiers->width - specifiers->precision - (((argument->is_negative || specifiers->plus) && !(specifiers->u)) ? 1 : 0);
+    const int length_for_spaces = specifiers->width - specifiers->precision -
+    (((argument->is_negative || specifiers->plus) && !(specifiers->u)) ? 1 : 0);
 
     if (specifiers->minus) {
-        
         const int shift = __write_with_precision_no_width(buffer, index, specifiers, argument);
-        
         assert(length_for_spaces >= 0);
         s21_memset(buffer + shift, ' ', length_for_spaces);
         *index += length_for_spaces;
@@ -310,12 +328,13 @@ static void __write_with_precision_with_width(char *buffer, int* index, const Sp
 }
 
 
-static void write_number_to_buffer(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static void write_number_to_buffer(char *buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
     assert(argument->length >= 0);
 
     if (specifiers->precision < argument->length) {   //  ignoring precision
-        if (specifiers->width <= argument->length) {  //  ignoring width and ignoring precision
-            __write_no_precision_no_width(buffer, index, argument);
+        if (specifiers->width < argument->length) {  //  ignoring width and ignoring precision
+            __write_no_precision_no_width(buffer, index, specifiers, argument);
         } else {  //  considering width
             __write_no_precision_with_width(buffer, index, specifiers, argument);
         }
@@ -331,7 +350,6 @@ static void write_number_to_buffer(char *buffer, int* index, const Specifiers* s
             } else {
                 __write_with_precision_with_width(buffer, index, specifiers, argument);
             }
-            
         }
     }
 }
@@ -341,17 +359,18 @@ static void set_default_precision_if_needed(Specifiers* specifiers) {
         specifiers->precision = 6;
 }
 
-static void write_string_to_buffer(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static void write_string_to_buffer(char *buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
     int length_to_copy = argument->length;
     if (!(specifiers->is_precision_default) && specifiers->precision < argument->length)
-        length_to_copy = specifiers->precision; 
-    
+        length_to_copy = specifiers->precision;
+
     if (specifiers->width > length_to_copy) {
         const int length_for_spaces = specifiers->width - length_to_copy;
         assert(length_to_copy >= 0);
 
         if (specifiers->minus) {
-            s21_memmove(buffer, argument->string_pointer, length_to_copy);    
+            s21_memmove(buffer, argument->string_pointer, length_to_copy);
             s21_memset(buffer + length_to_copy, ' ', length_for_spaces);
         } else {
             s21_memset(buffer, ' ', length_for_spaces);
@@ -366,17 +385,18 @@ static void write_string_to_buffer(char *buffer, int* index, const Specifiers* s
     *index += length_to_copy;
 }
 
-static void write_wide_string_to_buffer(char *buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static void write_wide_string_to_buffer(char *buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
     int length_to_copy = argument->length;
     if (!(specifiers->is_precision_default) && specifiers->precision < argument->length)
-        length_to_copy = specifiers->precision; 
-    
+        length_to_copy = specifiers->precision;
+
     if (specifiers->width > length_to_copy) {
         const int length_for_spaces = specifiers->width - length_to_copy;
         assert(length_to_copy >= 0);
 
         if (specifiers->minus) {
-            __s21_wmemmove(buffer, argument->wstring_pointer, length_to_copy);    
+            __s21_wmemmove(buffer, argument->wstring_pointer, length_to_copy);
             s21_memset(buffer + length_to_copy, ' ', length_for_spaces);
         } else {
             s21_memset(buffer, ' ', length_for_spaces);
@@ -391,7 +411,8 @@ static void write_wide_string_to_buffer(char *buffer, int* index, const Specifie
     *index += (length_to_copy);
 }
 
-static void write_argument_to_buffer(char* buffer, int* index, const Specifiers* specifiers, const Argument* argument) {
+static void write_argument_to_buffer(char* buffer, int* index,
+const Specifiers* specifiers, const Argument* argument) {
     assert(argument->length >= 0 && "Length should not be negative!");
     if (specifiers->c) {
         if (specifiers->l)
@@ -401,7 +422,7 @@ static void write_argument_to_buffer(char* buffer, int* index, const Specifiers*
     }
     if (specifiers->d || specifiers->i)
         write_number_to_buffer(buffer, index, specifiers, argument);
-    if (specifiers->f) 
+    if (specifiers->f)
         write_number_to_buffer(buffer, index, specifiers, argument);
     if (specifiers->s) {
         if (specifiers->l)
@@ -424,20 +445,29 @@ static int __is_not_end(const char *format) {
     return *(format) != '\0';
 }
 
+static int __get_length_for_spaces_precent(const char** format,
+const Specifiers* specifiers, int length_for_content) {
+    int length_for_spaces = ((specifiers->width - length_for_content) >
+    0 && __is_not_end(*format)) ? (specifiers->width - length_for_content) : 0;
+    return length_for_spaces;
+}
 
-static void write_percent_to_buffer(char* buffer, const char** format, int* index, const Specifiers* specifiers) {
+static void write_percent_to_buffer(char* buffer, const char** format,
+int* index, const Specifiers* specifiers) {
     if (!specifiers->percent)
         return;
 
     const int length_for_content = __get_distance_to_next_percent(*format);
-    const int length_for_spaces = ((specifiers->width - length_for_content) > 0 && __is_not_end(*format)) ? (specifiers->width - length_for_content) : 0;
+    const int length_for_spaces = __get_length_for_spaces_precent(format, specifiers, length_for_content);
 
     assert(length_for_content >= 0);
     assert(length_for_spaces >= 0);
 
     if (length_for_content == 0 && __is_not_end(*format)) {  //  printing '%', also considering width
         const int length_for_percent = 1;
-        const int length_for_spaces_percent = length_for_spaces - length_for_percent > 0 ? length_for_spaces - length_for_percent : 0;
+        const int length_for_spaces_percent =
+        length_for_spaces - length_for_percent > 0 ?
+        length_for_spaces - length_for_percent : 0;
 
         assert(length_for_spaces_percent >= 0);
         if (specifiers->minus) {
@@ -449,11 +479,9 @@ static void write_percent_to_buffer(char* buffer, const char** format, int* inde
         }
         *index += length_for_percent;
         *index += length_for_spaces_percent;
-        
         *format += length_for_percent;
 
     } else {  //  printing content up to the next '%', not including '%', considering width
-
         if (specifiers->minus) {
             s21_memmove(buffer, *format, length_for_content);
             s21_memset(buffer + length_for_content, ' ', length_for_spaces);
@@ -486,7 +514,7 @@ static void initialize_specifiers(Specifiers *specifiers) {
     specifiers->p = FALSE;
     specifiers->n = FALSE;
     specifiers->percent = FALSE;
-    
+
     specifiers->plus = FALSE;
     specifiers->minus = FALSE;
     specifiers->space = FALSE;
@@ -499,7 +527,7 @@ static void initialize_specifiers(Specifiers *specifiers) {
     specifiers->is_precision_default = TRUE;
 
     specifiers->star = FALSE;
-    
+
     specifiers->h = FALSE;
     specifiers->l = FALSE;
     specifiers->ll = FALSE;
@@ -508,7 +536,7 @@ static void initialize_specifiers(Specifiers *specifiers) {
 
 static void initialize_argument(Argument* argument) {
     s21_memset(argument->data, '\0', 100ul);
-    
+
     argument->string_pointer = s21_NULL;
     argument->wstring_pointer = s21_NULL;
     argument->length = 0;
@@ -517,12 +545,15 @@ static void initialize_argument(Argument* argument) {
 }
 
 
-static void write_space_to_buffer_and_decrease_width(char *buffer, int *index, Specifiers* specifiers, const Argument* argument) {
-    if (specifiers->space && (!specifiers->plus) && !(argument->is_negative) && (specifiers->d || specifiers->i || specifiers->f)) {
+static void write_space_to_buffer_and_decrease_width(char *buffer,
+int *index, Specifiers* specifiers, const Argument* argument) {
+    if (specifiers->space && (!specifiers->plus) &&
+    !(argument->is_negative) &&
+    (specifiers->d || specifiers->i || specifiers->f)) {
         s21_memset(buffer, ' ', 1);
         ++(*index);
 
-        if(specifiers->width > 0)
+        if (specifiers->width > 0)
             specifiers->width -= 1;
     }
 }
@@ -558,19 +589,19 @@ static void __write_signed_to_argument(long long int number, char plus, Argument
 
 static void int_from_varg_to_argument(va_list argp, char plus, Argument* argument) {
     const int number = __get_signed_from_va_arg(argp);
-    __write_signed_to_argument(number, plus, argument);    
+    __write_signed_to_argument(number, plus, argument);
 }
 static void short_int_from_varg_to_argument(va_list argp, char plus, Argument* argument) {
     const short int number = __get_signed_from_va_arg(argp);
-    __write_signed_to_argument(number, plus, argument);  
+    __write_signed_to_argument(number, plus, argument);
 }
 static void long_int_from_varg_to_argument(va_list argp, char plus, Argument* argument) {
     const long int number = __get_signed_from_va_arg(argp);
-    __write_signed_to_argument(number, plus, argument);  
+    __write_signed_to_argument(number, plus, argument);
 }
 static void long_long_int_from_varg_to_argument(va_list argp, char plus, Argument* argument) {
     const long long int number = __get_signed_from_va_arg(argp);
-    __write_signed_to_argument(number, plus, argument);  
+    __write_signed_to_argument(number, plus, argument);
 }
 
 
@@ -583,22 +614,22 @@ static void __write_unsigned_to_argument(unsigned long long int number, Argument
 
 static void unsigned_from_varg_to_argument(va_list argp, Argument* argument) {
     const unsigned int number = __get_unsigned_from_va_arg(argp);
-    __write_unsigned_to_argument(number, argument);    
+    __write_unsigned_to_argument(number, argument);
 }
 
 static void short_unsigned_from_varg_to_argument(va_list argp, Argument* argument) {
     const unsigned short int number = __get_unsigned_from_va_arg(argp);
-    __write_unsigned_to_argument(number, argument);  
+    __write_unsigned_to_argument(number, argument);
 }
 
 static void long_unsigned_from_varg_to_argument(va_list argp, Argument* argument) {
     const unsigned long int number = __get_unsigned_from_va_arg(argp);
-    __write_unsigned_to_argument(number, argument);  
+    __write_unsigned_to_argument(number, argument);
 }
 
 static void long_long_unsigned_from_varg_to_argument(va_list argp, Argument* argument) {
     const unsigned long long int number = __get_unsigned_from_va_arg(argp);
-    __write_unsigned_to_argument(number, argument);  
+    __write_unsigned_to_argument(number, argument);
 }
 
 static void string_from_varg_to_argument(va_list argp, Argument* argument) {
@@ -609,7 +640,7 @@ static void string_from_varg_to_argument(va_list argp, Argument* argument) {
 
 static int __s21_wstrlen(const wchar_t* string) {
     int length = 0;
-    while(string[length])
+    while (string[length])
         ++length;
     return length;
 }
@@ -619,19 +650,6 @@ static void wide_string_from_varg_to_argument(va_list argp, Argument* argument) 
     argument->wstring_pointer = va_arg(argp, wchar_t*);
     argument->length = __s21_wstrlen(argument->wstring_pointer);
 }
-
-
-// static void ___round(unsigned long long int* number) {
-//     static const int base = 100;
-//     const int remainder = *number % base;
-
-//     static const int threshold = 51;
-//     if (remainder >= threshold)
-//         *number += base;
-// }
-
-
-
 
 static int __count_zeros(double* number, int* precision) {
     static const int base = 10;
@@ -648,18 +666,27 @@ static int __count_zeros(double* number, int* precision) {
     return zeros;
 }
 
+static void ___round(unsigned long long int* number) {
+    static const int base = 10;
+    const int remainder = *number % base;
 
-static void __double_to_array_of_chars(char *pointer_array_for_double, double temp_arpg_variable, const Specifiers* specifiers) {
+    static const int threshold = 5;
+    if (remainder >= threshold)
+        *number += base;
+}
 
+
+static void __double_to_array_of_chars(char *pointer_array_for_double,
+double temp_arpg_variable, const Specifiers* specifiers) {
     static const int base = 10;
 
-    int precision = specifiers->precision + 2;
+    int precision = specifiers->precision + 1;
 
     const int zeros = __count_zeros(&temp_arpg_variable, &precision);
 
 
     // const double multiplier = pow(base, precision);
-    const unsigned long long int multiplier = pow(base, precision);
+    const unsigned long long multiplier = pow(base, precision);
 
     char is_negative = FALSE;
     if (temp_arpg_variable < 0) {
@@ -667,46 +694,24 @@ static void __double_to_array_of_chars(char *pointer_array_for_double, double te
         is_negative = TRUE;
     }
 
-    //unsigned long long int double_without_floating_point = temp_arpg_variable * multiplier;  //  TODO: get rid of overflow!
-    
-    double double_without_floating_point_double = 0.0;
-    unsigned long long int double_without_floating_point = 0;
-    double fraction_part = 0.0;
-    // Get the integer part without the floating point and fractional part without the integer part as double value
-    fraction_part = modf(temp_arpg_variable, &double_without_floating_point_double);
-    double_without_floating_point = double_without_floating_point_double;
-    // Convert double to int
-    fraction_part = round(fraction_part);
-    unsigned long long int fraction_part_to_int = fraction_part * multiplier;
+    unsigned long long int double_without_floating_point
+    = temp_arpg_variable * multiplier;  // TODO(elviaatt): get rid of overflow!
 
-    //___round(&double_without_floating_point);
-    if (specifiers->precision == 0) {
-        double_without_floating_point = round(temp_arpg_variable);
-        fraction_part_to_int = 0;
-    }
-    //___round(&fraction_part_to_int);
+    ___round(&double_without_floating_point);
 
     int index = 0, flip_index = 0;
     char temp_array_for_double[49] = {'\0'};
-    
-    // Add integer part
+
     while (double_without_floating_point > 0) {
         temp_array_for_double[index] = (char)((double_without_floating_point % base) + '0');
         double_without_floating_point /= base;
         ++index;
     }
 
-    // Add floating point part
-    while (fraction_part_to_int > 0) {
-        temp_array_for_double[index] = (char)((fraction_part_to_int % base) + '0');
-        fraction_part_to_int /= base;
-        ++index;
-    }
-    
     if (specifiers->plus && !is_negative) {
         pointer_array_for_double[flip_index] = '+';
         ++flip_index;
-    }    
+    }
     if (is_negative) {
         pointer_array_for_double[flip_index] = '-';
         ++flip_index;
@@ -728,7 +733,7 @@ static void __double_to_array_of_chars(char *pointer_array_for_double, double te
 
 
 static int __find_dot_index(double number, const Specifiers* specifiers) {
-    int index = 0; 
+    int index = 0;
     char is_negative = FALSE;
     if (number < 0) {
         number *= -1;
@@ -737,17 +742,17 @@ static int __find_dot_index(double number, const Specifiers* specifiers) {
     }
 
     if (number < 1) {
-        if (is_negative)  //  012345
-            index = 2;    //  -0.987
-        else              //  012345
-            index = 1;    //  0.987
+        if (is_negative || specifiers->plus)  //  012345
+            index = 2;                        //  -0.987
+        else                                  //  012345
+            index = 1;                        //  0.987
     } else {
         double remainder = number;
         while (remainder >= 1) {
             remainder /= 10;
             ++index;
         }
-        
+
         if (specifiers->plus && !is_negative) {
             ++index;
         }
@@ -758,23 +763,23 @@ static int __find_dot_index(double number, const Specifiers* specifiers) {
 
 static void float_from_varg_to_argument(va_list argp, const Specifiers* specifiers, Argument* argument) {
     char array_for_double[49] = {'\0'};
-    
+
     char *pointer_array_for_double = array_for_double;
     const double temp_arpg_variable = va_arg(argp, double);
-    
+
     int dot_index = __find_dot_index(temp_arpg_variable, specifiers);
     int array_for_double_index = 0;
 
 
     const int max_amount_of_precision = specifiers->precision;
-    
+
     __double_to_array_of_chars(pointer_array_for_double, temp_arpg_variable, specifiers);
-    
+
     while (array_for_double_index != dot_index) {
         argument->data[array_for_double_index] = array_for_double[array_for_double_index];
         ++array_for_double_index;
     }
-    
+
     static const char dot = '.';
     if (specifiers->precision != 0) {
         argument->data[array_for_double_index] = dot;
@@ -808,12 +813,13 @@ static void pick_type(const char **format, Specifiers* specifiers) {
     } else {
         specifiers->percent = TRUE;
     }
-    
+
     if (!specifiers->percent)
         ++*format;
 }
 
-static void any_type_from_varg_to_argument(va_list argp, const Specifiers* specifiers, Argument* argument) {  //  pick type in separated function
+static void any_type_from_varg_to_argument(va_list argp,
+const Specifiers* specifiers, Argument* argument) {  //  pick type in separated function
     if (specifiers->c) {
         char_from_varg_to_argument(argp, argument);
     } else if (specifiers->d || specifiers->i) {
@@ -821,13 +827,13 @@ static void any_type_from_varg_to_argument(va_list argp, const Specifiers* speci
             short_int_from_varg_to_argument(argp, specifiers->plus, argument);
         else if (specifiers->l)  //  %ld  %li
             long_int_from_varg_to_argument(argp, specifiers->plus, argument);
-        else if (specifiers->ll) //  %lld %lli
+        else if (specifiers->ll)  //  %lld %lli
             long_long_int_from_varg_to_argument(argp, specifiers->plus, argument);
         else                     //  %d   %i
             int_from_varg_to_argument(argp, specifiers->plus,  argument);
     } else if (specifiers->f) {  //  %f
         float_from_varg_to_argument(argp, specifiers, argument);
-    } else if (specifiers->s) {  
+    } else if (specifiers->s) {
         if (specifiers->l)       //  %ls
             wide_string_from_varg_to_argument(argp, argument);
         else                     //  %s
@@ -835,9 +841,9 @@ static void any_type_from_varg_to_argument(va_list argp, const Specifiers* speci
     } else if (specifiers->u) {
         if (specifiers->h)       //  %hu
             short_unsigned_from_varg_to_argument(argp, argument);
-        else if (specifiers->l)  //  %lu 
+        else if (specifiers->l)  //  %lu
             long_unsigned_from_varg_to_argument(argp, argument);
-        else if (specifiers->ll) //  %llu 
+        else if (specifiers->ll)  //  %llu
             long_long_unsigned_from_varg_to_argument(argp, argument);
         else                     //  %u
             unsigned_from_varg_to_argument(argp, argument);
@@ -861,11 +867,10 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 
             Argument argument;
             initialize_argument(&argument);
-            
             ++format;  // to move from percent
 
             pick_minus_plus_or_space(&format, &specifiers);
-            pick_width(&format, &specifiers);  
+            pick_width(&format, &specifiers);
             pick_minus_plus_or_space(&format, &specifiers);
             pick_precision(&format, &specifiers);
             pick_minus_plus_or_space(&format, &specifiers);
@@ -876,7 +881,6 @@ int s21_sprintf(char *buffer, const char *format, ...) {
             set_default_precision_if_needed(&specifiers);
 
             any_type_from_varg_to_argument(argp, &specifiers, &argument);
-            
 
             write_space_to_buffer_and_decrease_width(buffer + index, &index, &specifiers, &argument);
             write_percent_to_buffer(buffer + index, &format, &index, &specifiers);
@@ -892,6 +896,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
     // We call va_end to stop consuming the vararg arguments
     va_end(argp);
     buffer[index] = '\0';
-    // Upon successful return, the function returns the number of characters printed (excluding the null byte used to end output to strings).
+    // Upon successful return, the function returns the number of
+    // characters printed (excluding the null byte used to end output to strings).
     return index;
 }

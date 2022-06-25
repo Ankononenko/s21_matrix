@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_strncpy.h"
 #include "../s21_strlen/s21_strlen.h"
 #include "../s21_memset/s21_memset.h"
@@ -15,4 +17,3 @@ char *s21_strncpy(char *destination, const char *source, s21_size_t size) {
 
     return destination;   
 }
-

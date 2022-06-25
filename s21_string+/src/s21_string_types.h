@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #ifndef SRC_S21_STRING_TYPES_H_
 #define SRC_S21_STRING_TYPES_H_
 

@@ -1,11 +1,15 @@
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra -std=c11 -c -fsanitize=address
-#CFLAGS=-std=c11 -c
+CFLAGS=-Wall -Werror -Wextra -std=c11 -c $(shell pkg-config --cflags check) -g
+# CFLAGS=-Wall -Werror -Wextra -std=c11 -c -g
 CFLAGS_GCOV=-fprofile-arcs -ftest-coverage
-LIBS=-lcheck -lgcov -fsanitize=address
+LIBS=-lcheck -lgcov $(shell pkg-config --libs check) -g
 
-SOURCE_DIRECTORIES=../s21_memchr ../s21_strlen
+
+SOURCE_DIRECTORIES=../s21_strlen
+
+
 OBJECT_DIRECTORIES_TO_CLEAN=$(subst ../,,$(filter ../%, $(SOURCE_DIRECTORIES)))
+OBJECT_DIRECTORIES_TO_CLEAN+=s21_common
 
 BUILD_DIRECTORY=build
 DEPENDENCY_DIRECTORY=$(BUILD_DIRECTORY)/dependencies
@@ -40,7 +44,8 @@ test: $(TARGET_TEST)
 rerun_test: clean run_test
 
 gcov_report: run_test
-		gcovr -r . --html --html-details -o coverage_report.html
+		$(foreach directory,$(SOURCE_DIRECTORIES),gcovr $(subst ../,,$(directory)) -r $(directory) --html-details -o coverage_report.html ;)
+		gcovr . --html --html-details -o coverage_report.html
 
 leaks: run_test
 		leaks -atExit -- $(TARGET_TEST)
@@ -48,15 +53,21 @@ leaks: run_test
 leaks_short: run_test
 		leaks -atExit -- $(TARGET_TEST) | grep LEAK
 
+valgrind: test
+		valgrind --trace-children=yes --leak-check=full --show-leak-kinds=all --track-origins=yes $(TARGET_TEST)
+
+insert_line_to_make_leaks_work_fast:
+		sed -i.bak -r 's/srunner_run_all\(sr, CK_ENV\);/srunner_set_fork_status\(sr, CK_NOFORK\); srunner_run_all\(sr, CK_ENV\);/g' $(TEST_FILE_GENERATED)
+
 $(TEST_FILE_GENERATED): $(TEST_FILE)
 		checkmk $< > $@
 
 
 $(TARGET_TEST): $(OBJECT_FILES_IN_BUILD_DIRECTORIES) $(OBJECT_TEST_FILE_GENERATED)
-		$(CC) -o $@ $^ $(LIBS)
+		$(CC) -o $@ $^ $(LIBS) $(CFLAGS_GCOV)
 
 
-$(OBJECT_TEST_FILE_GENERATED): $(TEST_FILE_GENERATED) $(DEPENDENCY_FILE_TEST_FILE_GENERATED_IN_DEPENDENCY_DIRECTORY) | $(DEPENDENCY_DIRECTORY)
+$(OBJECT_TEST_FILE_GENERATED): $(TEST_FILE_GENERATED) insert_line_to_make_leaks_work_fast $(DEPENDENCY_FILE_TEST_FILE_GENERATED_IN_DEPENDENCY_DIRECTORY) | $(DEPENDENCY_DIRECTORY)
 		mkdir -p $(dir $@)
 		mkdir -p $(DEPENDENCY_DIRECTORY)/$(dir $*)
 		$(CC) $(CFLAGS) $< -o $@ $(DEPFLAGS)
@@ -80,7 +91,7 @@ clean:
 
 
 print:
-		#echo $(OBJECT_FILES_IN_BUILD_DIRECTORIES)
+		$(patsubst ../,,$(directory))
 		
 
 include $(wildcard $(DEPENDENCY_FILES_ALL_IN_DEPENDENCY_DIRECTORIES))

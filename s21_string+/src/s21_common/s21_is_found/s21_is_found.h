@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #ifndef S21_COMMON_S21_IS_FOUND_S21_IS_FOUND_H
 #define S21_COMMON_S21_IS_FOUND_S21_IS_FOUND_H
 

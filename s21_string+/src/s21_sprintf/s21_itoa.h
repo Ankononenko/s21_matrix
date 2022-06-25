@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt & finchren
+
 #ifndef S21_ITOA_H
 #define S21_ITOA_H
 

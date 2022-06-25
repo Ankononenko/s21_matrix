@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_strtok.h"
 #include "../s21_common/s21_is_found/s21_is_found.h"
 #include "../s21_strlen/s21_strlen.h"

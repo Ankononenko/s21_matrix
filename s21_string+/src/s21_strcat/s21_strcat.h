@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #ifndef SRC_S21_STRCAT_H
 #define SRC_S21_STRCAT_H
 

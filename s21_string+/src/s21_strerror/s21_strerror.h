@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #ifndef SRC_S21_STRERROR_S21_STRERROR_H
 #define SRC_S21_STRERROR_S21_STRERROR_H
 
@@ -121,7 +123,7 @@ char *s21_strerror(int error_number);
 #else
 #define NUMBER_OF_ERRORS 133
 #define UNKNOWN_ERROR "Unknown error "
-#define ERROR 
+#define ERROR
 {                                                                          \
     "Success", "Operation not permitted", "No such file or directory",     \
     "No such process", "Interrupted system call", "Input/output error",    \

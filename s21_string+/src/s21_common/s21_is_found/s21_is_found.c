@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_is_found.h"
 #include "../../s21_memchr/s21_memchr.h"
 

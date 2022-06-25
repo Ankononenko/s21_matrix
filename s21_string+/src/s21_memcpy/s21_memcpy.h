@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #ifndef SRC_S21_MEMCPY_S21_MEMCPY_H
 #define SRC_S21_MEMCPY_S21_MEMCPY_H
 

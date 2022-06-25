@@ -2047,19 +2047,3 @@ int s21_sprintf(char *buffer, const char *format, ...);
     
     ck_assert_str_eq(s21_buffer, buffer);
     ck_assert_int_eq(s21_result, result);
-
-// %lu Maximum value test - left-justify and empty precision
-#test s21_sprintf_lu_specifier_test60
-    const unsigned long int input_unsigned = 0;
-    const char *format = "%-.3lu%-.7lu%-.10lu Hello, World %-3.lu%-7.lu%-10.lu";
-
-    char s21_buffer[1000];
-    memset(s21_buffer, 'a', 1000);
-    char buffer[1000];
-    memset(buffer, 'a', 1000);
-
-    const int s21_result = s21_sprintf(s21_buffer, format, input_unsigned, input_unsigned, input_unsigned, input_unsigned, input_unsigned, input_unsigned);
-    const int result = sprintf(buffer, format, input_unsigned, input_unsigned, input_unsigned, input_unsigned, input_unsigned, input_unsigned);
-    
-    ck_assert_str_eq(s21_buffer, buffer);
-    ck_assert_int_eq(s21_result, result);

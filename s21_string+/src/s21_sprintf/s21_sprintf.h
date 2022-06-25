@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt & finchren
+
 #ifndef S21_SPRINTF_H
 #define S21_SPRINTF_H
 
@@ -15,4 +17,4 @@
 int s21_sprintf(char *buffer, const char *format, ...);
 
 
-#endif //  S21_SPRINTF_H
+#endif  //  S21_SPRINTF_H

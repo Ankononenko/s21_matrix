@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_strspn.h"
 #include "../s21_memchr/s21_memchr.h"
 #include "../s21_strlen/s21_strlen.h"

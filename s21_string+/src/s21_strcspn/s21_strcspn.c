@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_strcspn.h"
 #include "../s21_common/s21_filter_from_beginning/s21_filter_from_beginning.h"
 #include "../s21_common/s21_is_found/s21_is_found.h"

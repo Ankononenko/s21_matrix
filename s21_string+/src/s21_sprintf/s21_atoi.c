@@ -1,4 +1,6 @@
-#include "s21_atoi.h"
+// Copyright 2022 elviaatt & finchren
+
+#include "../s21_sprintf/s21_atoi.h"
 
 // Main used for testing
 // int main() {
@@ -8,7 +10,6 @@
 //     printf("Resulting number = %d", resulting_number);
 //     return 0;
 // }
-
 
 static int __get_sign(const char **format) {
     int sign = 1;
@@ -20,16 +21,11 @@ static int __get_sign(const char **format) {
 }
 
 int s21_atoi(const char **format) {
-    // Note for later - Do I need to use index from sprintf here or not? The index of buffer doesn't move if while I parse the number from string
-    // So probably I don't need it. Need to look into it after a while. Now too sleepy.
     int result = 0, index = 0;
     char temp_array_of_numbers[13] = {'\0'};
     // We write to the temp array each number in the sequence
 
-
-    const int sign = __get_sign(format);    
-
-
+    const int sign = __get_sign(format);
     while (**format <= '9' && **format >= '0') {
         temp_array_of_numbers[index] = **format;
         ++index;

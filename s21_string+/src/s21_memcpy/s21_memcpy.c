@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_memcpy.h"
 #include "../s21_common/s21_memcpy_forward_backward/s21_memcpy_forward_backward.h"
 

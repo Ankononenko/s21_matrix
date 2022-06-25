@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_strerror.h"
 #include "../s21_strncpy/s21_strncpy.h"
 #include "../s21_strlen/s21_strlen.h"
@@ -34,7 +36,8 @@ char *s21_strerror(int error_number) {
         const s21_size_t length = s21_strlen(UNKNOWN_ERROR);
         static char unknown_error_with_code[100];
         s21_strncpy(unknown_error_with_code, UNKNOWN_ERROR, length);
-        __int_to_string_with_terminator(unknown_error_with_code + length, error_number);
+        __int_to_string_with_terminator(unknown_error_with_code +
+        length, error_number);
 
         return unknown_error_with_code;
     }

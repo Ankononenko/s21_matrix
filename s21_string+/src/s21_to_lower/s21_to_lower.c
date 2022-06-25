@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_to_lower.h"
 #include "../s21_strlen/s21_strlen.h"
 

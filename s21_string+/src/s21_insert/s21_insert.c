@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_insert.h"
 #include "../s21_strlen/s21_strlen.h"
 /*
@@ -21,8 +23,10 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index)
     return str_;
 }
 */
-//  TODO: decide behaviour when source is NULL or string_to_insert is NULL
-void *s21_insert(const char *source, const char *string_to_insert, s21_size_t start_index) {
+// TODO(elviaatt):
+// decide behaviour when source is NULL or string_to_insert is NULL
+void *s21_insert(const char *source,
+const char *string_to_insert, s21_size_t start_index) {
     if (source == s21_NULL || string_to_insert == s21_NULL)
         return s21_NULL;
 
@@ -32,7 +36,8 @@ void *s21_insert(const char *source, const char *string_to_insert, s21_size_t st
     if (start_index > source_length)
         return s21_NULL;
 
-    char *extended_string = malloc(sizeof(char) * (source_length + string_to_insert_length + 1ul));
+    char *extended_string = malloc(sizeof(char) *
+    (source_length + string_to_insert_length + 1ul));
 
     for (s21_size_t index = 0ul; index < start_index; ++index)
         extended_string[index] = source[index];
@@ -41,8 +46,9 @@ void *s21_insert(const char *source, const char *string_to_insert, s21_size_t st
         extended_string[index + start_index] = string_to_insert[index];
 
     for (s21_size_t index = 0ul; index < source_length - start_index; ++index)
-        extended_string[index + start_index + string_to_insert_length] = source[index + start_index];
- 
+        extended_string[index + start_index +
+        string_to_insert_length] = source[index + start_index];
+
     extended_string[source_length + string_to_insert_length] = '\0';
 
     return extended_string;

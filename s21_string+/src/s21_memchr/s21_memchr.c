@@ -1,7 +1,10 @@
+// Copyright 2022 elviaatt
+
 #include "s21_memchr.h"
 
-static char *s21_memchr_not_like_shit(const unsigned char *string, unsigned char symbol, s21_size_t size) {
-    for (s21_size_t index = 0ul; index < size; ++index) 
+static char *s21_memchr_not_like_shit(const unsigned char *string,
+unsigned char symbol, s21_size_t size) {
+    for (s21_size_t index = 0ul; index < size; ++index)
         if (string[index] == symbol)
             return (char*)(string + index);
 

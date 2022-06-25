@@ -1,3 +1,5 @@
+// Copyright 2022 elviaatt
+
 #include "s21_strncmp.h"
 
 int s21_strncmp(const char *string1, const char *string2, s21_size_t size) {
