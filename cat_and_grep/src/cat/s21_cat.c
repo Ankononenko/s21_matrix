@@ -22,7 +22,11 @@ You need to develop a cat utility:
 int main(int argc, char *argv[]) {
     Flags flags;
     initialize_flags(&flags);
-    check_start_conditions(argc, argv);
+    if (check_start_conditions(argc, argv)) {
+        printf("Success");
+    } else {
+        printf("Fail");
+    }
     return 0;
 }
 
@@ -62,8 +66,8 @@ int parse_flags_and_text_files(int argc, char *argv[]) {
                 ++counter_for_text_files;
             }
         }
-        if (check_if_flags_are_valid(counter_for_flags, all_flags_array &&
-            check_if_files_exist(counter_for_text_files, all_text_files_array))) {
+        if (check_if_flags_are_valid(counter_for_flags, all_flags_array) &&
+            check_if_files_exist(counter_for_text_files, all_text_files_array)) {
             is_valid_input = TRUE;
         }
     }
@@ -72,7 +76,7 @@ int parse_flags_and_text_files(int argc, char *argv[]) {
 
 int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
     int files_exist = TRUE, index = 0;
-    FILE *file;
+    FILE *file = NULL;
     while (files_exist && index != number_of_files) {
         printf("all_text_files[index] = %s \n", filenames[index]);
         if (((file = fopen(filenames[index], "r")) == NULL)) {
@@ -89,7 +93,7 @@ int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][N
     int flags_are_valid = TRUE;
     while (flags_are_valid == TRUE) {
         for (int index_all_flags = 0; index_all_flags <= counter_for_flags; ++index_all_flags) {
-            for (int index_possible_flags = 0; index_possible_flags < NUMBER_OF_FLAG_VALUES; ++index_possible_flags) {
+            for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
                 if (strcmp(all_flags_array[index_all_flags], possible_flags[index_possible_flags]) != 0) {
                     flags_are_valid = FALSE;
                 }

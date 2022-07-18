@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define NUMBER_OF_FLAG_VALUES 11
-#define MAX_LENGTH_OF_FLAG 17
+#define TOTAL_NUMBER_OF_FLAGS 11
+#define MAX_LENGTH_OF_FLAG 18
 #define NMAX 256
 
 enum true_of_false{
@@ -13,7 +13,7 @@ enum true_of_false{
     TRUE
 };
 
-static const char possible_flags[NUMBER_OF_FLAG_VALUES][MAX_LENGTH_OF_FLAG] = {
+static const char possible_flags[TOTAL_NUMBER_OF_FLAGS][MAX_LENGTH_OF_FLAG] = {
     "-b", "--number-nonblank", "-e", "-E",
     "-n", "--number", "-s", "--squeeze-blank", "-t", "-T", "NULL"
 };
