@@ -30,51 +30,54 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-int check_start_conditions(int argc, char *argv[]) {
+// int check_start_conditions(int argc, char *argv[]) {
+int check_start_conditions(int argc, char **argv) {
     int conditions = FALSE;
-    // Condition to catch the case when only text-file is given without flags
-    if (argc == 2 && argv[1][0] != '-') {
-        conditions = TRUE;
-    }
     // Condition to check if theree are flags and a text-file
     // Parse flags() should return TRUE or FALSE if the flags are valid or they are not valid
     // Here also should be a check if file exists 
-    if (argc > 2 && parse_flags_and_text_files(argc, argv)) {
+    // if (argc >= 2 && parse_flags_and_text_files(argc, argv)) {
+    if (argc >= 2 && parse_flags_and_text_files(argc, (char**)argv)) {
         conditions = TRUE;
     }
     return conditions;
 }
 
-int parse_flags_and_text_files(int argc, char *argv[]) {
-    int is_valid_input = FALSE;
+// int parse_flags_and_text_files(int argc, char *argv[]) {
+int parse_flags_and_text_files(int argc, char **argv) {
+    int is_valid_input = FALSE, letter_index = 0;
+    // Create an array for all the flags - valid and invalid to sort them out later
+    char all_flags_array[NMAX][NMAX];
+    // And an array for text-file names - valid and invalid to sort later
+    char all_text_files_array[NMAX][NMAX];
     // Here we have two-dimensional array first loop is going to iterate over elements of array
+    // Counters to know when to stop in iterating over the arrays
+    int counter_for_flags = 0, counter_for_text_files = 0;
     for (int element_index = 1; element_index < argc; ++element_index) {
-        // And the second is going to iterate over the element itself
-        int letter_index = 0;
-        // Create an array for all the flags - valid and invalid to sort them out later
-        char all_flags_array[NMAX][NMAX];
-        // And an array for text-file names - valid and invalid to sort later
-        char all_text_files_array[NMAX][NMAX];
-        // Counters to know when to stop in iterating over the arrays
-        int counter_for_flags = 0, counter_for_text_files = 0;
-        while (argv[element_index][letter_index] != '\0') {
-            if (argv[element_index][letter_index] == '-') {
-                strcpy(all_flags_array[counter_for_flags], argv[element_index]);
-                ++counter_for_flags;
-            } else {
-                strcpy(all_text_files_array[counter_for_flags], argv[element_index]);
-                ++counter_for_text_files;
-            }
+        if (argv[element_index][letter_index] == '-') {
+            // strcpy(all_flags_array[counter_for_flags], argv[element_index]);
+            strcpy((char*)all_flags_array[counter_for_flags], argv[element_index]);
+            ++counter_for_flags;
+        } else {
+            strcpy((char*)all_text_files_array[counter_for_text_files], argv[element_index]);
+            ++counter_for_text_files;
         }
-        if (check_if_flags_are_valid(counter_for_flags, all_flags_array) &&
-            check_if_files_exist(counter_for_text_files, all_text_files_array)) {
+    }
+    if (argc == 2) {
+        if (check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)) {
+            is_valid_input = TRUE;
+        }
+    } else {
+        if (check_if_flags_are_valid(counter_for_flags, (char**)all_flags_array) &&
+        check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)) {
             is_valid_input = TRUE;
         }
     }
     return is_valid_input;
 }
 
-int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
+// int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
+int check_if_files_exist(int number_of_files, char** filenames) {
     int files_exist = TRUE, index = 0;
     FILE *file = NULL;
     while (files_exist && index != number_of_files) {
@@ -89,17 +92,65 @@ int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
     return files_exist;
 }
 
-int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]) {
-    int flags_are_valid = TRUE;
-    while (flags_are_valid == TRUE) {
-        for (int index_all_flags = 0; index_all_flags <= counter_for_flags; ++index_all_flags) {
-            for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
-                if (strcmp(all_flags_array[index_all_flags], possible_flags[index_possible_flags]) != 0) {
-                    flags_are_valid = FALSE;
-                }
+int get_length(const char* string) {
+    int length = 0;
+
+    while(string[length] != '\0')
+        ++length;
+
+    return length;
+}
+
+int are_not_equal(const char* string1, const char* string2) {
+    // while ((string1 != NULL) && (string2 != NULL) && (*string1 != '\0') && (*string2 != '\0') && (*string1 == *string2))
+    const int length1 = get_length(string1);
+    const int length2 = get_length(string2);
+
+    int result = FALSE;
+    if (length1 != length2)
+        result = TRUE;
+
+    if (result == FALSE) {
+        for (int index = 0; index < length1; ++index) {
+            if (string1[index] != string2[index]) {
+                result = TRUE;
+                break;
             }
         }
     }
+
+    return result;
+}
+int are_equal(const char* string1, const char* string2) {
+    return !are_not_equal(string1, string2);
+}
+int is_in_possible_flags(const char *current_flag, const char** flags, int number_of_possible_flags) {
+    int result = FALSE;
+    for (int index_flag = 0; index_flag < number_of_possible_flags; ++index_flag) {
+        if (are_equal(current_flag, flags[index_flag])) {
+            result = TRUE;
+            break;
+        }
+    }
+    return result;
+}
+
+// int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]) {
+// int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array) {
+//     int flags_are_valid = TRUE, stop_when_equals_to_counter_for_flags = 0;
+//     while (flags_are_valid == TRUE && stop_when_equals_to_counter_for_flags != counter_for_flags) {
+//         for (int index_all_flags = 0; index_all_flags <= counter_for_flags; ++index_all_flags) {
+//             for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
+//                 if (strcmp(all_flags_array[index_all_flags], possible_flags[index_possible_flags]) != 0) {
+//                     flags_are_valid = FALSE;
+//                 }
+//             }
+//             ++stop_when_equals_to_counter_for_flags
+//         }
+//     }
+
+
+
     return flags_are_valid;
 }
 
