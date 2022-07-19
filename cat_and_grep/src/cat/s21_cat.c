@@ -19,7 +19,18 @@ You need to develop a cat utility:
 
 #include "s21_cat.h"
 
+void print_arguments(int argument_counter, char** arguments) {
+    for (int index = 0; index < argument_counter; ++index) {
+        printf("%d ----- %s\n", index, *(arguments + index));
+        printf("%d ----- %s\n", index, arguments[index]);
+    }
+}
+
 int main(int argc, char *argv[]) {
+
+    print_arguments(argc, argv);
+
+
     Flags flags;
     initialize_flags(&flags);
     if (check_start_conditions(argc, argv)) {
@@ -68,8 +79,8 @@ int parse_flags_and_text_files(int argc, char **argv) {
             is_valid_input = TRUE;
         }
     } else {
-        if (check_if_flags_are_valid(counter_for_flags, (char**)all_flags_array) &&
-        check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)) {
+        if (check_if_flags_are_valid(counter_for_flags, (char**)all_flags_array) /*&&
+        check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)*/) {
             is_valid_input = TRUE;
         }
     }
@@ -93,9 +104,13 @@ int check_if_files_exist(int number_of_files, char** filenames) {
 }
 
 int get_length(const char* string) {
+    
+    if (!string)
+        return 0;
+
     int length = 0;
 
-    while(string[length] != '\0')
+    while(string[length] != '\0') 
         ++length;
 
     return length;
@@ -107,27 +122,27 @@ int are_not_equal(const char* string1, const char* string2) {
     const int length2 = get_length(string2);
 
     int result = FALSE;
-    if (length1 != length2)
-        result = TRUE;
+    // if (length1 != length2)
+    //     result = TRUE;
 
-    if (result == FALSE) {
-        for (int index = 0; index < length1; ++index) {
-            if (string1[index] != string2[index]) {
-                result = TRUE;
-                break;
-            }
-        }
-    }
+    // if (result == FALSE) {
+    //     for (int index = 0; index < length1; ++index) {
+    //         if (string1[index] != string2[index]) {
+    //             result = TRUE;
+    //             break;
+    //         }
+    //     }
+    // }
 
     return result;
 }
 int are_equal(const char* string1, const char* string2) {
     return !are_not_equal(string1, string2);
 }
-int is_in_possible_flags(const char *current_flag, const char** flags, int number_of_possible_flags) {
+int is_in_possible_flags(const char *current_flag) {
     int result = FALSE;
-    for (int index_flag = 0; index_flag < number_of_possible_flags; ++index_flag) {
-        if (are_equal(current_flag, flags[index_flag])) {
+    for (int index_flag = 0; index_flag < TOTAL_NUMBER_OF_FLAGS; ++index_flag) {
+        if (are_equal(current_flag, possible_flags[index_flag])) {
             result = TRUE;
             break;
         }
@@ -136,21 +151,12 @@ int is_in_possible_flags(const char *current_flag, const char** flags, int numbe
 }
 
 // int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]) {
-// int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array) {
-//     int flags_are_valid = TRUE, stop_when_equals_to_counter_for_flags = 0;
-//     while (flags_are_valid == TRUE && stop_when_equals_to_counter_for_flags != counter_for_flags) {
-//         for (int index_all_flags = 0; index_all_flags <= counter_for_flags; ++index_all_flags) {
-//             for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
-//                 if (strcmp(all_flags_array[index_all_flags], possible_flags[index_possible_flags]) != 0) {
-//                     flags_are_valid = FALSE;
-//                 }
-//             }
-//             ++stop_when_equals_to_counter_for_flags
-//         }
-//     }
-
-
-
+int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array) {
+    int flags_are_valid = TRUE, index = 0;
+    while (flags_are_valid == TRUE && index != counter_for_flags) {
+        flags_are_valid = is_in_possible_flags((char*)all_flags_array[index]);
+        ++index;
+    }
     return flags_are_valid;
 }
 
