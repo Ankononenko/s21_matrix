@@ -21,7 +21,7 @@ You need to develop a cat utility:
 
 void print_arguments(int argument_counter, char arguments[NMAX][NMAX]) {
     for (int index = 0; index < argument_counter; ++index) {
-        printf("%d ----- %s\n", index, arguments[index]);
+        printf("Index = %d ----- element of the array = %s\n", index, arguments[index]);
     }
 }
 
@@ -37,20 +37,19 @@ int main(int argc, char *argv[]) {
 }
 
 int check_start_conditions(int argc, char *argv[]) {
-// int check_start_conditions(int argc, char **argv) {
     int conditions = FALSE;
     // Condition to check if theree are flags and a text-file
     // Parse flags() should return TRUE or FALSE if the flags are valid or they are not valid
-    // Here also should be a check if file exists 
+    // Here also should be a check if file exists
+
     if (argc >= 2 && parse_flags_and_text_files(argc, argv)) {
-    // if (argc >= 2 && parse_flags_and_text_files(argc, (char**)argv)) {
         conditions = TRUE;
     }
+
     return conditions;
 }
 
 int parse_flags_and_text_files(int argc, char *argv[]) {
-// int parse_flags_and_text_files(int argc, char **argv) {
     int is_valid_input = FALSE, letter_index = 0;
     // Create an array for all the flags - valid and invalid to sort them out later
     char all_flags_array[NMAX][NMAX];
@@ -59,39 +58,36 @@ int parse_flags_and_text_files(int argc, char *argv[]) {
     // Here we have two-dimensional array first loop is going to iterate over elements of array
     // Counters to know when to stop in iterating over the arrays
     int counter_for_flags = 0, counter_for_text_files = 0;
+
     for (int element_index = 1; element_index < argc; ++element_index) {
         if (argv[element_index][letter_index] == '-') {
             strcpy(all_flags_array[counter_for_flags], argv[element_index]);
-            // strcpy((char*)all_flags_array[counter_for_flags], argv[element_index]);
             ++counter_for_flags;
         } else {
             strcpy(all_text_files_array[counter_for_text_files], argv[element_index]);
-            // strcpy((char*)all_text_files_array[counter_for_text_files], argv[element_index]);
             ++counter_for_text_files;
         }
     }
+
     if (argc == 2) {
         if (check_if_files_exist(counter_for_text_files, all_text_files_array)) {
-        // if (check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)) {
             is_valid_input = TRUE;
         }
     } else {
         if (check_if_flags_are_valid(counter_for_flags, all_flags_array) &&
         check_if_files_exist(counter_for_text_files, all_text_files_array)) {
-        // if (check_if_flags_are_valid(counter_for_flags, (char**)all_flags_array) /*&&
-        // check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)*/) {
             is_valid_input = TRUE;
         }
     }
+
     return is_valid_input;
 }
 
 int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
-// int check_if_files_exist(int number_of_files, char** filenames) {
     int files_exist = TRUE, index = 0;
     FILE *file = NULL;
+
     while (files_exist && index != number_of_files) {
-        printf("all_text_files[index] = %s \n", filenames[index]);
         if (((file = fopen(filenames[index], "r")) == NULL)) {
             files_exist = FALSE;
         } else {
@@ -99,60 +95,29 @@ int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
             ++index;
         }
     }
+    
     return files_exist;
 }
 
-int get_length(const char* string) {
-    if (!string)
-        return 0;
-    int length = 0;
-    while(string[length] != '\0') 
-        ++length;
-    return length;
-}
+int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]) {
+    
+    int flags_are_valid = FALSE, index_all_flags = 0, number_of_valid_flags = 0;
+    
+    while (index_all_flags != counter_for_flags) {
 
-int are_not_equal(const char* string1, const char* string2) {
-    // while ((string1 != NULL) && (string2 != NULL) && (*string1 != '\0') && (*string2 != '\0') && (*string1 == *string2))
-    const int length1 = get_length(string1);
-    const int length2 = get_length(string2);
-
-    int result = FALSE;
-    if (length1 != length2)
-        result = TRUE;
-
-    if (result == FALSE) {
-        for (int index = 0; index < length1; ++index) {
-            if (string1[index] != string2[index]) {
-                result = TRUE;
-                break;
+        for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
+            if (!strncmp(all_flags_array[index_all_flags], possible_flags[index_possible_flags], strlen(all_flags_array[index_all_flags]))) {
+                ++number_of_valid_flags;
             }
         }
+
+        ++index_all_flags;
     }
 
-    return result;
-}
-int are_equal(const char* string1, const char* string2) {
-    return !are_not_equal(string1, string2);
-}
-int is_in_possible_flags(const char *current_flag) {
-    int result = FALSE;
-    for (int index_flag = 0; index_flag < TOTAL_NUMBER_OF_FLAGS; ++index_flag) {
-        if (are_equal(current_flag, possible_flags[index_flag])) {
-            result = TRUE;
-            break;
-        }
+    if (counter_for_flags == number_of_valid_flags) {
+        flags_are_valid = TRUE;
     }
-    return result;
-}
 
-int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]) {
-// int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array) {
-    int flags_are_valid = TRUE, index = 0;
-    while (flags_are_valid == TRUE && index != counter_for_flags) {
-        flags_are_valid = is_in_possible_flags(all_flags_array[index]);
-        // flags_are_valid = is_in_possible_flags((char*)all_flags_array[index]);
-        ++index;
-    }
     return flags_are_valid;
 }
 
