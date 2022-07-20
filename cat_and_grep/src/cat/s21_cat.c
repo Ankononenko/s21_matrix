@@ -95,7 +95,7 @@ int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
             ++index;
         }
     }
-    
+
     return files_exist;
 }
 
@@ -106,7 +106,7 @@ int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][N
     while (index_all_flags != counter_for_flags) {
 
         for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
-            if (!strncmp(all_flags_array[index_all_flags], possible_flags[index_possible_flags], strlen(all_flags_array[index_all_flags]))) {
+            if (!strcmp(all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
                 ++number_of_valid_flags;
             }
         }
