@@ -19,18 +19,13 @@ You need to develop a cat utility:
 
 #include "s21_cat.h"
 
-void print_arguments(int argument_counter, char** arguments) {
+void print_arguments(int argument_counter, char arguments[NMAX][NMAX]) {
     for (int index = 0; index < argument_counter; ++index) {
-        printf("%d ----- %s\n", index, *(arguments + index));
         printf("%d ----- %s\n", index, arguments[index]);
     }
 }
 
 int main(int argc, char *argv[]) {
-
-    print_arguments(argc, argv);
-
-
     Flags flags;
     initialize_flags(&flags);
     if (check_start_conditions(argc, argv)) {
@@ -41,21 +36,21 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-// int check_start_conditions(int argc, char *argv[]) {
-int check_start_conditions(int argc, char **argv) {
+int check_start_conditions(int argc, char *argv[]) {
+// int check_start_conditions(int argc, char **argv) {
     int conditions = FALSE;
     // Condition to check if theree are flags and a text-file
     // Parse flags() should return TRUE or FALSE if the flags are valid or they are not valid
     // Here also should be a check if file exists 
-    // if (argc >= 2 && parse_flags_and_text_files(argc, argv)) {
-    if (argc >= 2 && parse_flags_and_text_files(argc, (char**)argv)) {
+    if (argc >= 2 && parse_flags_and_text_files(argc, argv)) {
+    // if (argc >= 2 && parse_flags_and_text_files(argc, (char**)argv)) {
         conditions = TRUE;
     }
     return conditions;
 }
 
-// int parse_flags_and_text_files(int argc, char *argv[]) {
-int parse_flags_and_text_files(int argc, char **argv) {
+int parse_flags_and_text_files(int argc, char *argv[]) {
+// int parse_flags_and_text_files(int argc, char **argv) {
     int is_valid_input = FALSE, letter_index = 0;
     // Create an array for all the flags - valid and invalid to sort them out later
     char all_flags_array[NMAX][NMAX];
@@ -66,29 +61,33 @@ int parse_flags_and_text_files(int argc, char **argv) {
     int counter_for_flags = 0, counter_for_text_files = 0;
     for (int element_index = 1; element_index < argc; ++element_index) {
         if (argv[element_index][letter_index] == '-') {
-            // strcpy(all_flags_array[counter_for_flags], argv[element_index]);
-            strcpy((char*)all_flags_array[counter_for_flags], argv[element_index]);
+            strcpy(all_flags_array[counter_for_flags], argv[element_index]);
+            // strcpy((char*)all_flags_array[counter_for_flags], argv[element_index]);
             ++counter_for_flags;
         } else {
-            strcpy((char*)all_text_files_array[counter_for_text_files], argv[element_index]);
+            strcpy(all_text_files_array[counter_for_text_files], argv[element_index]);
+            // strcpy((char*)all_text_files_array[counter_for_text_files], argv[element_index]);
             ++counter_for_text_files;
         }
     }
     if (argc == 2) {
-        if (check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)) {
+        if (check_if_files_exist(counter_for_text_files, all_text_files_array)) {
+        // if (check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)) {
             is_valid_input = TRUE;
         }
     } else {
-        if (check_if_flags_are_valid(counter_for_flags, (char**)all_flags_array) /*&&
-        check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)*/) {
+        if (check_if_flags_are_valid(counter_for_flags, all_flags_array) &&
+        check_if_files_exist(counter_for_text_files, all_text_files_array)) {
+        // if (check_if_flags_are_valid(counter_for_flags, (char**)all_flags_array) /*&&
+        // check_if_files_exist(counter_for_text_files, (char**)all_text_files_array)*/) {
             is_valid_input = TRUE;
         }
     }
     return is_valid_input;
 }
 
-// int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
-int check_if_files_exist(int number_of_files, char** filenames) {
+int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]) {
+// int check_if_files_exist(int number_of_files, char** filenames) {
     int files_exist = TRUE, index = 0;
     FILE *file = NULL;
     while (files_exist && index != number_of_files) {
@@ -104,15 +103,11 @@ int check_if_files_exist(int number_of_files, char** filenames) {
 }
 
 int get_length(const char* string) {
-    
     if (!string)
         return 0;
-
     int length = 0;
-
     while(string[length] != '\0') 
         ++length;
-
     return length;
 }
 
@@ -122,17 +117,17 @@ int are_not_equal(const char* string1, const char* string2) {
     const int length2 = get_length(string2);
 
     int result = FALSE;
-    // if (length1 != length2)
-    //     result = TRUE;
+    if (length1 != length2)
+        result = TRUE;
 
-    // if (result == FALSE) {
-    //     for (int index = 0; index < length1; ++index) {
-    //         if (string1[index] != string2[index]) {
-    //             result = TRUE;
-    //             break;
-    //         }
-    //     }
-    // }
+    if (result == FALSE) {
+        for (int index = 0; index < length1; ++index) {
+            if (string1[index] != string2[index]) {
+                result = TRUE;
+                break;
+            }
+        }
+    }
 
     return result;
 }
@@ -150,11 +145,12 @@ int is_in_possible_flags(const char *current_flag) {
     return result;
 }
 
-// int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]) {
-int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array) {
+int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]) {
+// int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array) {
     int flags_are_valid = TRUE, index = 0;
     while (flags_are_valid == TRUE && index != counter_for_flags) {
-        flags_are_valid = is_in_possible_flags((char*)all_flags_array[index]);
+        flags_are_valid = is_in_possible_flags(all_flags_array[index]);
+        // flags_are_valid = is_in_possible_flags((char*)all_flags_array[index]);
         ++index;
     }
     return flags_are_valid;

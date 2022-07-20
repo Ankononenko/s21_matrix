@@ -28,15 +28,15 @@ typedef struct Flags {
     int t;
 } Flags;
 
-// int check_start_conditions(int argc, char *argv[]);
-int check_start_conditions(int argc, char** argv);
+int check_start_conditions(int argc, char *argv[]);
+// int check_start_conditions(int argc, char** argv);
 void initialize_flags(Flags* flags);
-// int parse_flags_and_text_files(int argc, char *argv[]);
-int parse_flags_and_text_files(int argc, char** argv);
-// int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]);
-int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array);
-// int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]);
-int check_if_files_exist(int number_of_files, char** filenames);
+int parse_flags_and_text_files(int argc, char *argv[]);
+// int parse_flags_and_text_files(int argc, char** argv);
+int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]);
+// int check_if_flags_are_valid(int counter_for_flags, char** all_flags_array);
+int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]);
+// int check_if_files_exist(int number_of_files, char** filenames);
 int is_in_possible_flags(const char *current_flag);
 int are_equal(const char* string1, const char* string2);
 int are_not_equal(const char* string1, const char* string2);
