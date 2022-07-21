@@ -28,10 +28,19 @@ typedef struct Flags {
     int t;
 } Flags;
 
-int check_start_conditions(int argc, char *argv[]);
+typedef struct Data {
+    // Create an array for all the flags - valid and invalid to sort them out later
+    char all_flags_array[NMAX][NMAX];
+    // And an array for text-file names - valid and invalid to sort later
+    char all_text_files_array[NMAX][NMAX];
+} Data;
+
+
+int check_start_conditions(int argc, char *argv[], Data* data);
 void initialize_flags(Flags* flags);
-int parse_flags_and_text_files(int argc, char *argv[]);
-int check_if_flags_are_valid(int counter_for_flags, char all_flags_array[NMAX][NMAX]);
-int check_if_files_exist(int number_of_files, char filenames[NMAX][NMAX]);
+void initialize_data(Data* data);
+int parse_flags_and_text_files(int argc, char *argv[], Data* data);
+int check_if_flags_are_valid(int counter_for_flags, Data* data);
+int check_if_files_exist(int number_of_files, Data* data);
 
 #endif  // SRC_S21_CAT_H_
