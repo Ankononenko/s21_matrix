@@ -19,30 +19,76 @@ You need to develop a cat utility:
 
 #include "s21_cat.h"
 
+// For testing. Need to delete that function later
 void print_arguments(int argument_counter, char arguments[NMAX][NMAX]) {
     for (int index = 0; index < argument_counter; ++index) {
         printf("Index = %d ----- element of the array = %s\n", index, arguments[index]);
     }
 }
 
+// For testing. Should be deleted later:
+void test_flags(Flags* flags) {
+    if (flags->b == TRUE) {
+        printf("-b = TRUE \n");
+    } else {
+        printf("-b = FALSE \n");
+    }
+    if (flags->s == TRUE) {
+        printf("-s = TRUE \n");
+    } else {
+        printf("-s = FALSE \n");
+    }
+    if (flags->n == TRUE) {
+        printf("-n = TRUE \n");
+    } else {
+        printf("-n = FALSE \n");
+    }
+    if (flags->e == TRUE) {
+        printf("-e = TRUE \n");
+    } else {
+        printf("-e = FALSE \n");
+    }
+    if (flags->E == TRUE) {
+        printf("-E = TRUE \n");
+    } else {
+        printf("-E = FALSE \n");
+    }
+    if (flags->T == TRUE) {
+        printf("-T = TRUE \n");
+    } else {
+        printf("-T = FALSE \n");
+    }
+    if (flags->t == TRUE) {
+        printf("-t = TRUE \n");
+    } else {
+        printf("-t = FALSE \n");
+    }
+}
+
 int main(int argc, char *argv[]) {
+    // print_arguments(argc, (char **)argv);
+
     Flags flags;
     initialize_flags(&flags);
     Data data;
     initialize_data(&data);
     if (check_start_conditions(argc, argv, &data)) {
-        printf("Success");
+        pass_flags_to_structure(&flags, &data);
+        test_flags(&flags);
+        printf("Success \n");
     } else {
-        printf("Fail");
+        // Should be replaced with output to stderr
+        printf("Fail \n");
     }
     return 0;
 }
 
 int check_start_conditions(int argc, char *argv[], Data* data) {
     int conditions = FALSE;
-    // Condition to check if theree are flags and a text-file
-    // Parse flags() should return TRUE or FALSE if the flags are valid or they are not valid
-    // Here also should be a check if file exists
+
+    // Condition to check if there are flags and text-files
+    // Parse flags() should return TRUE or FALSE if the flags are valid or not
+    // And the files exist
 
     if (argc >= 2 && parse_flags_and_text_files(argc, argv, data)) {
         conditions = TRUE;
@@ -51,13 +97,37 @@ int check_start_conditions(int argc, char *argv[], Data* data) {
     return conditions;
 }
 
+void pass_flags_to_structure(Flags* flags, Data* data) {
+    int index = 0;
+    // Until it is the end of the two-dimensional array, I iterate over it and pass the values to the Flags structure
+    // strcmp returns 0 if the values are equal, so I use !(not) to invert the value of zero to true
+    while (strcmp(data->all_flags_array[index], "\0")) {
+        if (!strcmp(data->all_flags_array[index], "-b") || !strcmp(data->all_flags_array[index], "--number-nonblank")) {
+            flags->b = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-e")) {
+            flags->e = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-E")) {
+            flags->E = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-n") || !strcmp(data->all_flags_array[index], "--number")) {
+            flags->n = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-s") || !strcmp(data->all_flags_array[index], "--squeeze-blank")) {
+            flags->s = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-t")) {
+            flags->t = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-T")) {
+            flags->T = TRUE;
+        }
+        // Here I should work with NULL but I'm not sure how to handle that case
+        ++index;
+    }
+}
+
 int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
     int is_valid_input = FALSE, letter_index = 0;
-
     // Counters to know when to stop in iterating over the arrays
     int counter_for_flags = 0, counter_for_text_files = 0;
-
     // Iterate over the argv to sort out flags from files
+
     for (int element_index = 1; element_index < argc; ++element_index) {
         if (argv[element_index][letter_index] == '-') {
             strcpy(data->all_flags_array[counter_for_flags], argv[element_index]);
@@ -68,7 +138,7 @@ int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
         }
     }
 
-    if (argc == 2) {
+    if (argc == 2 && counter_for_text_files) {
         if (check_if_files_exist(counter_for_text_files, data)) {
             is_valid_input = TRUE;
         }
