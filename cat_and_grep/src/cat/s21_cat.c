@@ -66,21 +66,52 @@ void test_flags(Flags* flags) {
 }
 
 int main(int argc, char *argv[]) {
-    // print_arguments(argc, (char **)argv);
-
     Flags flags;
     initialize_flags(&flags);
     Data data;
     initialize_data(&data);
     if (check_start_conditions(argc, argv, &data)) {
         pass_flags_to_structure(&flags, &data);
-        test_flags(&flags);
-        printf("Success \n");
+        print_result(&flags, &data);
     } else {
         // Should be replaced with output to stderr
         printf("Fail \n");
     }
     return 0;
+}
+
+void print_result(Flags* flags, Data* data) {
+    int index = 0;
+    FILE *file = fopen(data->all_text_files_array[index], "r");
+    while (index != 1) {    
+        if (flags->b) {
+            handle_b(file);
+        }
+        ++index;
+    }
+    fclose(file);
+}
+
+void handle_b(FILE* file) {
+    char first_character = '\0', second_character = '\0', newline = '\n';
+    char temp_array[NMAX];
+    int ordinal_number = 1, index = 0;
+    second_character = fgetc(file);
+    while (second_character != EOF) {
+        first_character = second_character;
+        second_character = fgetc(file);
+        if (first_character == newline && second_character != newline) {
+            printf("%6d\t", ordinal_number);
+            ++ordinal_number;
+            printf("%s\n", temp_array);
+            memset(temp_array, '\0', NMAX);
+            index = 0;
+        } else {
+            // Write chars to temp array to print later
+            temp_array[index] = first_character;
+            ++index;
+        }
+    }
 }
 
 int check_start_conditions(int argc, char *argv[], Data* data) {

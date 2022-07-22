@@ -43,5 +43,7 @@ int parse_flags_and_text_files(int argc, char *argv[], Data* data);
 int check_if_flags_are_valid(int counter_for_flags, Data* data);
 int check_if_files_exist(int number_of_files, Data* data);
 void pass_flags_to_structure(Flags* flags, Data* data);
+void print_result(Flags* flags, Data* data);
+void handle_b(FILE* file);
 
 #endif  // SRC_S21_CAT_H_
