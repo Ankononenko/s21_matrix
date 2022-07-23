@@ -94,26 +94,35 @@ void print_result(Flags* flags, Data* data) {
                 second_character = fgetc(file);
             }
         }
+        if (flags->s) {
+            if (handle_s(first_character, second_character, data)) {
+                first_character = second_character;
+                second_character = fgetc(file);
+            }
+        }
         printf("%c", first_character);
-        ++data->character_index;
     }
     fclose(file);
     ++index_for_files;
 }
 
-// void handle_s(FILE* file) {
-
-// }
+int handle_s(char first_character, char second_character, Data* data) {
+    int should_be_squeezed = FALSE;
+    if (first_character == data->newline && second_character == data->newline) {
+        should_be_squeezed = TRUE;
+    }
+    return should_be_squeezed;
+}
 
 int handle_b(char first_character, char second_character, Data* data) {
     int ordinal_was_printed = FALSE;
-    char newline = '\n';
-    if ((first_character == newline && second_character != newline) ||
-        (data->character_index == 0 && second_character != newline)) {
+    if ((first_character == data->newline && second_character != data->newline) ||
+        (data->character_index == 0 && second_character != data->newline)) {
         printf("%6d\t", data->ordinal_b);
         ordinal_was_printed = TRUE;
         ++data->ordinal_b;
     }
+    ++data->character_index;
     return ordinal_was_printed;
 }
 
@@ -239,4 +248,5 @@ void initialize_data(Data* data) {
     memset(data->all_text_files_array, '\0', NMAX *sizeof(char));
     data->ordinal_b = 1;
     data->character_index = 0;
+    data->newline = '\n';
 }
