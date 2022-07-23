@@ -81,37 +81,40 @@ int main(int argc, char *argv[]) {
 }
 
 void print_result(Flags* flags, Data* data) {
-    int index = 0;
-    FILE *file = fopen(data->all_text_files_array[index], "r");
-    while (index != 1) {    
-        if (flags->b) {
-            handle_b(file);
-        }
-        ++index;
-    }
-    fclose(file);
-}
-
-void handle_b(FILE* file) {
-    char first_character = '\0', second_character = '\0', newline = '\n';
-    char temp_array[NMAX];
-    int ordinal_number = 1, index = 0;
+    int index_for_files = 0;
+    char first_character = '\0', second_character = '\0';
+    FILE *file = fopen(data->all_text_files_array[index_for_files], "r");
     second_character = fgetc(file);
     while (second_character != EOF) {
         first_character = second_character;
         second_character = fgetc(file);
-        if (first_character == newline && second_character != newline) {
-            printf("%6d\t", ordinal_number);
-            ++ordinal_number;
-            printf("%s\n", temp_array);
-            memset(temp_array, '\0', NMAX);
-            index = 0;
-        } else {
-            // Write chars to temp array to print later
-            temp_array[index] = first_character;
-            ++index;
+        if (flags->b) {
+            if (handle_b(first_character, second_character, data) && data->character_index) {
+                first_character = second_character;
+                second_character = fgetc(file);
+            }
         }
+        printf("%c", first_character);
+        ++data->character_index;
     }
+    fclose(file);
+    ++index_for_files;
+}
+
+// void handle_s(FILE* file) {
+
+// }
+
+int handle_b(char first_character, char second_character, Data* data) {
+    int ordinal_was_printed = FALSE;
+    char newline = '\n';
+    if ((first_character == newline && second_character != newline) ||
+        (data->character_index == 0 && second_character != newline)) {
+        printf("%6d\t", data->ordinal_b);
+        ordinal_was_printed = TRUE;
+        ++data->ordinal_b;
+    }
+    return ordinal_was_printed;
 }
 
 int check_start_conditions(int argc, char *argv[], Data* data) {
@@ -234,4 +237,6 @@ void initialize_flags(Flags* flags) {
 void initialize_data(Data* data) {
     memset(data->all_flags_array, '\0', NMAX *sizeof(char));
     memset(data->all_text_files_array, '\0', NMAX *sizeof(char));
+    data->ordinal_b = 1;
+    data->character_index = 0;
 }
