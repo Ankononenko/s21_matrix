@@ -33,7 +33,8 @@ typedef struct Data {
     char all_flags_array[NMAX][NMAX];
     // And an array for text-file names - valid and invalid to sort later
     char all_text_files_array[NMAX][NMAX];
-    int ordinal_b;
+    int number_of_files;
+    int ordinal;
     int character_index;
     char newline;
 } Data;
@@ -48,5 +49,6 @@ void pass_flags_to_structure(Flags* flags, Data* data);
 void print_result(Flags* flags, Data* data);
 int handle_b(char first_character, char second_character, Data* data);
 int handle_s(char first_character, char second_character, Data* data);
+void handle_n(char first_character, Data* data);
 
 #endif  // SRC_S21_CAT_H_

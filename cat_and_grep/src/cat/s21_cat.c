@@ -81,31 +81,49 @@ int main(int argc, char *argv[]) {
 }
 
 void print_result(Flags* flags, Data* data) {
-    int index_for_files = 0;
-    char first_character = '\0', second_character = '\0';
-    FILE *file = fopen(data->all_text_files_array[index_for_files], "r");
-    second_character = fgetc(file);
-    while (second_character != EOF) {
-        first_character = second_character;
+    for (int index_for_files = 0; index_for_files < data->number_of_files; ++index_for_files) {
+        int kostili = FALSE;
+        char first_character = '\0', second_character = '\0';
+        FILE *file = fopen(data->all_text_files_array[index_for_files], "r");
         second_character = fgetc(file);
-        if (flags->b) {
-            if (handle_b(first_character, second_character, data) && data->character_index) {
-                if (data->character_index != 1) {
-                    first_character = second_character;
-                    second_character = fgetc(file);
-                }
-            }
-        }
-        if (flags->s) {
-            if (handle_s(first_character, second_character, data)) {
+        while (second_character != EOF) {
+            if (kostili == FALSE) {
                 first_character = second_character;
                 second_character = fgetc(file);
             }
+            kostili = FALSE;
+            if (flags->b) {
+                if (handle_b(first_character, second_character, data) && data->character_index) {
+                    if (data->character_index != 1) {
+                        first_character = second_character;
+                        second_character = fgetc(file);
+                    }
+                }
+            }
+            if (flags->s) {
+                if (handle_s(first_character, second_character, data)) {
+                    first_character = second_character;
+                    second_character = fgetc(file);
+                    kostili = TRUE;
+                }
+            }
+            if (flags->n && !flags->b) {
+                handle_n(first_character, data);
+            }
+            printf("%c", first_character);
         }
-        printf("%c", first_character);
+        fclose(file);
+        data->ordinal = 1;
+        data->character_index = 0;
     }
-    fclose(file);
-    ++index_for_files;
+}
+
+void handle_n(char first_character, Data* data) {
+    if (first_character == data->newline) {
+        printf("%6d\t", data->ordinal);
+        ++data->ordinal;
+        ++data->character_index;
+    }
 }
 
 int handle_s(char first_character, char second_character, Data* data) {
@@ -120,9 +138,9 @@ int handle_b(char first_character, char second_character, Data* data) {
     int ordinal_was_printed = FALSE;
     if ((first_character == data->newline && second_character != data->newline) ||
         (data->character_index == 0 && second_character != data->newline)) {
-        printf("%6d\t", data->ordinal_b);
+        printf("%6d\t", data->ordinal);
         ordinal_was_printed = TRUE;
-        ++data->ordinal_b;
+        ++data->ordinal;
     }
     ++data->character_index;
     return ordinal_was_printed;
@@ -170,7 +188,7 @@ void pass_flags_to_structure(Flags* flags, Data* data) {
 int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
     int is_valid_input = FALSE, letter_index = 0;
     // Counters to know when to stop in iterating over the arrays
-    int counter_for_flags = 0, counter_for_text_files = 0;
+    int counter_for_flags = 0;
     // Iterate over the argv to sort out flags from files
 
     for (int element_index = 1; element_index < argc; ++element_index) {
@@ -178,18 +196,18 @@ int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
             strcpy(data->all_flags_array[counter_for_flags], argv[element_index]);
             ++counter_for_flags;
         } else {
-            strcpy(data->all_text_files_array[counter_for_text_files], argv[element_index]);
-            ++counter_for_text_files;
+            strcpy(data->all_text_files_array[data->number_of_files], argv[element_index]);
+            ++data->number_of_files;
         }
     }
 
-    if (argc == 2 && counter_for_text_files) {
-        if (check_if_files_exist(counter_for_text_files, data)) {
+    if (argc == 2 && data->number_of_files) {
+        if (check_if_files_exist(data->number_of_files, data)) {
             is_valid_input = TRUE;
         }
     } else {
         if (check_if_flags_are_valid(counter_for_flags, data) &&
-        check_if_files_exist(counter_for_text_files, data)) {
+        check_if_files_exist(data->number_of_files, data)) {
             is_valid_input = TRUE;
         }
     }
@@ -248,7 +266,8 @@ void initialize_flags(Flags* flags) {
 void initialize_data(Data* data) {
     memset(data->all_flags_array, '\0', NMAX *sizeof(char));
     memset(data->all_text_files_array, '\0', NMAX *sizeof(char));
-    data->ordinal_b = 1;
+    data->number_of_files = 0;
+    data->ordinal = 1;
     data->character_index = 0;
     data->newline = '\n';
 }
