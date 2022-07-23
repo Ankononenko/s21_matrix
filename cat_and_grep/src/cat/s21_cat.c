@@ -90,8 +90,10 @@ void print_result(Flags* flags, Data* data) {
         second_character = fgetc(file);
         if (flags->b) {
             if (handle_b(first_character, second_character, data) && data->character_index) {
-                first_character = second_character;
-                second_character = fgetc(file);
+                if (data->character_index != 1) {
+                    first_character = second_character;
+                    second_character = fgetc(file);
+                }
             }
         }
         if (flags->s) {
