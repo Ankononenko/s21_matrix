@@ -35,7 +35,6 @@ typedef struct Data {
     char all_text_files_array[NMAX][NMAX];
     int number_of_files;
     int ordinal;
-    int character_index;
     char newline;
 } Data;
 
@@ -48,7 +47,7 @@ int check_if_files_exist(int number_of_files, Data* data);
 void pass_flags_to_structure(Flags* flags, Data* data);
 void print_result(Flags* flags, Data* data);
 void handle_b(char current_character, int is_previous_newline, Data* data);
-void handle_s(char* current_character, int is_previous_newline, Data* data, FILE *file);
-void handle_n(char current_character, Data* data);
+void handle_s(char current_character, char* next_character, int is_previous_newline, Data* data, FILE *file);
+void handle_n(Data* data);
 
 #endif  // SRC_S21_CAT_H_

@@ -84,47 +84,41 @@ void print_result(Flags* flags, Data* data) {
     for (int index_for_files = 0; index_for_files < data->number_of_files; ++index_for_files) {
         // is_previous_newline is set to TRUE to work around the begging of the file
         int is_previous_newline = TRUE;
-        char current_character = '\0';
+        char current_character = '\0', next_character = '\0';
         FILE *file = fopen(data->all_text_files_array[index_for_files], "r");
-        current_character = fgetc(file);
+        next_character = fgetc(file);
+        current_character = next_character;
+        next_character = fgetc(file);
         while (current_character != EOF) {
             if (flags->b && is_previous_newline) {
                 handle_b(current_character, is_previous_newline, data);
             }
-            if (flags->s && current_character == data->newline) {
-                handle_s(&current_character, is_previous_newline, data, file);
+            if (flags->s && current_character == data->newline && is_previous_newline) {
+                handle_s(current_character, &next_character, is_previous_newline, data, file);
             }
-            // if (flags->n && !flags->b) {
-            //     handle_n(first_character, data);
-            // }
+            if (flags->n && !flags->b && is_previous_newline) {
+                handle_n(data);
+            }
             printf("%c", current_character);
             is_previous_newline = current_character == '\n' ? TRUE : FALSE;
-            current_character = fgetc(file);
+            current_character = next_character;
+            next_character = fgetc(file);
         }
         fclose(file);
         data->ordinal = 1;
-        data->character_index = 0;
     }
 }
 
-// void handle_n(char first_character, Data* data) {
-//     if (first_character == data->newline) {
-//         printf("%6d\t", data->ordinal);
-//         ++data->ordinal;
-//         ++data->character_index;
-//     }
-// }
+void handle_n(Data* data) {
+    printf("%6d\t", data->ordinal);
+    ++data->ordinal;
+}
 
-void handle_s(char* current_character, int is_previous_newline, Data* data, FILE *file) {
-    while (*current_character == data->newline && is_previous_newline) {
-        is_previous_newline = *current_character == '\n' ? TRUE : FALSE;
-        *current_character = fgetc(file);
+void handle_s(char current_character, char* next_character, int is_previous_newline, Data* data, FILE *file) {
+    while (current_character == data->newline && is_previous_newline && *next_character == data->newline) {
+        is_previous_newline = current_character == '\n' ? TRUE : FALSE;
+        *next_character = fgetc(file);
     }
-    // This if-case is used to work around the case where the current char gets moved an extra time
-    // One time inside this function and then an extra one time in the print result function
-    // if (is_previous_newline && current_character != data->newline) {
-    //     printf("%c", current_character);
-    // }
 }
 
 void handle_b(char current_character, int is_previous_newline, Data* data) {
@@ -256,6 +250,5 @@ void initialize_data(Data* data) {
     memset(data->all_text_files_array, '\0', NMAX *sizeof(char));
     data->number_of_files = 0;
     data->ordinal = 1;
-    data->character_index = 0;
     data->newline = '\n';
 }
