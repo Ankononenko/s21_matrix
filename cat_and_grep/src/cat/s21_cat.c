@@ -19,52 +19,6 @@ You need to develop a cat utility:
 
 #include "s21_cat.h"
 
-// For testing. Need to delete that function later
-void print_arguments(int argument_counter, char arguments[NMAX][NMAX]) {
-    for (int index = 0; index < argument_counter; ++index) {
-        printf("Index = %d ----- element of the array = %s\n", index, arguments[index]);
-    }
-}
-
-// For testing. Should be deleted later:
-void test_flags(Flags flags) {
-    if (flags.b == TRUE) {
-        printf("-b = TRUE \n");
-    } else {
-        printf("-b = FALSE \n");
-    }
-    if (flags.s == TRUE) {
-        printf("-s = TRUE \n");
-    } else {
-        printf("-s = FALSE \n");
-    }
-    if (flags.n == TRUE) {
-        printf("-n = TRUE \n");
-    } else {
-        printf("-n = FALSE \n");
-    }
-    if (flags.e == TRUE) {
-        printf("-e = TRUE \n");
-    } else {
-        printf("-e = FALSE \n");
-    }
-    if (flags.E == TRUE) {
-        printf("-E = TRUE \n");
-    } else {
-        printf("-E = FALSE \n");
-    }
-    if (flags.T == TRUE) {
-        printf("-T = TRUE \n");
-    } else {
-        printf("-T = FALSE \n");
-    }
-    if (flags.t == TRUE) {
-        printf("-t = TRUE \n");
-    } else {
-        printf("-t = FALSE \n");
-    }
-}
-
 int main(int argc, char *argv[]) {
     Flags flags;
     initialize_flags(&flags);
@@ -83,29 +37,58 @@ int main(int argc, char *argv[]) {
 void print_result(Flags flags, Data data) {
     for (int index_for_files = 0; index_for_files < data.number_of_files; ++index_for_files) {
         // is_previous_newline is set to TRUE to work around the begging of the file
-        int is_previous_newline = TRUE, ordinal = 1;
-        char current_character = '\0', next_character = '\0';
-        FILE *file = fopen(data.all_text_files_array[index_for_files], "r");
-        next_character = fgetc(file);
-        current_character = next_character;
-        next_character = fgetc(file);
-        while (current_character != EOF) {
-            if (flags.b && is_previous_newline) {
-                handle_b(current_character, is_previous_newline, data, &ordinal);
-            }
-            if (flags.s && current_character == data.newline && is_previous_newline) {
-                handle_s(current_character, &next_character, is_previous_newline, data, file);
-            }
-            if (flags.n && !flags.b && is_previous_newline) {
-                handle_n(&ordinal);
-            }
-            printf("%c", current_character);
-            is_previous_newline = current_character == '\n' ? TRUE : FALSE;
+        if (check_if_files_exist(index_for_files, data)) {
+            int is_previous_newline = TRUE, ordinal = 1;
+            char current_character = '\0', next_character = '\0';
+            FILE *file = fopen(data.all_text_files_array[index_for_files], "r");
+            next_character = fgetc(file);
             current_character = next_character;
             next_character = fgetc(file);
+            while (next_character != EOF) {
+                if (flags.b && is_previous_newline) {
+                    handle_b(current_character, is_previous_newline, data, &ordinal);
+                }
+                if (flags.s && current_character == data.newline && is_previous_newline) {
+                    handle_s(current_character, &next_character, is_previous_newline, data, file);
+                }
+                if (flags.n && !flags.b && is_previous_newline) {
+                    handle_n(&ordinal);
+                }
+                if ((flags.e && next_character == data.newline) || (flags.e && current_character == data.newline)) {
+                    handle_e();
+                }
+                if (flags.t && current_character == data.tabulator) {
+                    handle_t(&current_character, &next_character, file, data);
+                }
+                printf("%c", current_character);
+                is_previous_newline = current_character == '\n' ? TRUE : FALSE;
+                current_character = next_character;
+                next_character = fgetc(file);
+            }
+            printf("%c", current_character);
+            fclose(file);
+        } else {
+            // Should be replaced with an error to stderr
+            printf("File doesn't exist");
         }
-        fclose(file);
+
     }
+}
+
+void handle_t(char* current_character, char* next_character, FILE *file, Data data) {
+    char temp_char = '\0';
+    while (*current_character == data.tabulator || (*current_character == data.tabulator && *next_character == data.tabulator)) {
+        printf("^I");
+        *current_character = *next_character;
+        temp_char = fgetc(file);
+        if (temp_char != EOF) {
+            *next_character = fgetc(file);
+        }
+    }
+}
+
+void handle_e() {
+    printf("$");
 }
 
 void handle_n(int* ordinal) {
@@ -182,31 +165,21 @@ int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
         }
     }
 
-    if (argc == 2 && data->number_of_files) {
-        if (check_if_files_exist(data->number_of_files, *data)) {
+    if (check_if_flags_are_valid(counter_for_flags, *data)) {
             is_valid_input = TRUE;
-        }
-    } else {
-        if (check_if_flags_are_valid(counter_for_flags, *data) &&
-        check_if_files_exist(data->number_of_files, *data)) {
-            is_valid_input = TRUE;
-        }
     }
 
     return is_valid_input;
 }
 
-int check_if_files_exist(int number_of_files, Data data) {
-    int files_exist = TRUE, index = 0;
+int check_if_files_exist(int filename_index, Data data) {
+    int files_exist = TRUE;
     FILE *file = NULL;
 
-    while (files_exist && index != number_of_files) {
-        if (((file = fopen(data.all_text_files_array[index], "r")) == NULL)) {
-            files_exist = FALSE;
-        } else {
-            fclose(file);
-            ++index;
-        }
+    if (((file = fopen(data.all_text_files_array[filename_index], "r")) == NULL)) {
+        files_exist = FALSE;
+    } else {
+        fclose(file);
     }
 
     return files_exist;
@@ -249,4 +222,5 @@ void initialize_data(Data* data) {
     memset(data->all_text_files_array, '\0', NMAX *sizeof(char));
     data->number_of_files = 0;
     data->newline = '\n';
+    data->tabulator = '\t';
 }
