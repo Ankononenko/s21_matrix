@@ -34,7 +34,6 @@ typedef struct Data {
     // And an array for text-file names - valid and invalid to sort later
     char all_text_files_array[NMAX][NMAX];
     int number_of_files;
-    int ordinal;
     char newline;
 } Data;
 
@@ -42,12 +41,12 @@ int check_start_conditions(int argc, char *argv[], Data* data);
 void initialize_flags(Flags* flags);
 void initialize_data(Data* data);
 int parse_flags_and_text_files(int argc, char *argv[], Data* data);
-int check_if_flags_are_valid(int counter_for_flags, Data* data);
-int check_if_files_exist(int number_of_files, Data* data);
-void pass_flags_to_structure(Flags* flags, Data* data);
-void print_result(Flags* flags, Data* data);
-void handle_b(char current_character, int is_previous_newline, Data* data);
-void handle_s(char current_character, char* next_character, int is_previous_newline, Data* data, FILE *file);
-void handle_n(Data* data);
+int check_if_flags_are_valid(int counter_for_flags, Data data);
+int check_if_files_exist(int number_of_files, Data data);
+void pass_flags_to_structure(Flags* flags, Data data);
+void print_result(Flags flags, Data data);
+void handle_b(char current_character, int is_previous_newline, Data data, int* ordinal);
+void handle_s(char current_character, char* next_character, int is_previous_newline, Data data, FILE *file);
+void handle_n(int* ordinal);
 
 #endif  // SRC_S21_CAT_H_
