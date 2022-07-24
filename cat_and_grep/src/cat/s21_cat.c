@@ -82,35 +82,24 @@ int main(int argc, char *argv[]) {
 
 void print_result(Flags* flags, Data* data) {
     for (int index_for_files = 0; index_for_files < data->number_of_files; ++index_for_files) {
-        int kostili = FALSE;
-        char first_character = '\0', second_character = '\0';
+        // is_previous_newline is set to TRUE to work around the begging of the file
+        int is_previous_newline = TRUE;
+        char current_character = '\0';
         FILE *file = fopen(data->all_text_files_array[index_for_files], "r");
-        second_character = fgetc(file);
-        while (second_character != EOF) {
-            if (kostili == FALSE) {
-                first_character = second_character;
-                second_character = fgetc(file);
+        current_character = fgetc(file);
+        while (current_character != EOF) {
+            if (flags->b && is_previous_newline) {
+                handle_b(current_character, is_previous_newline, data);
             }
-            kostili = FALSE;
-            if (flags->b) {
-                if (handle_b(first_character, second_character, data) && data->character_index) {
-                    if (data->character_index != 1) {
-                        first_character = second_character;
-                        second_character = fgetc(file);
-                    }
-                }
+            if (flags->s && current_character == data->newline) {
+                handle_s(&current_character, is_previous_newline, data, file);
             }
-            if (flags->s) {
-                if (handle_s(first_character, second_character, data)) {
-                    first_character = second_character;
-                    second_character = fgetc(file);
-                    kostili = TRUE;
-                }
-            }
-            if (flags->n && !flags->b) {
-                handle_n(first_character, data);
-            }
-            printf("%c", first_character);
+            // if (flags->n && !flags->b) {
+            //     handle_n(first_character, data);
+            // }
+            printf("%c", current_character);
+            is_previous_newline = current_character == '\n' ? TRUE : FALSE;
+            current_character = fgetc(file);
         }
         fclose(file);
         data->ordinal = 1;
@@ -118,32 +107,31 @@ void print_result(Flags* flags, Data* data) {
     }
 }
 
-void handle_n(char first_character, Data* data) {
-    if (first_character == data->newline) {
-        printf("%6d\t", data->ordinal);
-        ++data->ordinal;
-        ++data->character_index;
+// void handle_n(char first_character, Data* data) {
+//     if (first_character == data->newline) {
+//         printf("%6d\t", data->ordinal);
+//         ++data->ordinal;
+//         ++data->character_index;
+//     }
+// }
+
+void handle_s(char* current_character, int is_previous_newline, Data* data, FILE *file) {
+    while (*current_character == data->newline && is_previous_newline) {
+        is_previous_newline = *current_character == '\n' ? TRUE : FALSE;
+        *current_character = fgetc(file);
     }
+    // This if-case is used to work around the case where the current char gets moved an extra time
+    // One time inside this function and then an extra one time in the print result function
+    // if (is_previous_newline && current_character != data->newline) {
+    //     printf("%c", current_character);
+    // }
 }
 
-int handle_s(char first_character, char second_character, Data* data) {
-    int should_be_squeezed = FALSE;
-    if (first_character == data->newline && second_character == data->newline) {
-        should_be_squeezed = TRUE;
-    }
-    return should_be_squeezed;
-}
-
-int handle_b(char first_character, char second_character, Data* data) {
-    int ordinal_was_printed = FALSE;
-    if ((first_character == data->newline && second_character != data->newline) ||
-        (data->character_index == 0 && second_character != data->newline)) {
+void handle_b(char current_character, int is_previous_newline, Data* data) {
+    if (is_previous_newline && current_character != data->newline) {
         printf("%6d\t", data->ordinal);
-        ordinal_was_printed = TRUE;
         ++data->ordinal;
     }
-    ++data->character_index;
-    return ordinal_was_printed;
 }
 
 int check_start_conditions(int argc, char *argv[], Data* data) {
