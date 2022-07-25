@@ -77,7 +77,7 @@ void print_result(Flags flags, Data data) {
 }
 
 void handle_t(char* current_character, char* next_character, FILE *file, Data data) {
-    while (*current_character == data.tabulator || (*current_character == data.tabulator && *next_character == data.tabulator)) {
+    while (*current_character == data.tabulator || *next_character == data.tabulator) {
         printf("^I");
         // Used to work around the case when the current char is tab and next is newline
         // If there is no this condtition the newline will get printed and shifted (other conditions wouldn't get checked)
