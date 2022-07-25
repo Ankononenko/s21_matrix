@@ -60,12 +60,13 @@ void print_result(Flags flags, Data data) {
                 if (flags.t && current_character == data.tabulator) {
                     handle_t(&current_character, &next_character, file, data);
                 }
-                printf("%c", current_character);
+                if (current_character != data.tabulator) {
+                    printf("%c", current_character);
+                }
                 is_previous_newline = current_character == '\n' ? TRUE : FALSE;
                 current_character = next_character;
                 next_character = fgetc(file);
             }
-            // printf("%c", current_character);
             fclose(file);
         } else {
             // Should be replaced with an error to stderr
@@ -76,14 +77,16 @@ void print_result(Flags flags, Data data) {
 }
 
 void handle_t(char* current_character, char* next_character, FILE *file, Data data) {
-    char temp_char = '\0';
     while (*current_character == data.tabulator || (*current_character == data.tabulator && *next_character == data.tabulator)) {
         printf("^I");
-        *current_character = *next_character;
-        temp_char = fgetc(file);
-        if (temp_char != EOF) {
-            *next_character = fgetc(file);
+        // Used to work around the case when the current char is tab and next is newline
+        // If there is no this condtition the newline will get printed and shifted (other conditions wouldn't get checked)
+        // For example -e flag
+        if (*next_character == data.newline || *next_character == EOF) {
+            return;
         }
+        *current_character = *next_character;
+        *next_character = fgetc(file);
     }
 }
 
