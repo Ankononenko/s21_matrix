@@ -55,5 +55,7 @@ void handle_v(char* current_character, char* next_character, FILE *file, Data da
 int is_unprintable(char current_character, Data data);
 int is_newline(char current_character, Data data);
 int is_tabulator(char current_character, Data data);
+void handle_flags(char* current_character, char* next_character, 
+    int* is_previous_newline, int* ordinal, Data data, Flags flags, FILE* file);
 
 #endif  // SRC_S21_CAT_H_

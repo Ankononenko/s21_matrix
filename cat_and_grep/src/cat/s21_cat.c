@@ -45,43 +45,7 @@ void print_result(Flags flags, Data data) {
             current_character = next_character;
             next_character = fgetc(file);
             while (current_character != EOF) {
-                if (flags.b && is_previous_newline) {
-                    handle_b(current_character, is_previous_newline, data, &ordinal);
-                }
-                if (flags.s && is_newline(current_character, data) && is_previous_newline) {
-                    handle_s(current_character, &next_character, is_previous_newline, data, file);
-                }
-                if (flags.n && !flags.b && is_previous_newline) {
-                    handle_n(&ordinal);
-                }
-                if ((flags.e && is_newline(current_character, data)) ||
-                    (flags.e && is_unprintable(current_character, data))) {
-                    if (flags.e && is_newline(current_character, data)) {
-                        handle_e();
-                    }
-                    if (is_unprintable(current_character, data)) {
-                        handle_v(&current_character, &next_character, file, data);
-                    }
-                }
-                if (flags.E && is_newline(current_character, data)) {
-                    handle_e();
-                }
-                if (flags.T && is_tabulator(current_character, data)) {
-                    handle_t(&current_character, &next_character, file, data);
-                }
-                if ((flags.t && is_tabulator(current_character, data)) ||
-                    (flags.t && is_unprintable(current_character, data))) {
-                    handle_t(&current_character, &next_character, file, data);
-                    if (is_unprintable(current_character, data)) {
-                        handle_v(&current_character, &next_character, file, data);
-                    }
-                }
-                if ((!flags.t && !flags.T) || !is_tabulator(current_character, data)) {
-                    printf("%c", current_character);
-                }
-                is_previous_newline = current_character == '\n' ? TRUE : FALSE;
-                current_character = next_character;
-                next_character = fgetc(file);
+                handle_flags(&current_character, &next_character, &is_previous_newline, &ordinal, data, flags, file);
             }
             fclose(file);
         } else {
@@ -89,6 +53,48 @@ void print_result(Flags flags, Data data) {
             printf("File doesn't exist");
         }
     }
+}
+
+void handle_flags(char* current_character, char* next_character, 
+        int* is_previous_newline, int* ordinal, Data data, Flags flags, FILE* file) {
+
+    if (flags.b && *is_previous_newline) {
+        handle_b(*current_character, *is_previous_newline, data, ordinal);
+    }
+    if (flags.s && is_newline(*current_character, data) && *is_previous_newline) {
+        handle_s(*current_character, next_character, *is_previous_newline, data, file);
+    }
+    if (flags.n && !flags.b && *is_previous_newline) {
+        handle_n(ordinal);
+    }
+    if ((flags.e && is_newline(*current_character, data)) ||
+        (flags.e && is_unprintable(*current_character, data))) {
+        if (flags.e && is_newline(*current_character, data)) {
+            handle_e();
+        }
+        if (is_unprintable(*current_character, data)) {
+            handle_v(current_character, next_character, file, data);
+        }
+    }
+    if (flags.E && is_newline(*current_character, data)) {
+        handle_e();
+    }
+    if (flags.T && is_tabulator(*current_character, data)) {
+        handle_t(current_character, next_character, file, data);
+    }
+    if ((flags.t && is_tabulator(*current_character, data)) ||
+        (flags.t && is_unprintable(*current_character, data))) {
+        handle_t(current_character, next_character, file, data);
+        if (is_unprintable(*current_character, data)) {
+            handle_v(current_character, next_character, file, data);
+        }
+    }
+    if ((!flags.t && !flags.T) || !is_tabulator(*current_character, data)) {
+        printf("%c", *current_character);
+    }
+    *is_previous_newline = *current_character == '\n' ? TRUE : FALSE;
+    *current_character = *next_character;
+    *next_character = fgetc(file);
 }
 
 int is_tabulator(char current_character, Data data) {
