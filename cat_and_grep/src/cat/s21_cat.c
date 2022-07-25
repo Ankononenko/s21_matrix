@@ -76,8 +76,7 @@ void print_result(Flags flags, Data data) {
                         handle_v(&current_character, &next_character, file, data);
                     }
                 }
-                // TODO: Don't print a char if it is unprintable
-                if (!is_tabulator(current_character, data)) {
+                if ((!flags.t && !flags.T) || !is_tabulator(current_character, data)) {
                     printf("%c", current_character);
                 }
                 is_previous_newline = current_character == '\n' ? TRUE : FALSE;
@@ -140,7 +139,7 @@ void handle_t(char* current_character, char* next_character, FILE *file, Data da
         // Used to work around the case when the current char is tab and next is newline
         // If there is no this condtition the newline will get printed and shifted (other conditions wouldn't get checked)
         // For example -e flag
-        if (is_newline(*current_character, data) || *next_character == EOF) {
+        if (is_newline(*next_character, data) || *next_character == EOF) {
             return;
         }
         *current_character = *next_character;
