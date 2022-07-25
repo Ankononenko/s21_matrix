@@ -44,7 +44,7 @@ void print_result(Flags flags, Data data) {
             next_character = fgetc(file);
             current_character = next_character;
             next_character = fgetc(file);
-            while (next_character != EOF) {
+            while (current_character != EOF) {
                 if (flags.b && is_previous_newline) {
                     handle_b(current_character, is_previous_newline, data, &ordinal);
                 }
@@ -54,7 +54,7 @@ void print_result(Flags flags, Data data) {
                 if (flags.n && !flags.b && is_previous_newline) {
                     handle_n(&ordinal);
                 }
-                if ((flags.e && next_character == data.newline) || (flags.e && current_character == data.newline)) {
+                if (flags.e && current_character == data.newline) {
                     handle_e();
                 }
                 if (flags.t && current_character == data.tabulator) {
@@ -65,7 +65,7 @@ void print_result(Flags flags, Data data) {
                 current_character = next_character;
                 next_character = fgetc(file);
             }
-            printf("%c", current_character);
+            // printf("%c", current_character);
             fclose(file);
         } else {
             // Should be replaced with an error to stderr
