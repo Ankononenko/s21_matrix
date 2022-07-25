@@ -51,5 +51,9 @@ void handle_s(char current_character, char* next_character, int is_previous_newl
 void handle_n(int* ordinal);
 void handle_e();
 void handle_t(char* current_character, char* next_character, FILE *file, Data data);
+void handle_v(char* current_character, char* next_character, FILE *file, Data data);
+int is_unprintable(char current_character, Data data);
+int is_newline(char current_character, Data data);
+int is_tabulator(char current_character, Data data);
 
 #endif  // SRC_S21_CAT_H_

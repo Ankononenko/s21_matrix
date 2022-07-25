@@ -48,19 +48,36 @@ void print_result(Flags flags, Data data) {
                 if (flags.b && is_previous_newline) {
                     handle_b(current_character, is_previous_newline, data, &ordinal);
                 }
-                if (flags.s && current_character == data.newline && is_previous_newline) {
+                if (flags.s && is_newline(current_character, data) && is_previous_newline) {
                     handle_s(current_character, &next_character, is_previous_newline, data, file);
                 }
                 if (flags.n && !flags.b && is_previous_newline) {
                     handle_n(&ordinal);
                 }
-                if (flags.e && current_character == data.newline) {
+                if ((flags.e && is_newline(current_character, data)) ||
+                    (flags.e && is_unprintable(current_character, data))) {
+                    if (flags.e && is_newline(current_character, data)) {
+                        handle_e();
+                    }
+                    if (is_unprintable(current_character, data)) {
+                        handle_v(&current_character, &next_character, file, data);
+                    }
+                }
+                if (flags.E && is_newline(current_character, data)) {
                     handle_e();
                 }
-                if (flags.t && current_character == data.tabulator) {
+                if (flags.T && is_tabulator(current_character, data)) {
                     handle_t(&current_character, &next_character, file, data);
                 }
-                if (current_character != data.tabulator) {
+                if ((flags.t && is_tabulator(current_character, data)) ||
+                    (flags.t && is_unprintable(current_character, data))) {
+                    handle_t(&current_character, &next_character, file, data);
+                    if (is_unprintable(current_character, data)) {
+                        handle_v(&current_character, &next_character, file, data);
+                    }
+                }
+                // TODO: Don't print a char if it is unprintable
+                if (!is_tabulator(current_character, data)) {
                     printf("%c", current_character);
                 }
                 is_previous_newline = current_character == '\n' ? TRUE : FALSE;
@@ -72,17 +89,58 @@ void print_result(Flags flags, Data data) {
             // Should be replaced with an error to stderr
             printf("File doesn't exist");
         }
+    }
+}
 
+int is_tabulator(char current_character, Data data) {
+    int is_tabulator = FALSE;
+    if (current_character == data.tabulator) {
+        is_tabulator = TRUE;
+    }
+    return is_tabulator;
+}
+
+int is_newline(char current_character, Data data) {
+    int is_newline = FALSE;
+    if (current_character == data.newline) {
+        is_newline = TRUE;
+    }
+    return is_newline;
+}
+
+int is_unprintable(char current_character, Data data) {
+    int is_unprintable = FALSE;
+    if (((current_character >= 0 && current_character < 31) &&
+        !is_newline(current_character, data) &&
+        !is_tabulator(current_character, data)) || current_character == 127) {
+        is_unprintable = TRUE;
+    }
+    return is_unprintable;
+}
+
+void handle_v(char* current_character, char* next_character, FILE *file, Data data) {
+    while (is_unprintable(*current_character, data)) {
+        if (*current_character == 127) {
+            *current_character = '?';
+        } else {
+            *current_character += 64;
+        }
+        printf("^%c", *current_character);
+        if (is_newline(*current_character, data) || *next_character == EOF) {
+            return;
+        }
+        *current_character = *next_character;
+        *next_character = fgetc(file);
     }
 }
 
 void handle_t(char* current_character, char* next_character, FILE *file, Data data) {
-    while (*current_character == data.tabulator || *next_character == data.tabulator) {
+    while (is_tabulator(*current_character, data) || is_tabulator(*next_character, data)) {
         printf("^I");
         // Used to work around the case when the current char is tab and next is newline
         // If there is no this condtition the newline will get printed and shifted (other conditions wouldn't get checked)
         // For example -e flag
-        if (*next_character == data.newline || *next_character == EOF) {
+        if (is_newline(*current_character, data) || *next_character == EOF) {
             return;
         }
         *current_character = *next_character;
@@ -100,14 +158,14 @@ void handle_n(int* ordinal) {
 }
 
 void handle_s(char current_character, char* next_character, int is_previous_newline, Data data, FILE *file) {
-    while (current_character == data.newline && is_previous_newline && *next_character == data.newline) {
+    while (is_newline(current_character, data) && is_previous_newline && is_newline(*next_character, data)) {
         is_previous_newline = current_character == '\n' ? TRUE : FALSE;
         *next_character = fgetc(file);
     }
 }
 
 void handle_b(char current_character, int is_previous_newline, Data data, int* ordinal) {
-    if (is_previous_newline && current_character != data.newline) {
+    if (is_previous_newline && !is_newline(current_character, data)) {
         printf("%6d\t", *ordinal);
         ++*ordinal;
     }
@@ -115,15 +173,12 @@ void handle_b(char current_character, int is_previous_newline, Data data, int* o
 
 int check_start_conditions(int argc, char *argv[], Data* data) {
     int conditions = FALSE;
-
     // Condition to check if there are flags and text-files
     // Parse flags() should return TRUE or FALSE if the flags are valid or not
     // And the files exist
-
     if (argc >= 2 && parse_flags_and_text_files(argc, argv, data)) {
         conditions = TRUE;
     }
-
     return conditions;
 }
 
@@ -157,7 +212,6 @@ int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
     // Counters to know when to stop in iterating over the arrays
     int counter_for_flags = 0;
     // Iterate over the argv to sort out flags from files
-
     for (int element_index = 1; element_index < argc; ++element_index) {
         if (argv[element_index][letter_index] == '-') {
             strcpy(data->all_flags_array[counter_for_flags], argv[element_index]);
@@ -167,46 +221,36 @@ int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
             ++data->number_of_files;
         }
     }
-
     if (check_if_flags_are_valid(counter_for_flags, *data)) {
             is_valid_input = TRUE;
     }
-
     return is_valid_input;
 }
 
 int check_if_files_exist(int filename_index, Data data) {
     int files_exist = TRUE;
     FILE *file = NULL;
-
     if (((file = fopen(data.all_text_files_array[filename_index], "r")) == NULL)) {
         files_exist = FALSE;
     } else {
         fclose(file);
     }
-
     return files_exist;
 }
 
 int check_if_flags_are_valid(int counter_for_flags, Data data) {
-    
     int flags_are_valid = FALSE, index_all_flags = 0, number_of_valid_flags = 0;
-    
     while (index_all_flags != counter_for_flags) {
-
         for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
             if (!strcmp(data.all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
                 ++number_of_valid_flags;
             }
         }
-
         ++index_all_flags;
     }
-
     if (counter_for_flags == number_of_valid_flags) {
         flags_are_valid = TRUE;
     }
-
     return flags_are_valid;
 }
 
