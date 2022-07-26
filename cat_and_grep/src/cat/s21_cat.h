@@ -46,16 +46,16 @@ int check_if_flags_are_valid(const int counter_for_flags, Data const* data);
 int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data const* data);
-void handle_b(const char current_character, const int is_previous_newline, Data const* data, int* ordinal);
-void handle_s(const char current_character, char* next_character, int is_previous_newline, Data const* data, FILE *file);
+void handle_b(const int current_character, const int is_previous_newline, Data const* data, int* ordinal);
+void handle_s(const int current_character, int* next_character, int is_previous_newline, Data const* data, FILE *file);
 void handle_n(int* ordinal);
 void handle_e();
-void handle_t(char* current_character, char* next_character, FILE *file, Data const* data);
-void handle_v(char* current_character, char* next_character, FILE *file, Data const* data);
-int is_unprintable(const char current_character, Data const* data);
-int is_newline(const char current_character, Data const* data);
-int is_tabulator(const char current_character, Data const* data);
-void handle_flags(char* current_character, char* next_character,
+void handle_t(int* current_character, int* next_character, FILE *file, Data const* data);
+void handle_v(int* current_character, int* next_character, FILE *file, Data const* data);
+int is_unprintable(const int current_character, Data const* data);
+int is_newline(const int current_character, Data const* data);
+int is_tabulator(const int current_character, Data const* data);
+void handle_flags(int* current_character, int* next_character,
     int* is_previous_newline, int* ordinal, Data const* data, Flags const* flags, FILE* file);
 
 #endif  // SRC_S21_CAT_H_

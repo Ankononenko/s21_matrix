@@ -39,7 +39,7 @@ void print_result(Flags const* flags, Data const* data) {
         // is_previous_newline is set to TRUE to work around the begging of the file
         if (check_if_files_exist(index_for_files, data)) {
             int is_previous_newline = TRUE, ordinal = 1;
-            char current_character = '\0', next_character = '\0';
+            int current_character = 0, next_character = 0;
             FILE *file = fopen(data->all_text_files_array[index_for_files], "r");
             next_character = fgetc(file);
             current_character = next_character;
@@ -55,7 +55,7 @@ void print_result(Flags const* flags, Data const* data) {
     }
 }
 
-void handle_flags(char* current_character, char* next_character,
+void handle_flags(int* current_character, int* next_character,
     int* is_previous_newline, int* ordinal, Data const* data, Flags const* flags, FILE* file) {
 
     if (flags->b && *is_previous_newline) {
@@ -97,7 +97,7 @@ void handle_flags(char* current_character, char* next_character,
     *next_character = fgetc(file);
 }
 
-int is_tabulator(const char current_character, Data const* data) {
+int is_tabulator(const int current_character, Data const* data) {
     int is_tabulator = FALSE;
     if (current_character == data->tabulator) {
         is_tabulator = TRUE;
@@ -105,7 +105,7 @@ int is_tabulator(const char current_character, Data const* data) {
     return is_tabulator;
 }
 
-int is_newline(const char current_character, Data const* data) {
+int is_newline(const int current_character, Data const* data) {
     int is_newline = FALSE;
     if (current_character == data->newline) {
         is_newline = TRUE;
@@ -113,7 +113,7 @@ int is_newline(const char current_character, Data const* data) {
     return is_newline;
 }
 
-int is_unprintable(const char current_character, Data const* data) {
+int is_unprintable(const int current_character, Data const* data) {
     int is_unprintable = FALSE;
     if (((current_character >= 0 && current_character < 31) &&
         !is_newline(current_character, data) &&
@@ -123,7 +123,7 @@ int is_unprintable(const char current_character, Data const* data) {
     return is_unprintable;
 }
 
-void handle_v(char* current_character, char* next_character, FILE *file, Data const* data) {
+void handle_v(int* current_character, int* next_character, FILE *file, Data const* data) {
     while (is_unprintable(*current_character, data)) {
         if (*current_character == 127) {
             *current_character = '?';
@@ -139,7 +139,7 @@ void handle_v(char* current_character, char* next_character, FILE *file, Data co
     }
 }
 
-void handle_t(char* current_character, char* next_character, FILE *file, Data const* data) {
+void handle_t(int* current_character, int* next_character, FILE *file, Data const* data) {
     while (is_tabulator(*current_character, data) || is_tabulator(*next_character, data)) {
         printf("^I");
         // Used to work around the case when the current char is tab and next is newline
@@ -162,14 +162,14 @@ void handle_n(int* ordinal) {
     ++*ordinal;
 }
 
-void handle_s(const char current_character, char* next_character, int is_previous_newline, Data const* data, FILE *file) {
+void handle_s(const int current_character, int* next_character, int is_previous_newline, Data const* data, FILE *file) {
     while (is_newline(current_character, data) && is_previous_newline && is_newline(*next_character, data)) {
         is_previous_newline = current_character == '\n' ? TRUE : FALSE;
         *next_character = fgetc(file);
     }
 }
 
-void handle_b(const char current_character, const int is_previous_newline, Data const* data, int* ordinal) {
+void handle_b(const int current_character, const int is_previous_newline, Data const* data, int* ordinal) {
     if (is_previous_newline && !is_newline(current_character, data)) {
         printf("%6d\t", *ordinal);
         ++*ordinal;
