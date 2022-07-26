@@ -1,0 +1,21 @@
+     1	abc 
+     2	ABC 
+     3	aBc
+
+     4	Bac
+
+     5	134
+     6	123
+     7	213A
+     8	ABCD 
+
+
+     9	CBS
+
+    10	1Ab2CD
+
+
+
+
+
+     1	asdfs

@@ -6,7 +6,7 @@
 
 #define TOTAL_NUMBER_OF_FLAGS 11
 #define MAX_LENGTH_OF_FLAG 18
-#define NMAX 20
+#define NMAX 30
 
 enum true_of_false{
     FALSE,
