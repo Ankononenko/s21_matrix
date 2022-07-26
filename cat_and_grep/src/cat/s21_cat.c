@@ -55,8 +55,8 @@ void print_result(Flags flags, Data data) {
     }
 }
 
-void handle_flags(char* current_character, char* next_character, 
-        int* is_previous_newline, int* ordinal, Data data, Flags flags, FILE* file) {
+void handle_flags(char* current_character, char* next_character,
+    int* is_previous_newline, int* ordinal, Data data, Flags flags, FILE* file) {
 
     if (flags.b && *is_previous_newline) {
         handle_b(*current_character, *is_previous_newline, data, ordinal);
@@ -89,7 +89,7 @@ void handle_flags(char* current_character, char* next_character,
             handle_v(current_character, next_character, file, data);
         }
     }
-    if ((!flags.t && !flags.T) || !is_tabulator(*current_character, data)) {
+    if ((!flags.t || !flags.T) && !is_tabulator(*current_character, data)) {
         printf("%c", *current_character);
     }
     *is_previous_newline = *current_character == '\n' ? TRUE : FALSE;
@@ -145,7 +145,7 @@ void handle_t(char* current_character, char* next_character, FILE *file, Data da
         // Used to work around the case when the current char is tab and next is newline
         // If there is no this condtition the newline will get printed and shifted (other conditions wouldn't get checked)
         // For example -e flag
-        if (is_newline(*next_character, data) || *next_character == EOF) {
+        if (!is_tabulator(*next_character, data)) {
             return;
         }
         *current_character = *next_character;
