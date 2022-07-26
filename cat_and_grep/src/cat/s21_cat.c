@@ -25,8 +25,8 @@ int main(int argc, char *argv[]) {
     Data data;
     initialize_data(&data);
     if (check_start_conditions(argc, argv, &data)) {
-        pass_flags_to_structure(&flags, data);
-        print_result(flags, data);
+        pass_flags_to_structure(&flags, &data);
+        print_result(&flags, &data);
     } else {
         // Should be replaced with output to stderr
         printf("Fail \n");
@@ -34,13 +34,13 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void print_result(Flags flags, Data data) {
-    for (int index_for_files = 0; index_for_files < data.number_of_files; ++index_for_files) {
+void print_result(Flags const* flags, Data const* data) {
+    for (int index_for_files = 0; index_for_files < data->number_of_files; ++index_for_files) {
         // is_previous_newline is set to TRUE to work around the begging of the file
         if (check_if_files_exist(index_for_files, data)) {
             int is_previous_newline = TRUE, ordinal = 1;
             char current_character = '\0', next_character = '\0';
-            FILE *file = fopen(data.all_text_files_array[index_for_files], "r");
+            FILE *file = fopen(data->all_text_files_array[index_for_files], "r");
             next_character = fgetc(file);
             current_character = next_character;
             next_character = fgetc(file);
@@ -56,40 +56,40 @@ void print_result(Flags flags, Data data) {
 }
 
 void handle_flags(char* current_character, char* next_character,
-    int* is_previous_newline, int* ordinal, Data data, Flags flags, FILE* file) {
+    int* is_previous_newline, int* ordinal, Data const* data, Flags const* flags, FILE* file) {
 
-    if (flags.b && *is_previous_newline) {
+    if (flags->b && *is_previous_newline) {
         handle_b(*current_character, *is_previous_newline, data, ordinal);
     }
-    if (flags.s && is_newline(*current_character, data) && *is_previous_newline) {
+    if (flags->s && is_newline(*current_character, data) && *is_previous_newline) {
         handle_s(*current_character, next_character, *is_previous_newline, data, file);
     }
-    if (flags.n && !flags.b && *is_previous_newline) {
+    if (flags->n && !flags->b && *is_previous_newline) {
         handle_n(ordinal);
     }
-    if ((flags.e && is_newline(*current_character, data)) ||
-        (flags.e && is_unprintable(*current_character, data))) {
-        if (flags.e && is_newline(*current_character, data)) {
+    if ((flags->e && is_newline(*current_character, data)) ||
+        (flags->e && is_unprintable(*current_character, data))) {
+        if (flags->e && is_newline(*current_character, data)) {
             handle_e();
         }
         if (is_unprintable(*current_character, data)) {
             handle_v(current_character, next_character, file, data);
         }
     }
-    if (flags.E && is_newline(*current_character, data)) {
+    if (flags->E && is_newline(*current_character, data)) {
         handle_e();
     }
-    if (flags.T && is_tabulator(*current_character, data)) {
+    if (flags->T && is_tabulator(*current_character, data)) {
         handle_t(current_character, next_character, file, data);
     }
-    if ((flags.t && is_tabulator(*current_character, data)) ||
-        (flags.t && is_unprintable(*current_character, data))) {
+    if ((flags->t && is_tabulator(*current_character, data)) ||
+        (flags->t && is_unprintable(*current_character, data))) {
         handle_t(current_character, next_character, file, data);
         if (is_unprintable(*current_character, data)) {
             handle_v(current_character, next_character, file, data);
         }
     }
-    if ((!flags.t || !flags.T) && !is_tabulator(*current_character, data)) {
+    if ((!flags->t || !flags->T) && !is_tabulator(*current_character, data)) {
         printf("%c", *current_character);
     }
     *is_previous_newline = *current_character == '\n' ? TRUE : FALSE;
@@ -97,23 +97,23 @@ void handle_flags(char* current_character, char* next_character,
     *next_character = fgetc(file);
 }
 
-int is_tabulator(char current_character, Data data) {
+int is_tabulator(const char current_character, Data const* data) {
     int is_tabulator = FALSE;
-    if (current_character == data.tabulator) {
+    if (current_character == data->tabulator) {
         is_tabulator = TRUE;
     }
     return is_tabulator;
 }
 
-int is_newline(char current_character, Data data) {
+int is_newline(const char current_character, Data const* data) {
     int is_newline = FALSE;
-    if (current_character == data.newline) {
+    if (current_character == data->newline) {
         is_newline = TRUE;
     }
     return is_newline;
 }
 
-int is_unprintable(char current_character, Data data) {
+int is_unprintable(const char current_character, Data const* data) {
     int is_unprintable = FALSE;
     if (((current_character >= 0 && current_character < 31) &&
         !is_newline(current_character, data) &&
@@ -123,7 +123,7 @@ int is_unprintable(char current_character, Data data) {
     return is_unprintable;
 }
 
-void handle_v(char* current_character, char* next_character, FILE *file, Data data) {
+void handle_v(char* current_character, char* next_character, FILE *file, Data const* data) {
     while (is_unprintable(*current_character, data)) {
         if (*current_character == 127) {
             *current_character = '?';
@@ -139,7 +139,7 @@ void handle_v(char* current_character, char* next_character, FILE *file, Data da
     }
 }
 
-void handle_t(char* current_character, char* next_character, FILE *file, Data data) {
+void handle_t(char* current_character, char* next_character, FILE *file, Data const* data) {
     while (is_tabulator(*current_character, data) || is_tabulator(*next_character, data)) {
         printf("^I");
         // Used to work around the case when the current char is tab and next is newline
@@ -162,21 +162,21 @@ void handle_n(int* ordinal) {
     ++*ordinal;
 }
 
-void handle_s(char current_character, char* next_character, int is_previous_newline, Data data, FILE *file) {
+void handle_s(const char current_character, char* next_character, int is_previous_newline, Data const* data, FILE *file) {
     while (is_newline(current_character, data) && is_previous_newline && is_newline(*next_character, data)) {
         is_previous_newline = current_character == '\n' ? TRUE : FALSE;
         *next_character = fgetc(file);
     }
 }
 
-void handle_b(char current_character, int is_previous_newline, Data data, int* ordinal) {
+void handle_b(const char current_character, const int is_previous_newline, Data const* data, int* ordinal) {
     if (is_previous_newline && !is_newline(current_character, data)) {
         printf("%6d\t", *ordinal);
         ++*ordinal;
     }
 }
 
-int check_start_conditions(int argc, char *argv[], Data* data) {
+int check_start_conditions(const int argc, char *argv[], Data* data) {
     int conditions = FALSE;
     // Condition to check if there are flags and text-files
     // Parse flags() should return TRUE or FALSE if the flags are valid or not
@@ -187,24 +187,24 @@ int check_start_conditions(int argc, char *argv[], Data* data) {
     return conditions;
 }
 
-void pass_flags_to_structure(Flags* flags, Data data) {
+void pass_flags_to_structure(Flags* flags, Data const* data) {
     int index = 0;
     // Until it is the end of the two-dimensional array, I iterate over it and pass the values to the Flags structure
     // strcmp returns 0 if the values are equal, so I use !(not) to invert the value of zero to true
-    while (strcmp(data.all_flags_array[index], "\0")) {
-        if (!strcmp(data.all_flags_array[index], "-b") || !strcmp(data.all_flags_array[index], "--number-nonblank")) {
+    while (strcmp(data->all_flags_array[index], "\0")) {
+        if (!strcmp(data->all_flags_array[index], "-b") || !strcmp(data->all_flags_array[index], "--number-nonblank")) {
             flags->b = TRUE;
-        } else if (!strcmp(data.all_flags_array[index], "-e")) {
+        } else if (!strcmp(data->all_flags_array[index], "-e")) {
             flags->e = TRUE;
-        } else if (!strcmp(data.all_flags_array[index], "-E")) {
+        } else if (!strcmp(data->all_flags_array[index], "-E")) {
             flags->E = TRUE;
-        } else if (!strcmp(data.all_flags_array[index], "-n") || !strcmp(data.all_flags_array[index], "--number")) {
+        } else if (!strcmp(data->all_flags_array[index], "-n") || !strcmp(data->all_flags_array[index], "--number")) {
             flags->n = TRUE;
-        } else if (!strcmp(data.all_flags_array[index], "-s") || !strcmp(data.all_flags_array[index], "--squeeze-blank")) {
+        } else if (!strcmp(data->all_flags_array[index], "-s") || !strcmp(data->all_flags_array[index], "--squeeze-blank")) {
             flags->s = TRUE;
-        } else if (!strcmp(data.all_flags_array[index], "-t")) {
+        } else if (!strcmp(data->all_flags_array[index], "-t")) {
             flags->t = TRUE;
-        } else if (!strcmp(data.all_flags_array[index], "-T")) {
+        } else if (!strcmp(data->all_flags_array[index], "-T")) {
             flags->T = TRUE;
         }
         // Here I should work with NULL but I'm not sure how to handle that case
@@ -212,7 +212,7 @@ void pass_flags_to_structure(Flags* flags, Data data) {
     }
 }
 
-int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
+int parse_flags_and_text_files(const int argc, char *argv[], Data* data) {
     int is_valid_input = FALSE, letter_index = 0;
     // Counters to know when to stop in iterating over the arrays
     int counter_for_flags = 0;
@@ -226,16 +226,16 @@ int parse_flags_and_text_files(int argc, char *argv[], Data* data) {
             ++data->number_of_files;
         }
     }
-    if (check_if_flags_are_valid(counter_for_flags, *data)) {
+    if (check_if_flags_are_valid(counter_for_flags, data)) {
             is_valid_input = TRUE;
     }
     return is_valid_input;
 }
 
-int check_if_files_exist(int filename_index, Data data) {
+int check_if_files_exist(const int filename_index, Data const* data) {
     int files_exist = TRUE;
     FILE *file = NULL;
-    if (((file = fopen(data.all_text_files_array[filename_index], "r")) == NULL)) {
+    if ((file = fopen(data->all_text_files_array[filename_index], "r")) == NULL) {
         files_exist = FALSE;
     } else {
         fclose(file);
@@ -243,11 +243,11 @@ int check_if_files_exist(int filename_index, Data data) {
     return files_exist;
 }
 
-int check_if_flags_are_valid(int counter_for_flags, Data data) {
+int check_if_flags_are_valid(const int counter_for_flags, Data const* data) {
     int flags_are_valid = FALSE, index_all_flags = 0, number_of_valid_flags = 0;
     while (index_all_flags != counter_for_flags) {
         for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
-            if (!strcmp(data.all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
+            if (!strcmp(data->all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
                 ++number_of_valid_flags;
             }
         }
