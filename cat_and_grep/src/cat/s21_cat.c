@@ -28,8 +28,8 @@ int main(int argc, char *argv[]) {
         pass_flags_to_structure(&flags, &data);
         print_result(&flags, &data);
     } else {
-        // Should be replaced with output to stderr
-        printf("Fail \n");
+        // Error message, when entered flags are invalid
+        fprintf(stderr, "Flags were not valid \n");
     }
     return 0;
 }
@@ -49,8 +49,8 @@ void print_result(Flags const* flags, Data const* data) {
             }
             fclose(file);
         } else {
-            // Should be replaced with an error to stderr
-            printf("File doesn't exist");
+            // Error message when a file doesn't exist
+            fprintf(stderr, "File doesn't exist");
         }
     }
 }
@@ -89,7 +89,12 @@ void handle_flags(int* current_character, int* next_character,
             handle_v(current_character, next_character, file, data);
         }
     }
+    // Follwing 2 if-else cases used to print out regular characters when there are no T or t flags and the current char isn't \t
+    // Otherwise the tabs get eaten. Also these conditions are used to not print regular tabs when -t or -T flags are active 
     if ((!flags->t || !flags->T) && !is_tabulator(*current_character, data)) {
+        printf("%c", *current_character);
+    }
+    if ((!flags->t && !flags->T) && is_tabulator(*current_character, data)) {
         printf("%c", *current_character);
     }
     *is_previous_newline = *current_character == '\n' ? TRUE : FALSE;
@@ -207,7 +212,6 @@ void pass_flags_to_structure(Flags* flags, Data const* data) {
         } else if (!strcmp(data->all_flags_array[index], "-T")) {
             flags->T = TRUE;
         }
-        // Here I should work with NULL but I'm not sure how to handle that case
         ++index;
     }
 }
