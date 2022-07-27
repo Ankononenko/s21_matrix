@@ -89,6 +89,9 @@ void handle_flags(int* current_character, int* next_character,
             handle_v(current_character, next_character, file, data);
         }
     }
+    if (flags->v && is_unprintable(*current_character, data)) {
+        handle_v(current_character, next_character, file, data);
+    }
     // Follwing 2 if-else cases used to print out regular characters when there are no T or t flags and the current char isn't \t
     // Otherwise the tabs get eaten. Also these conditions are used to not print regular tabs when -t or -T flags are active 
     if ((!flags->t || !flags->T) && !is_tabulator(*current_character, data)) {
@@ -211,6 +214,8 @@ void pass_flags_to_structure(Flags* flags, Data const* data) {
             flags->t = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-T")) {
             flags->T = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-v")) {
+            flags->v = TRUE;
         }
         ++index;
     }
@@ -271,6 +276,7 @@ void initialize_flags(Flags* flags) {
     flags->E = FALSE;
     flags->T = FALSE;
     flags->t = FALSE;
+    flags->v = FALSE;
 }
 
 void initialize_data(Data* data) {

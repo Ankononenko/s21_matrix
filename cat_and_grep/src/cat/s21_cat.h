@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TOTAL_NUMBER_OF_FLAGS 11
+#define TOTAL_NUMBER_OF_FLAGS 12
 #define MAX_LENGTH_OF_FLAG 18
 #define NMAX 30
 
@@ -15,7 +15,7 @@ enum true_of_false{
 
 static const char possible_flags[TOTAL_NUMBER_OF_FLAGS][MAX_LENGTH_OF_FLAG] = {
     "-b", "--number-nonblank", "-e", "-E",
-    "-n", "--number", "-s", "--squeeze-blank", "-t", "-T", "NULL"
+    "-n", "--number", "-s", "--squeeze-blank", "-t", "-T", "NULL", "-v"
 };
 
 typedef struct Flags {
@@ -26,6 +26,7 @@ typedef struct Flags {
     int E;
     int T;
     int t;
+    int v;
 } Flags;
 
 typedef struct Data {
