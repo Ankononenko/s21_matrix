@@ -45,7 +45,8 @@ void print_result(Flags const* flags, Data const* data) {
             current_character = next_character;
             next_character = fgetc(file);
             while (current_character != EOF) {
-                handle_flags(&current_character, &next_character, &is_previous_newline, &ordinal, data, flags, file);
+                handle_flags(&current_character, &next_character,
+                    &is_previous_newline, &ordinal, data, flags, file);
             }
             fclose(file);
         } else {
@@ -92,8 +93,10 @@ void handle_flags(int* current_character, int* next_character,
     if (flags->v && is_unprintable(*current_character, data)) {
         handle_v(current_character, next_character, file, data);
     }
-    // Follwing 2 if-else cases used to print out regular characters when there are no T or t flags and the current char isn't \t
-    // Otherwise the tabs get eaten. Also these conditions are used to not print regular tabs when -t or -T flags are active 
+    // Follwing 2 if-else cases used to print out regular characters
+    // when there are no T or t flags and the current char isn't \t
+    // Otherwise the tabs get eaten.
+    // Also these conditions are used to not print regular tabs when -t or -T flags are active
     if ((!flags->t || !flags->T) && !is_tabulator(*current_character, data)) {
         printf("%c", *current_character);
     }
@@ -151,7 +154,8 @@ void handle_t(int* current_character, int* next_character, FILE *file, Data cons
     while (is_tabulator(*current_character, data) || is_tabulator(*next_character, data)) {
         printf("^I");
         // Used to work around the case when the current char is tab and next is newline
-        // If there is no this condtition the newline will get printed and shifted (other conditions wouldn't get checked)
+        // If there is no this condtition the newline will get printed
+        // and shifted (other conditions wouldn't get checked)
         // For example -e flag
         if (!is_tabulator(*next_character, data)) {
             return;
@@ -170,7 +174,8 @@ void handle_n(int* ordinal) {
     ++*ordinal;
 }
 
-void handle_s(const int current_character, int* next_character, int is_previous_newline, Data const* data, FILE *file) {
+void handle_s(const int current_character, int* next_character,
+    int is_previous_newline, Data const* data, FILE *file) {
     while (is_newline(current_character, data) && is_previous_newline && is_newline(*next_character, data)) {
         is_previous_newline = current_character == '\n' ? TRUE : FALSE;
         *next_character = fgetc(file);
@@ -197,18 +202,22 @@ int check_start_conditions(const int argc, char *argv[], Data* data) {
 
 void pass_flags_to_structure(Flags* flags, Data const* data) {
     int index = 0;
-    // Until it is the end of the two-dimensional array, I iterate over it and pass the values to the Flags structure
+    // Until it is the end of the two-dimensional array,
+    // I iterate over it and pass the values to the Flags structure
     // strcmp returns 0 if the values are equal, so I use !(not) to invert the value of zero to true
     while (strcmp(data->all_flags_array[index], "\0")) {
-        if (!strcmp(data->all_flags_array[index], "-b") || !strcmp(data->all_flags_array[index], "--number-nonblank")) {
+        if (!strcmp(data->all_flags_array[index], "-b") ||
+            !strcmp(data->all_flags_array[index], "--number-nonblank")) {
             flags->b = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-e")) {
             flags->e = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-E")) {
             flags->E = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-n") || !strcmp(data->all_flags_array[index], "--number")) {
+        } else if (!strcmp(data->all_flags_array[index], "-n") ||
+            !strcmp(data->all_flags_array[index], "--number")) {
             flags->n = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-s") || !strcmp(data->all_flags_array[index], "--squeeze-blank")) {
+        } else if (!strcmp(data->all_flags_array[index], "-s") ||
+            !strcmp(data->all_flags_array[index], "--squeeze-blank")) {
             flags->s = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-t")) {
             flags->t = TRUE;
@@ -255,7 +264,8 @@ int check_if_files_exist(const int filename_index, Data const* data) {
 int check_if_flags_are_valid(const int counter_for_flags, Data const* data) {
     int flags_are_valid = FALSE, index_all_flags = 0, number_of_valid_flags = 0;
     while (index_all_flags != counter_for_flags) {
-        for (int index_possible_flags = 0; index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
+        for (int index_possible_flags = 0;
+        index_possible_flags < TOTAL_NUMBER_OF_FLAGS; ++index_possible_flags) {
             if (!strcmp(data->all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
                 ++number_of_valid_flags;
             }
