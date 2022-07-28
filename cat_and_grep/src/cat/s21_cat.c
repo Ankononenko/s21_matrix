@@ -20,9 +20,10 @@ You need to develop a cat utility:
 #include "s21_cat.h"
 
 int main(int argc, char *argv[]) {
-    Flags flags;
+    // Initialize the value for the Valgrind to not to throw errors at me
+    Flags flags = {0};
     initialize_flags(&flags);
-    Data data;
+    Data data = {0};
     initialize_data(&data);
     if (check_start_conditions(argc, argv, &data)) {
         pass_flags_to_structure(&flags, &data);
@@ -290,8 +291,8 @@ void initialize_flags(Flags* flags) {
 }
 
 void initialize_data(Data* data) {
-    memset(data->all_flags_array, '\0', NMAX *sizeof(char));
-    memset(data->all_text_files_array, '\0', NMAX *sizeof(char));
+    memset(data->all_flags_array, '\0', sizeof(char));
+    memset(data->all_text_files_array, '\0', sizeof(char));
     data->number_of_files = 0;
     data->newline = '\n';
     data->tabulator = '\t';
