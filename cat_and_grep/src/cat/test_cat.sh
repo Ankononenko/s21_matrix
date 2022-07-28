@@ -6,9 +6,9 @@ DIFF_RES=""
 TEST_FILE=""
 echo "" > log.txt
 
-for TEST_FILE1 in  "../../texts/test1.txt" "../../texts/test2.txt"
+for TEST_FILE1 in  "../texts/test1.txt" "../texts/test2.txt"
 do
-    for TEST_FILE2 in "../../texts/test3.txt" "../../texts/test4.txt" "../../texts/test5.txt"
+    for TEST_FILE2 in "../texts/test3.txt" "../texts/test4.txt" "../texts/test5.txt"
     do
     if [ $TEST_FILE1 != $TEST_FILE2 ]
     then
@@ -131,6 +131,7 @@ else
   echo "$TEST1" >> log.txt
   (( COUNTER_FAIL++ ))
 fi
+rm s21_cat.txt cat.txt
 
 TEST1="-e nofile"
 echo $TEST1
@@ -144,6 +145,7 @@ else
   echo "$TEST1" >> log.txt
   (( COUNTER_FAIL++ ))
 fi
+rm s21_cat.txt cat.txt
 
 echo "SUCCESS: $COUNTER_SUCCESS"
 echo "FAIL: $COUNTER_FAIL"
