@@ -36,8 +36,11 @@ void print_result(Flags const* flags, Data* data) {
                 if (flags->e) {
                     handle_e(data);
                 }
-                if (flags->l) {
-                    handle_l(data);
+                if (flags->i) {
+                    handle_i(data);
+                }
+                if (flags->v) {
+                    handle_v(data);
                 }
                 // Print the line in the end if it was found
                 if (data->want_to_print_line) {
@@ -52,17 +55,27 @@ void print_result(Flags const* flags, Data* data) {
     }
 }
 
-void handle_l(Data* data) {
+void handle_v(Data* data) {
+    if (strstr(data->line_array_copy, data->pattern_array)) {
+        data->want_to_print_line = FALSE;
+    } else {
+        data->want_to_print_line = TRUE;
+    }
+}
+
+void handle_i(Data* data) {
     int line_lenght = 0, pattern_lenght = 0;
     line_lenght = strlen(data->line_array);
     pattern_lenght = strlen(data->pattern_array);
+    // Erase the array before I use it again
+    memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     for (int index = 0; index <= line_lenght; ++ index) {
-        data->line_array[index] = tolower(data->line_array[index]);
+        data->line_array_copy[index] = tolower(data->line_array[index]);
     }
     for (int index = 0; index <= pattern_lenght; ++ index) {
         data->pattern_array[index] = tolower(data->pattern_array[index]);
     }
-    if (strstr(data->line_array, data->pattern_array)) {
+    if (strstr(data->line_array_copy, data->pattern_array)) {
         data->want_to_print_line = TRUE;
     }
 }
@@ -78,6 +91,8 @@ void handle_e(Data* data) {
 }
 
 int parse_line(FILE *file, Data* data) {
+    // Erase the line before I write the array again
+    memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     int can_be_parsed = TRUE, index = 0, current_character = fgetc(file);
     while (current_character != data->newline) {
         data->line_array[index] = current_character;
@@ -87,6 +102,9 @@ int parse_line(FILE *file, Data* data) {
             can_be_parsed = FALSE;
         }
     }
+    // Copy regular line to copy. Copy is going to be compared as it changes when flags are applied
+    // Regular array gets printed as it is the condition
+    memcpy(data->line_array_copy, data->line_array, index);
     return can_be_parsed;
 }
 
@@ -210,6 +228,7 @@ void initialize_data(Data* data) {
     memset(data->all_filenames_array, 0, TOTAL_NUM_FILENAMES * sizeof(char));
     memset(data->pattern_array, 0, MAX_LENGHT_OF_PATTERN * sizeof(char));
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     data->number_of_files = 0;
     data->newline = '\n';
     data->want_to_print_line = FALSE;

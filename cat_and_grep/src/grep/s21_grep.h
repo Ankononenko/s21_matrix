@@ -40,6 +40,8 @@ typedef struct Data {
     char pattern_array[MAX_LENGHT_OF_PATTERN];
     // Array to hold the current line
     char line_array[MAX_LENGHT_OF_LINE];
+    // Copy is going to be compared as it changes when flags are applied
+    char line_array_copy[MAX_LENGHT_OF_LINE];
     int number_of_files;
     int want_to_print_line;
     char newline;
@@ -58,6 +60,7 @@ void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
 int parse_line(FILE *file, Data* data);
 void handle_e(Data* data);
-void handle_l(Data* data);
+void handle_i(Data* data);
+void handle_v(Data* data);
 
 #endif  // SRC_S21_GREP_H
