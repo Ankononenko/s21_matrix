@@ -18,11 +18,24 @@ int main(int argc, char *argv[]) {
     Data data = {0};
     initialize_data(&data);
     if (check_start_conditions(argc, argv, &data)) {
-        printf("Success");
+        printf("Flags are valid \n");
+        pass_flags_to_structure(&flags, &data);
+        print_result(/* &flags, */ &data);
     } else {
         fprintf(stderr, "Flags were not valid \n");
     }
     return 0;
+}
+
+void print_result(/*Flags const* flags, */ Data const* data) {
+    for (int index_for_files = 0; index_for_files < data->number_of_files; ++index_for_files) {
+        if (check_if_files_exist(index_for_files, data)) {
+            printf("File exists \n");
+        } else {
+            // Error message when a file doesn't exist
+            fprintf(stderr, "File doesn't exist \n");
+        }
+    }
 }
 
 int check_start_conditions(const int argc, char *argv[], Data* data) {
@@ -57,6 +70,40 @@ int parse_flags_patters_filenames(/*const int argc, */char *argv[], Data* data) 
             is_valid_input = TRUE;
     }
     return is_valid_input;
+}
+
+void pass_flags_to_structure(Flags* flags, Data const* data) {
+    int index = 0;
+    // Until it is the end of the two-dimensional array,
+    // I iterate over it and pass the values to the Flags structure
+    // strcmp returns 0 if the values are equal, so I use !(not) to invert the value of zero to true
+    while (strcmp(data->all_flags_array[index], "\0")) {
+        if (!strcmp(data->all_flags_array[index], "-e")) {
+            flags->e = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-i")) {
+            flags->i = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-v")) {
+            flags->v = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-c")) {
+            flags->c = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-l")) {
+            flags->l = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-n")) {
+            flags->n = TRUE;
+        }
+        ++index;
+    }
+}
+
+int check_if_files_exist(const int filename_index, Data const* data) {
+    int files_exist = TRUE;
+    FILE *file = NULL;
+    if ((file = fopen(data->all_filenames_array[filename_index], "r")) == NULL) {
+        files_exist = FALSE;
+    } else {
+        fclose(file);
+    }
+    return files_exist;
 }
 
 int check_if_flags_are_valid(const int counter_for_flags, Data const* data) {

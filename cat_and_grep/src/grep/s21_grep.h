@@ -44,5 +44,8 @@ int check_start_conditions(const int argc, char *argv[], Data* data);
 int parse_flags_patters_filenames(/*const int argc, */char *argv[], Data* data);
 void parse_flags(char *argv[], Data* data, int* counter_for_flags, int* element_index);
 int check_if_flags_are_valid(const int counter_for_flags, Data const* data);
+int check_if_files_exist(const int filename_index, Data const* data);
+void pass_flags_to_structure(Flags* flags, Data const* data);
+void print_result(/*Flags const* flags, */ Data const* data);
 
 #endif  // SRC_S21_GREP_H
