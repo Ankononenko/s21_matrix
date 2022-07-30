@@ -18,7 +18,6 @@ int main(int argc, char *argv[]) {
     Data data = {0};
     initialize_data(&data);
     if (check_start_conditions(argc, argv, &data)) {
-        printf("Flags are valid \n");
         pass_flags_to_structure(&flags, &data);
         print_result(/* &flags, */ &data);
     } else {
@@ -27,15 +26,37 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void print_result(/*Flags const* flags, */ Data const* data) {
+void print_result(/*Flags const* flags, */ Data* data) {
     for (int index_for_files = 0; index_for_files < data->number_of_files; ++index_for_files) {
         if (check_if_files_exist(index_for_files, data)) {
-            printf("File exists \n");
+            FILE *file = fopen(data->all_filenames_array[index_for_files], "r");
+            while (parse_line(file, data)) {
+                int index = 0;
+                while (data->line_array[index] != '\0') {
+                    printf("%c", data->line_array[index]);
+                    ++index;
+                }
+                printf("\n");
+            }
+            printf("EOF \n");
         } else {
             // Error message when a file doesn't exist
             fprintf(stderr, "File doesn't exist \n");
         }
     }
+}
+
+int parse_line(FILE *file, Data* data) {
+    int can_be_parsed = TRUE, index = 0, current_character = fgetc(file);
+    while (current_character != data->newline) {
+        data->line_array[index] = current_character;
+        ++index;
+        current_character = fgetc(file);
+        if (current_character == EOF) {
+            can_be_parsed = FALSE;
+        }
+    }
+    return can_be_parsed;
 }
 
 int check_start_conditions(const int argc, char *argv[], Data* data) {
@@ -49,7 +70,7 @@ int check_start_conditions(const int argc, char *argv[], Data* data) {
     return conditions;
 }
 
-int parse_flags_patters_filenames(/*const int argc, */char *argv[], Data* data) {
+int parse_flags_patters_filenames(char *argv[], Data* data) {
     int is_valid_input = FALSE;
     // Counters to know when to stop in iterating over the arrays
     int counter_for_flags = 0;
@@ -136,7 +157,9 @@ void initialize_data(Data* data) {
     memset(data->all_flags_array, 0, TOTAL_NUM_FLAGS * sizeof(char));
     memset(data->all_filenames_array, 0, TOTAL_NUM_FILENAMES * sizeof(char));
     memset(data->patters_array, 0, MAX_LENGHT_OF_PATTERN * sizeof(char));
-    data->number_of_files = 0;   
+    memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    data->number_of_files = 0;
+    data->newline = '\n';
 }
 
 void initialize_flags(Flags* flags) {
