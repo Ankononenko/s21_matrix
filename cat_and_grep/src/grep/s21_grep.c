@@ -48,13 +48,10 @@ void print_result(Flags const* flags, Data* data) {
                     if (flags->c) {
                        handle_c(data);
                     } else {
-                        // ++data->number_of_matching_lines;
-                        // print_number_of_matching_lines(data);
                         printf("%s", data->line_array);
                         data->want_to_print_line = FALSE;
                     }
                 }
-                // data->want_to_print_line = FALSE;
             }
             if (flags->c) {
                 print_number_of_matching_lines(data);
@@ -98,11 +95,6 @@ void handle_i(Data* data) {
 
 void handle_e(Data* data) {
     data->want_to_print_line = compare_strings(data);
-// Tests
-    // printf("handle_e = %d \n", data->want_to_print_line);
-    // printf("line array = %s", data->line_array);
-    // printf("line array copy = %s", data->line_array_copy);
-    // printf("pattern array = %s \n", data->pattern_array);
 }
 
 int compare_strings(Data const* data) {
@@ -113,43 +105,34 @@ int compare_strings(Data const* data) {
     if (!compare_result) {
         are_equal = TRUE;
     }
+    regfree(&reegex);
     return are_equal;
 }
 
 int parse_line(FILE *file, Data* data) {
     // Erase the line before I write the array again
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     int can_be_parsed = TRUE, going_to_be_printed = FALSE, index = 0, current_character = 0;
     while (can_be_parsed && current_character != EOF) {
         current_character = fgetc(file);
-// Tests
-        // printf("While, current char = %d %c\n", current_character, current_character);
         if (current_character == EOF || current_character == data->newline) {
             can_be_parsed = FALSE;
             if (current_character == data->newline) {
                 data->line_array[index] = current_character;
                 ++index;
             }
-// Tests
-            // printf("False, current char = %d %c\n", current_character, current_character);
         } else {
-// Tests
-            // printf("Else, current char = %d %c\n", current_character, current_character);
             data->line_array[index] = current_character;
             ++index;
-            // printf("Probably here \n");
         }
     }
-// Tests
-    // printf("Index = %d \n", index);
     if (index) {
         going_to_be_printed = TRUE;
     }
     // Copy regular line to copy. Copy is going to be compared as it changes when flags are applied
     // Regular array gets printed as it is the condition
     memcpy(data->line_array_copy, data->line_array, index);
-// Tests
-    // printf("Going to be printed = %d \n", going_to_be_printed);
     return going_to_be_printed;
 }
 
@@ -158,7 +141,7 @@ int check_start_conditions(const int argc, char *argv[], Data* data) {
     // Condition to check if there are flags and text-files
     // Parse flags() should return TRUE or FALSE if the flags are valid or not
     // And the files exist
-    if (argc >= 4 && parse_flags_patterns_filenames(/*argc, */argv, data)) {
+    if (argc >= 4 && parse_flags_patterns_filenames(argv, data)) {
         conditions = TRUE;
     }
     return conditions;
