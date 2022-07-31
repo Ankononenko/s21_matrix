@@ -5,6 +5,7 @@
 #include <string.h>
 // Used for tolower function
 #include <ctype.h>
+#include <regex.h>
 
 #define TOTAL_NUM_FLAGS 7
 #define MAX_LENGHT_OF_FLAG 5
@@ -60,6 +61,7 @@ int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
 int parse_line(FILE *file, Data* data);
+int compare_strings(Data const* data);
 void handle_e(Data* data);
 void handle_i(Data* data);
 void handle_v(Data* data);

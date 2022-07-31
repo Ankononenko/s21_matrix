@@ -54,6 +54,7 @@ void print_result(Flags const* flags, Data* data) {
                         data->want_to_print_line = FALSE;
                     }
                 }
+                // data->want_to_print_line = FALSE;
             }
             if (flags->c) {
                 print_number_of_matching_lines(data);
@@ -77,11 +78,7 @@ void handle_c(Data* data) {
 }
 
 void handle_v(Data* data) {
-    if (strstr(data->line_array_copy, data->pattern_array)) {
-        data->want_to_print_line = FALSE;
-    } else {
-        data->want_to_print_line = TRUE;
-    }
+    data->want_to_print_line = !compare_strings(data);
 }
 
 void handle_i(Data* data) {
@@ -96,23 +93,27 @@ void handle_i(Data* data) {
     for (int index = 0; index <= pattern_lenght; ++ index) {
         data->pattern_array[index] = tolower(data->pattern_array[index]);
     }
-    if (strstr(data->line_array_copy, data->pattern_array)) {
-        data->want_to_print_line = TRUE;
-    }
+    data->want_to_print_line = compare_strings(data);
 }
 
 void handle_e(Data* data) {
-    // Strstr function finds the first occurrence of the substring needle in the string haystack. 
-    // The terminating '\0' characters are not compared.
-    // Returns a pointer to the first occurrence in haystack
-    // or a null pointer if the sequence is not present in haystack
-    if (strstr(data->line_array_copy, data->pattern_array)) {
-        data->want_to_print_line = TRUE;
-    }
+    data->want_to_print_line = compare_strings(data);
 // Tests
     // printf("handle_e = %d \n", data->want_to_print_line);
-    // printf("line array = %s \n", data->line_array_copy);
+    // printf("line array = %s", data->line_array);
+    // printf("line array copy = %s", data->line_array_copy);
     // printf("pattern array = %s \n", data->pattern_array);
+}
+
+int compare_strings(Data const* data) {
+    int are_equal = FALSE;
+    regex_t reegex;
+    int compare_result = regcomp(&reegex, data->pattern_array, 0);
+    compare_result = regexec(&reegex, data->line_array_copy, 0, NULL, 0);
+    if (!compare_result) {
+        are_equal = TRUE;
+    }
+    return are_equal;
 }
 
 int parse_line(FILE *file, Data* data) {
