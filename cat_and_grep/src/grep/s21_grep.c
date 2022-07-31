@@ -44,14 +44,35 @@ void print_result(Flags const* flags, Data* data) {
                 }
                 // Print the line in the end if it was found
                 if (data->want_to_print_line) {
-                    printf("%s\n", data->line_array);
-                    data->want_to_print_line = FALSE;
+                    // Don't print if -c and count the lines to be printed
+                    if (flags->c) {
+                       handle_c(data);
+                    } else {
+                        // ++data->number_of_matching_lines;
+                        // print_number_of_matching_lines(data);
+                        printf("%s", data->line_array);
+                        data->want_to_print_line = FALSE;
+                    }
                 }
+            }
+            if (flags->c) {
+                print_number_of_matching_lines(data);
             }
         } else {
             // Error message when a file doesn't exist
             fprintf(stderr, "File doesn't exist \n");
         }
+    }
+}
+
+void print_number_of_matching_lines(Data const* data) {
+    printf("%d", data->number_of_matching_lines);
+}
+
+void handle_c(Data* data) {
+    if (data->want_to_print_line) {
+        ++data->number_of_matching_lines;
+        data->want_to_print_line = FALSE;
     }
 }
 
@@ -85,29 +106,49 @@ void handle_e(Data* data) {
     // The terminating '\0' characters are not compared.
     // Returns a pointer to the first occurrence in haystack
     // or a null pointer if the sequence is not present in haystack
-    if (strstr(data->line_array, data->pattern_array)) {
+    if (strstr(data->line_array_copy, data->pattern_array)) {
         data->want_to_print_line = TRUE;
     }
+// Tests
+    // printf("handle_e = %d \n", data->want_to_print_line);
+    // printf("line array = %s \n", data->line_array_copy);
+    // printf("pattern array = %s \n", data->pattern_array);
 }
 
 int parse_line(FILE *file, Data* data) {
     // Erase the line before I write the array again
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
-    int can_be_parsed = TRUE, going_to_be_printed = FALSE, index = 0, current_character = fgetc(file);
+    int can_be_parsed = TRUE, going_to_be_printed = FALSE, index = 0, current_character = 0;
     while (can_be_parsed && current_character != EOF) {
-        data->line_array[index] = current_character;
-        ++index;
         current_character = fgetc(file);
+// Tests
+        // printf("While, current char = %d %c\n", current_character, current_character);
         if (current_character == EOF || current_character == data->newline) {
             can_be_parsed = FALSE;
+            if (current_character == data->newline) {
+                data->line_array[index] = current_character;
+                ++index;
+            }
+// Tests
+            // printf("False, current char = %d %c\n", current_character, current_character);
+        } else {
+// Tests
+            // printf("Else, current char = %d %c\n", current_character, current_character);
+            data->line_array[index] = current_character;
+            ++index;
+            // printf("Probably here \n");
         }
     }
+// Tests
+    // printf("Index = %d \n", index);
     if (index) {
         going_to_be_printed = TRUE;
     }
     // Copy regular line to copy. Copy is going to be compared as it changes when flags are applied
     // Regular array gets printed as it is the condition
     memcpy(data->line_array_copy, data->line_array, index);
+// Tests
+    // printf("Going to be printed = %d \n", going_to_be_printed);
     return going_to_be_printed;
 }
 
@@ -235,6 +276,7 @@ void initialize_data(Data* data) {
     data->number_of_files = 0;
     data->newline = '\n';
     data->want_to_print_line = FALSE;
+    data->number_of_matching_lines = 0;
 }
 
 void initialize_flags(Flags* flags) {

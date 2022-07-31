@@ -23,10 +23,10 @@ static const char possible_flags[TOTAL_NUM_FLAGS][MAX_LENGHT_OF_FLAG] = {
 };
 
 typedef struct Flags {
-    int e;
-    int i;
-    int v;
-    int c;
+    int e;  // Pattern
+    int i;  // Ignore uppercase and lowercase
+    int v;  // Inverted match
+    int c;  // Output count of matching lines only
     int l;
     int n;
 } Flags;
@@ -44,6 +44,7 @@ typedef struct Data {
     char line_array_copy[MAX_LENGHT_OF_LINE];
     int number_of_files;
     int want_to_print_line;
+    int number_of_matching_lines;
     char newline;
 } Data;
 
@@ -62,5 +63,8 @@ int parse_line(FILE *file, Data* data);
 void handle_e(Data* data);
 void handle_i(Data* data);
 void handle_v(Data* data);
+void handle_c(Data* data);
+
+void print_number_of_matching_lines(Data const* data);
 
 #endif  // SRC_S21_GREP_H
