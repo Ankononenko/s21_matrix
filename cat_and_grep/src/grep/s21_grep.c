@@ -102,12 +102,11 @@ int parse_line(FILE *file, Data* data) {
             can_be_parsed = FALSE;
         }
     }
-    // Copy regular line to copy. Copy is going to be compared as it changes when flags are applied
-    // Regular array gets printed as it is the condition
     if (index) {
         going_to_be_printed = TRUE;
     }
-
+    // Copy regular line to copy. Copy is going to be compared as it changes when flags are applied
+    // Regular array gets printed as it is the condition
     memcpy(data->line_array_copy, data->line_array, index);
     return going_to_be_printed;
 }
