@@ -93,19 +93,23 @@ void handle_e(Data* data) {
 int parse_line(FILE *file, Data* data) {
     // Erase the line before I write the array again
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
-    int can_be_parsed = TRUE, index = 0, current_character = fgetc(file);
-    while (current_character != data->newline) {
+    int can_be_parsed = TRUE, going_to_be_printed = FALSE, index = 0, current_character = fgetc(file);
+    while (can_be_parsed && current_character != EOF) {
         data->line_array[index] = current_character;
         ++index;
         current_character = fgetc(file);
-        if (current_character == EOF) {
+        if (current_character == EOF || current_character == data->newline) {
             can_be_parsed = FALSE;
         }
     }
     // Copy regular line to copy. Copy is going to be compared as it changes when flags are applied
     // Regular array gets printed as it is the condition
+    if (index) {
+        going_to_be_printed = TRUE;
+    }
+
     memcpy(data->line_array_copy, data->line_array, index);
-    return can_be_parsed;
+    return going_to_be_printed;
 }
 
 int check_start_conditions(const int argc, char *argv[], Data* data) {
