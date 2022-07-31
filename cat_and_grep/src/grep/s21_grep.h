@@ -10,9 +10,9 @@
 #define TOTAL_NUM_FLAGS 7
 #define MAX_LENGHT_OF_FLAG 5
 #define TOTAL_NUM_FILENAMES 50
-#define MAX_LENGHT_OF_FILENAME 30
+#define MAX_LENGHT_OF_FILENAME 100
 #define MAX_LENGHT_OF_PATTERN 30
-#define MAX_LENGHT_OF_LINE 50
+#define MAX_LENGHT_OF_LINE 500
 
 enum true_of_false{
     FALSE,
@@ -28,7 +28,7 @@ typedef struct Flags {
     int i;  // Ignore uppercase and lowercase
     int v;  // Inverted match
     int c;  // Output count of matching lines only
-    int l;
+    int l;  // Output matching files only
     int n;
 } Flags;
 
@@ -46,6 +46,7 @@ typedef struct Data {
     int number_of_files;
     int want_to_print_line;
     int number_of_matching_lines;
+    int number_of_matched_files;
     char newline;
 } Data;
 

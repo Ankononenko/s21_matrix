@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
 }
 
 void print_result(Flags const* flags, Data* data) {
-    for (int index_for_files = 0; index_for_files < data->number_of_files; ++index_for_files) {
+    const int number_of_files = data->number_of_files;
+    for (int index_for_files = 0; index_for_files < number_of_files; ++index_for_files) {
         if (check_if_files_exist(index_for_files, data)) {
             FILE *file = fopen(data->all_filenames_array[index_for_files], "r");
             while (parse_line(file, data)) {
@@ -51,6 +52,7 @@ void print_result(Flags const* flags, Data* data) {
                         printf("%s", data->line_array);
                         data->want_to_print_line = FALSE;
                     }
+                    // Here should be handle_l
                 }
             }
             if (flags->c) {
