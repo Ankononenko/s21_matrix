@@ -48,7 +48,7 @@ typedef struct Data {
     int number_of_matching_lines;
     int number_of_matched_files;
     int pattern_found_in_the_file;
-    char newline;
+    char newline, colon;
 } Data;
 
 void initialize_flags(Flags* flags);
@@ -65,7 +65,7 @@ void print_result(Flags const* flags, Data* data);
 int parse_line(FILE *file, Data* data);
 int compare_strings(Data* data);
 int filenames_should_be_printed(Data const* data);
-void print_filename(const int index_for_files, Data const* data);
+void print_filename(const int index_for_files, Data const* data, char custom_char);
 void print_number_of_matching_lines(Data const* data);
 void print_line(Data const* data);
 void handle_e(Data* data);

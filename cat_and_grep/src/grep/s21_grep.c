@@ -50,7 +50,7 @@ void print_result(Flags const* flags, Data* data) {
                        handle_c(data);
                     } else {
                         if (filenames_should_be_printed(data) && !flags->l) {
-                            print_filename(index_for_files, data);
+                            print_filename(index_for_files, data, data->colon);
                         }
                         if (!flags->l) {
                             print_line(data);
@@ -75,7 +75,7 @@ void print_result(Flags const* flags, Data* data) {
 
 void handle_l(int const index_for_files, Data const* data) {
     if (data->pattern_found_in_the_file) {
-        print_filename(index_for_files, data);
+        print_filename(index_for_files, data, data->newline);
     }
 }
 
@@ -88,9 +88,9 @@ int filenames_should_be_printed(Data const* data) {
     should_be_printed = data->number_of_files > 1 ? TRUE : FALSE;
     return should_be_printed;
 }
-// TODO: Rework the function so it takes another char as an argument and prints ':' or no ':'
-void print_filename(const int index_for_files, Data const* data) {
-    printf("%s:", data->all_filenames_array[index_for_files]);
+
+void print_filename(const int index_for_files, Data const* data, char custom_char) {
+    printf("%s%c", data->all_filenames_array[index_for_files], custom_char);
 }
 
 void print_number_of_matching_lines(Data const* data) {
@@ -292,6 +292,7 @@ void initialize_data(Data* data) {
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     data->number_of_files = 0;
     data->newline = '\n';
+    data->colon = ':';
     data->line_should_be_printed = FALSE;
     data->number_of_matching_lines = 0;
     data->pattern_found_in_the_file = FALSE;
