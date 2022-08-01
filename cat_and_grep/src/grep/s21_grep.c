@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     }
     return 0;
 }
-
+// TODO: Decompose while to another fucntion so it's shorter
 void print_result(Flags const* flags, Data* data) {
     const int number_of_files = data->number_of_files;
     for (int index_for_files = 0; index_for_files < number_of_files; ++index_for_files) {
@@ -52,6 +52,9 @@ void print_result(Flags const* flags, Data* data) {
                         if (filenames_should_be_printed(data) && !flags->l) {
                             print_filename(index_for_files, data, data->colon);
                         }
+                        if (flags->n) {
+                            handle_n(data->number_of_the_line);
+                        }
                         if (!flags->l) {
                             print_line(data);
                             data->line_should_be_printed = FALSE;
@@ -61,11 +64,15 @@ void print_result(Flags const* flags, Data* data) {
                 }
             }
             if (flags->c) {
+                if (filenames_should_be_printed(data) && !flags->l) {
+                    print_filename(index_for_files, data, data->colon);
+                }
                 print_number_of_matching_lines(data);
             }
             if (flags->l) {
                 handle_l(index_for_files, data);
             }
+            reset_values(data);
         } else {
             // Error message when a file doesn't exist
             fprintf(stderr, "File doesn't exist \n");
@@ -73,7 +80,20 @@ void print_result(Flags const* flags, Data* data) {
     }
 }
 
-void handle_l(int const index_for_files, Data const* data) {
+void reset_values(Data* data) {
+    data->number_of_the_line = 0;
+    data->number_of_matching_lines = 0;
+}
+
+void print_number_of_the_line(const int line_number) {
+    printf("%d:", line_number);
+}
+
+void handle_n(const int line_number) {
+    print_number_of_the_line(line_number);
+}
+
+void handle_l(const int index_for_files, Data const* data) {
     if (data->pattern_found_in_the_file) {
         print_filename(index_for_files, data, data->newline);
     }
@@ -94,7 +114,7 @@ void print_filename(const int index_for_files, Data const* data, char custom_cha
 }
 
 void print_number_of_matching_lines(Data const* data) {
-    printf("%d", data->number_of_matching_lines);
+    printf("%d\n", data->number_of_matching_lines);
 }
 
 void handle_c(Data* data) {
@@ -146,6 +166,7 @@ int parse_line(FILE *file, Data* data) {
     // Erase the line before I write the array again
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    ++data->number_of_the_line;
     int can_be_parsed = TRUE, going_to_be_printed = FALSE, index = 0, current_character = 0;
     while (can_be_parsed && current_character != EOF) {
         current_character = fgetc(file);
@@ -291,6 +312,7 @@ void initialize_data(Data* data) {
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     data->number_of_files = 0;
+    data->number_of_the_line = 0;
     data->newline = '\n';
     data->colon = ':';
     data->line_should_be_printed = FALSE;

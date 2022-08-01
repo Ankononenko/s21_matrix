@@ -29,7 +29,7 @@ typedef struct Flags {
     int v;  // Inverted match
     int c;  // Output count of matching lines only
     int l;  // Output matching files only
-    int n;
+    int n;  // Precede each matching line with a line number
 } Flags;
 
 typedef struct Data {
@@ -47,6 +47,7 @@ typedef struct Data {
     int line_should_be_printed;
     int number_of_matching_lines;
     int number_of_matched_files;
+    int number_of_the_line;
     int pattern_found_in_the_file;
     char newline, colon;
 } Data;
@@ -68,10 +69,13 @@ int filenames_should_be_printed(Data const* data);
 void print_filename(const int index_for_files, Data const* data, char custom_char);
 void print_number_of_matching_lines(Data const* data);
 void print_line(Data const* data);
+void print_number_of_the_line(const int line_number);
+void reset_values(Data* data);
 void handle_e(Data* data);
 void handle_i(Data* data);
 void handle_v(Data* data);
 void handle_c(Data* data);
 void handle_l(const int index_for_files, Data const* data);
+void handle_n(const int line_number);
 
 #endif  // SRC_S21_GREP_H
