@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         pass_flags_to_structure(&flags, &data);
         print_result(&flags, &data);
     } else {
-        fprintf(stderr, "Flags were not valid \n");
+        print_error_message(&data, "Flags were not valid");
     }
     return 0;
 }
@@ -33,8 +33,7 @@ void print_result(Flags const* flags, Data* data) {
             FILE *file = fopen(data->all_filenames_array[index_for_files], "r");
             handle_flags(file, flags, data, index_for_files);
         } else {
-            // Error message when a file doesn't exist
-            fprintf(stderr, "File doesn't exist \n");
+            print_error_message(data, "File doesn't exist");
         }
     }
 }
@@ -58,7 +57,11 @@ void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_fo
         if (flags->c) {
             handle_c(data);
         } else {
-            if (filenames_should_be_printed(data) && !flags->l) {
+            filenames_should_be_printed(data);
+            if (flags->h) {
+                handle_h(&data->filename_should_be_printed);
+            }
+            if (data->filename_should_be_printed && !flags->l) {
                 print_filename(index_for_files, data, data->colon);
             }
             if (flags->n) {
@@ -72,7 +75,8 @@ void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_fo
     }
     }
     if (flags->c) {
-        if (filenames_should_be_printed(data) && !flags->l) {
+        filenames_should_be_printed(data);
+        if (data->filename_should_be_printed && !flags->l) {
             print_filename(index_for_files, data, data->colon);
         }
         print_number_of_matching_lines(data);
@@ -81,6 +85,20 @@ void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_fo
         handle_l(index_for_files, data);
     }
     reset_num_values(data);
+}
+
+void print_error_message(Data const* data, char* error_message) {
+    if (!data->error_message_should_be_printed) {
+        fprintf(stderr, "%s\n", error_message);
+    }
+}
+
+void handle_s(int* error_message_should_be_printed) {
+    *error_message_should_be_printed = !*error_message_should_be_printed;
+}
+
+void handle_h(int* filenames_should_be_printed) {
+    *filenames_should_be_printed = !*filenames_should_be_printed;
 }
 
 void reset_num_values(Data* data) {
@@ -111,10 +129,8 @@ void print_line(Data const* data) {
     printf("%s", data->line_array);
 }
 
-int filenames_should_be_printed(Data const* data) {
-    int should_be_printed = FALSE;
-    should_be_printed = data->number_of_files > 1 ? TRUE : FALSE;
-    return should_be_printed;
+void filenames_should_be_printed(Data* data) {
+    data->filename_should_be_printed = data->number_of_files > 1 ? TRUE : FALSE;
 }
 
 void print_filename(const int index_for_files, Data const* data, char custom_char) {
@@ -248,6 +264,8 @@ void pass_flags_to_structure(Flags* flags, Data const* data) {
             flags->l = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-n")) {
             flags->n = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-h")) {
+            flags->h = TRUE;
         }
         ++index;
     }
@@ -264,11 +282,15 @@ int check_if_files_exist(const int filename_index, Data const* data) {
     return files_exist;
 }
 
-int check_if_flags_are_valid(const int counter_for_flags, Data const* data) {
+int check_if_flags_are_valid(const int counter_for_flags, Data* data) {
     int flags_are_valid = FALSE, index_all_flags = 0, number_of_valid_flags = 0;
     while (index_all_flags != counter_for_flags) {
         for (int index_possible_flags = 0;
         index_possible_flags < TOTAL_NUM_FLAGS; ++index_possible_flags) {
+            // If flag == '-s', don't display errors
+            if (!strcmp(data->all_flags_array[index_all_flags], "-s")) {
+                handle_s(&data->error_message_should_be_printed);
+            }
             if (!strcmp(data->all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
                 ++number_of_valid_flags;
             }
@@ -323,6 +345,7 @@ void initialize_data(Data* data) {
     data->newline = '\n';
     data->colon = ':';
     data->line_should_be_printed = FALSE;
+    data->filename_should_be_printed = FALSE;
     data->number_of_matching_lines = 0;
     data->pattern_found_in_the_file = FALSE;
 }
@@ -334,4 +357,5 @@ void initialize_flags(Flags* flags) {
     flags->c = FALSE;
     flags->l = FALSE;
     flags->n = FALSE;
+    flags->h = FALSE;
 }
