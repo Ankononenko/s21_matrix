@@ -25,54 +25,13 @@ int main(int argc, char *argv[]) {
     }
     return 0;
 }
-// TODO: Decompose while to another fucntion so it's shorter
+
 void print_result(Flags const* flags, Data* data) {
     const int number_of_files = data->number_of_files;
     for (int index_for_files = 0; index_for_files < number_of_files; ++index_for_files) {
         if (check_if_files_exist(index_for_files, data)) {
             FILE *file = fopen(data->all_filenames_array[index_for_files], "r");
-            while (parse_line(file, data)) {
-                // Here I pass a boolean value of print_line, change it to TRUE of FALSE
-                // Based on the current flags that are in power and print or not to print the line in the end
-                if (flags->e) {
-                    handle_e(data);
-                }
-                if (flags->i) {
-                    handle_i(data);
-                }
-                if (flags->v) {
-                    handle_v(data);
-                }
-                // Print the line in the end if it was found
-                if (data->line_should_be_printed) {
-                    // Don't print if -c and count the lines to be printed
-                    if (flags->c) {
-                       handle_c(data);
-                    } else {
-                        if (filenames_should_be_printed(data) && !flags->l) {
-                            print_filename(index_for_files, data, data->colon);
-                        }
-                        if (flags->n) {
-                            handle_n(data->number_of_the_line);
-                        }
-                        if (!flags->l) {
-                            print_line(data);
-                            data->line_should_be_printed = FALSE;
-                        }
-                    }
-                    // Here should be handle_l
-                }
-            }
-            if (flags->c) {
-                if (filenames_should_be_printed(data) && !flags->l) {
-                    print_filename(index_for_files, data, data->colon);
-                }
-                print_number_of_matching_lines(data);
-            }
-            if (flags->l) {
-                handle_l(index_for_files, data);
-            }
-            reset_values(data);
+            handle_flags(file, flags, data, index_for_files);
         } else {
             // Error message when a file doesn't exist
             fprintf(stderr, "File doesn't exist \n");
@@ -80,9 +39,58 @@ void print_result(Flags const* flags, Data* data) {
     }
 }
 
-void reset_values(Data* data) {
+void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_for_files) {
+    while (parse_line(file, data)) {
+    // Here I pass a boolean value of print_line, change it to TRUE of FALSE
+    // Based on the current flags that are in power and print or not to print the line in the end
+    if (flags->e) {
+        handle_e(data);
+    }
+    if (flags->i) {
+        handle_i(data);
+    }
+    if (flags->v) {
+        handle_v(data);
+    }
+    // Print the line in the end if it was found
+    if (data->line_should_be_printed) {
+        // Don't print if -c and count the lines to be printed
+        if (flags->c) {
+            handle_c(data);
+        } else {
+            if (filenames_should_be_printed(data) && !flags->l) {
+                print_filename(index_for_files, data, data->colon);
+            }
+            if (flags->n) {
+                handle_n(data->number_of_the_line);
+            }
+            if (!flags->l) {
+                print_line(data);
+                data->line_should_be_printed = FALSE;
+            }
+        }
+    }
+    }
+    if (flags->c) {
+        if (filenames_should_be_printed(data) && !flags->l) {
+            print_filename(index_for_files, data, data->colon);
+        }
+        print_number_of_matching_lines(data);
+    }
+    if (flags->l) {
+        handle_l(index_for_files, data);
+    }
+    reset_num_values(data);
+}
+
+void reset_num_values(Data* data) {
     data->number_of_the_line = 0;
     data->number_of_matching_lines = 0;
+}
+
+void reset_line_values(Data* data) {
+    memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
 }
 
 void print_number_of_the_line(const int line_number) {
@@ -164,8 +172,7 @@ int compare_strings(Data* data) {
 
 int parse_line(FILE *file, Data* data) {
     // Erase the line before I write the array again
-    memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
-    memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    reset_line_values(data);
     ++data->number_of_the_line;
     int can_be_parsed = TRUE, going_to_be_printed = FALSE, index = 0, current_character = 0;
     while (can_be_parsed && current_character != EOF) {

@@ -63,6 +63,7 @@ int check_if_flags_are_valid(const int counter_for_flags, Data const* data);
 int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
+void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_for_files);
 int parse_line(FILE *file, Data* data);
 int compare_strings(Data* data);
 int filenames_should_be_printed(Data const* data);
@@ -70,7 +71,8 @@ void print_filename(const int index_for_files, Data const* data, char custom_cha
 void print_number_of_matching_lines(Data const* data);
 void print_line(Data const* data);
 void print_number_of_the_line(const int line_number);
-void reset_values(Data* data);
+void reset_num_values(Data* data);
+void reset_line_values(Data* data);
 void handle_e(Data* data);
 void handle_i(Data* data);
 void handle_v(Data* data);
