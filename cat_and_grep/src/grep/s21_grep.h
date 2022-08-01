@@ -44,9 +44,10 @@ typedef struct Data {
     // Copy is going to be compared as it changes when flags are applied
     char line_array_copy[MAX_LENGHT_OF_LINE];
     int number_of_files;
-    int want_to_print_line;
+    int line_should_be_printed;
     int number_of_matching_lines;
     int number_of_matched_files;
+    int pattern_found_in_the_file;
     char newline;
 } Data;
 
@@ -62,7 +63,7 @@ int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
 int parse_line(FILE *file, Data* data);
-int compare_strings(Data const* data);
+int compare_strings(Data* data);
 int filenames_should_be_printed(Data const* data);
 void print_filename(const int index_for_files, Data const* data);
 void print_number_of_matching_lines(Data const* data);
@@ -71,5 +72,6 @@ void handle_e(Data* data);
 void handle_i(Data* data);
 void handle_v(Data* data);
 void handle_c(Data* data);
+void handle_l(const int index_for_files, Data const* data);
 
 #endif  // SRC_S21_GREP_H
