@@ -63,11 +63,13 @@ void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
 int parse_line(FILE *file, Data* data);
 int compare_strings(Data const* data);
+int filenames_should_be_printed(Data const* data);
+void print_filename(const int index_for_files, Data const* data);
+void print_number_of_matching_lines(Data const* data);
+void print_line(Data const* data);
 void handle_e(Data* data);
 void handle_i(Data* data);
 void handle_v(Data* data);
 void handle_c(Data* data);
-
-void print_number_of_matching_lines(Data const* data);
 
 #endif  // SRC_S21_GREP_H

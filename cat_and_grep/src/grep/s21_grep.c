@@ -49,7 +49,10 @@ void print_result(Flags const* flags, Data* data) {
                     if (flags->c) {
                        handle_c(data);
                     } else {
-                        printf("%s", data->line_array);
+                        if (filenames_should_be_printed(data)) {
+                            print_filename(index_for_files, data);
+                        }
+                        print_line(data);
                         data->want_to_print_line = FALSE;
                     }
                     // Here should be handle_l
@@ -63,6 +66,20 @@ void print_result(Flags const* flags, Data* data) {
             fprintf(stderr, "File doesn't exist \n");
         }
     }
+}
+
+void print_line(Data const* data) {
+    printf("%s", data->line_array);
+}
+
+int filenames_should_be_printed(Data const* data) {
+    int should_be_printed = FALSE;
+    should_be_printed = data->number_of_files > 1 ? TRUE : FALSE;
+    return should_be_printed;
+}
+
+void print_filename(const int index_for_files, Data const* data) {
+    printf("%s:", data->all_filenames_array[index_for_files]);
 }
 
 void print_number_of_matching_lines(Data const* data) {
