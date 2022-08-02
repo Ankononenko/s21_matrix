@@ -7,7 +7,7 @@
 #include <ctype.h>
 #include <regex.h>
 
-#define TOTAL_NUM_FLAGS 9
+#define TOTAL_NUM_FLAGS 10
 #define MAX_LENGHT_OF_FLAG 5
 #define TOTAL_NUM_FILENAMES 50
 #define MAX_LENGHT_OF_FILENAME 100
@@ -20,7 +20,7 @@ enum true_of_false{
 };
 // TODO: NULL flag implementation
 static const char possible_flags[TOTAL_NUM_FLAGS][MAX_LENGHT_OF_FLAG] = {
-    "-e", "-i", "-v", "-c", "-l", "-n", "-h", "-s", "NULL"
+    "-e", "-i", "-v", "-c", "-l", "-n", "-h", "-s", "-f", "NULL"
 };
 
 typedef struct Flags {
@@ -32,6 +32,7 @@ typedef struct Flags {
     int n;  // Precede each matching line with a line number
     int h;  // Output matching lines without preceding them by file names
     int s;  // Suppress error messages about nonexistent or unreadable files
+    int f;  // Take regexes from a file
 } Flags;
 
 typedef struct Data {
@@ -86,5 +87,6 @@ void handle_l(const int index_for_files, Data const* data);
 void handle_n(const int line_number);
 void handle_h(int* filenames_should_be_printed);
 void handle_s(int* error_message_should_be_printed);
+int handle_f(FILE* file, Data const*data);
 
 #endif  // SRC_S21_GREP_H

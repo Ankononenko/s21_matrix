@@ -86,7 +86,20 @@ void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_fo
     }
     reset_num_values(data);
 }
+// Should use handle_e function as it already uses regex and can take regular expressions
+int handle_f(FILE* file, Data const*data) {
+    int does_file_exist = FALSE;
+    if (check_if_files_exist(0,data)) {
+        does_file_exist = TRUE;
+        while (parse_line(file, data)) {
+            handle_e(data);
+        }
+    }
+    return does_file_exist;
+}
 
+// TODO: Probably should remove the function for flags
+// Library grep doesn't ignore incorrect flags
 void print_error_message(Data const* data, char* error_message) {
     if (!data->error_message_should_be_printed) {
         fprintf(stderr, "%s\n", error_message);
