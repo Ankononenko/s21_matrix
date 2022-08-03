@@ -30,31 +30,32 @@ int main(int argc, char *argv[]) {
 
 void print_result(Flags const* flags, Data* data) {
     const int number_of_files = data->number_of_files;
-    // If -f then index_for_files++ else index_for_files = 0 
-    // So I don't open the file with patterns
-    int index_for_files = 0;
-    index_for_files = flags->f ? 1 : 0;
     // If file with patterns doesn't exist, even if "-s" error is thrown and grep doesn't run
     int should_run = FALSE;
     if (flags->f) {
         should_run = check_if_files_exist(0, data);
     }
     if (should_run) {
-        for (index_for_files; index_for_files < number_of_files; ++index_for_files) {
+        // If -f then index_for_files++ else index_for_files = 0 
+        // So I don't open the file with patterns
+        int index_for_files = 0;
+        index_for_files = flags->f ? 1 : 0;
+        for (; index_for_files < number_of_files; ++index_for_files) {
             if (check_if_files_exist(index_for_files, data)) {
                 FILE *file = fopen(data->all_filenames_array[index_for_files], "r");
                 // Check pattern with no flags, -e pattern and -f pattern
                 while (parse_line(file, data)) {
                     int pattern_index = 0;
                     while (pattern_index <= data->pattern_index && !data->line_should_be_printed) {
-                        check_pattern(flags, data);
+                        check_pattern(flags, data, pattern_index);
                         ++pattern_index;
                     }
                     if (data->line_should_be_printed) {
                         print_line(flags, data, pattern_index);
                     }
                 }
-                print_result_no_line();
+                print_result_no_line(flags, data, index_for_files);
+                reset_num_values(data);
             } else {
                 print_error_message(data, "File doesn't exist");
             }
@@ -62,6 +63,16 @@ void print_result(Flags const* flags, Data* data) {
     } else {
         print_error_message(data, "Pattern file doesn't exist");
     }
+}
+
+void print_result_no_line(Flags const* flags, Data* data, const int index_for_files) {
+    handle_h(&data->filename_should_be_printed);
+    print_filename(index_for_files, data, data->colon);
+    if (flags->l) {
+        printf("%d\n", data->pattern_found_in_the_file);
+    }
+    handle_c(flags, data);
+    handle_l(flags, index_for_files, data);
 }
 
 void print_line(Flags const* flags, Data* data, int pattern_index) {
@@ -73,13 +84,16 @@ void print_line(Flags const* flags, Data* data, int pattern_index) {
     }
 }
 
-void check_pattern(Flags const* flags, Data* data) {
+void check_pattern(Flags const* flags, Data* data, const int pattern_index) {
     if (flags->i) {
-        handle_i(data);
+        handle_i(data, pattern_index);
     }
-    handle_e(data);
+    handle_e(data, pattern_index);
     if (flags->v) {
-        handle_v(data);
+        handle_v(data, pattern_index);
+    }
+    if (data->line_should_be_printed) {
+        ++data->number_of_matching_lines;
     }
 }
 
@@ -125,9 +139,11 @@ void handle_n(Flags const* flags, const int line_number) {
     }
 }
 
-void handle_l(const int index_for_files, Data const* data) {
-    if (data->pattern_found_in_the_file) {
-        print_filename(index_for_files, data, data->newline);
+void handle_l(Flags const* flags, const int index_for_files, Data const* data) {
+    if (flags->l) {
+        if (data->pattern_found_in_the_file) {
+            print_filename(index_for_files, data, data->newline);
+        }
     }
 }
 
@@ -151,40 +167,39 @@ void print_number_of_matching_lines(Data const* data) {
     printf("%d\n", data->number_of_matching_lines);
 }
 
-void handle_c(Data* data) {
-    if (data->line_should_be_printed) {
-        ++data->number_of_matching_lines;
-        data->line_should_be_printed = FALSE;
+void handle_c(Flags const* flags, Data* data) {
+    if (flags->c && !flags->l) {
+        print_number_of_matching_lines(data);
     }
 }
 
-void handle_v(Data* data) {
-    data->line_should_be_printed = !compare_strings(data);
+void handle_v(Data* data, const int pattern_index) {
+    data->line_should_be_printed = !compare_strings(data, pattern_index);
 }
 
-void handle_i(Data* data) {
+void handle_i(Data* data, const int pattern_index) {
     int line_lenght = 0, pattern_lenght = 0;
     line_lenght = strlen(data->line_array);
-    pattern_lenght = strlen(data->pattern_array);
+    pattern_lenght = strlen(data->pattern_array[pattern_index]);
     // Erase the array before I use it again
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     for (int index = 0; index <= line_lenght; ++ index) {
         data->line_array_copy[index] = tolower(data->line_array[index]);
     }
     for (int index = 0; index <= pattern_lenght; ++ index) {
-        data->pattern_array[index] = tolower(data->pattern_array[index]);
+        data->pattern_array[pattern_index][index] = tolower(data->pattern_array[pattern_index][index]);
     }
     // data->line_should_be_printed = compare_strings(data);
 }
 
-void handle_e(Data* data) {
-    data->line_should_be_printed = compare_strings(data);
+void handle_e(Data* data, const int pattern_index) {
+    data->line_should_be_printed = compare_strings(data, pattern_index);
 }
 
-int compare_strings(Data* data) {
+int compare_strings(Data* data, const int pattern_index) {
     int are_equal = FALSE;
     regex_t reegex;
-    int compare_result = regcomp(&reegex, data->pattern_array, 0);
+    int compare_result = regcomp(&reegex, data->pattern_array[pattern_index], 0);
     compare_result = regexec(&reegex, data->line_array_copy, 0, NULL, 0);
     if (!compare_result) {
         are_equal = TRUE;
