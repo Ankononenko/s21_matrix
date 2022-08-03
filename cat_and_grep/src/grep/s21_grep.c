@@ -12,6 +12,8 @@ The resulting executable file must be placed in the directory src/grep/ and name
 
 #include "s21_grep.h"
 
+// TODO: grep pattern file
+// TODO: Check if values are being reset
 int main(int argc, char *argv[]) {
     Flags flags = {0};
     initialize_flags(&flags);
@@ -41,7 +43,18 @@ void print_result(Flags const* flags, Data* data) {
         for (index_for_files; index_for_files < number_of_files; ++index_for_files) {
             if (check_if_files_exist(index_for_files, data)) {
                 FILE *file = fopen(data->all_filenames_array[index_for_files], "r");
-                handle_flags(file, flags, data, index_for_files);
+                // Check pattern with no flags, -e pattern and -f pattern
+                while (parse_line(file, data)) {
+                    int pattern_index = 0;
+                    while (pattern_index <= data->pattern_index && !data->line_should_be_printed) {
+                        check_pattern(flags, data);
+                        ++pattern_index;
+                    }
+                    if (data->line_should_be_printed) {
+                        print_line(flags, data, pattern_index);
+                    }
+                }
+                print_result_no_line();
             } else {
                 print_error_message(data, "File doesn't exist");
             }
@@ -51,71 +64,36 @@ void print_result(Flags const* flags, Data* data) {
     }
 }
 
-void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_for_files) {
-    while (parse_line(file, data)) {
-    // Here I pass a boolean value of print_line, change it to TRUE of FALSE
-    // Based on the current flags that are in power and print or not to print the line in the end
-    if (flags->e) {
-        handle_e(data);
+void print_line(Flags const* flags, Data* data, int pattern_index) {
+    if (!flags->c && !flags->l) {
+        filenames_should_be_printed(flags, data);
+        handle_n(flags, data->number_of_the_line);
+        handle_o(flags, data, pattern_index);
+        print_line_array(flags, data);
     }
+}
+
+void check_pattern(Flags const* flags, Data* data) {
     if (flags->i) {
         handle_i(data);
     }
+    handle_e(data);
     if (flags->v) {
         handle_v(data);
     }
-    // Print the line in the end if it was found
-    if (data->line_should_be_printed) {
-        // Don't print if -c and count the lines to be printed
-        if (flags->c) {
-            handle_c(data);
-        } else {
-            filenames_should_be_printed(data);
-            if (flags->h) {
-                handle_h(&data->filename_should_be_printed);
-            }
-            if (data->filename_should_be_printed && !flags->l) {
-                print_filename(index_for_files, data, data->colon);
-            }
-            if (flags->n) {
-                handle_n(data->number_of_the_line);
-            }
-            if (!flags->l) {
-                print_line(data);
-                data->line_should_be_printed = FALSE;
-            }
-        }
-    }
-    }
-    if (flags->c) {
-        filenames_should_be_printed(data);
-        if (data->filename_should_be_printed && !flags->l) {
-            print_filename(index_for_files, data, data->colon);
-        }
-        print_number_of_matching_lines(data);
-    }
-    if (flags->l) {
-        handle_l(index_for_files, data);
-    }
-    reset_num_values(data);
 }
-// Should use handle_e function as it already uses regex and can take regular expressions
-// int handle_f(FILE* file, Data const* data) {
-//     int does_file_exist = FALSE;
-//     if (check_if_files_exist(0,data)) {
-//         does_file_exist = TRUE;
-//         while (parse_line(file, data)) {
-//             handle_e(data);
-//         }
-//     }
-//     return does_file_exist;
-// }
 
 // TODO: Probably should remove the function for flags
 // Library grep doesn't ignore incorrect flags
 void print_error_message(Data const* data, char* error_message) {
     if (!data->error_message_should_be_printed) {
         fprintf(stderr, "%s\n", error_message);
+    }
+}
+
+void handle_o(Flags const* flags, Data* data, int pattern_index) {
+    if (flags->o) {
+        printf("%s", data->pattern_array[pattern_index]);
     }
 }
 
@@ -141,8 +119,10 @@ void print_number_of_the_line(const int line_number) {
     printf("%d:", line_number);
 }
 
-void handle_n(const int line_number) {
-    print_number_of_the_line(line_number);
+void handle_n(Flags const* flags, const int line_number) {
+    if (flags->n) {
+        print_number_of_the_line(line_number);
+    }
 }
 
 void handle_l(const int index_for_files, Data const* data) {
@@ -151,12 +131,16 @@ void handle_l(const int index_for_files, Data const* data) {
     }
 }
 
-void print_line(Data const* data) {
-    printf("%s", data->line_array);
+void print_line_array(Flags const* flags, Data const* data) {
+    if (!flags->o) {
+        printf("%s", data->line_array);
+    }
 }
 
-void filenames_should_be_printed(Data* data) {
+void filenames_should_be_printed(Flags const* flags, Data* data) {
+    if (!flags->h) {
     data->filename_should_be_printed = data->number_of_files > 1 ? TRUE : FALSE;
+    }
 }
 
 void print_filename(const int index_for_files, Data const* data, char custom_char) {
@@ -190,7 +174,7 @@ void handle_i(Data* data) {
     for (int index = 0; index <= pattern_lenght; ++ index) {
         data->pattern_array[index] = tolower(data->pattern_array[index]);
     }
-    data->line_should_be_printed = compare_strings(data);
+    // data->line_should_be_printed = compare_strings(data);
 }
 
 void handle_e(Data* data) {
@@ -325,6 +309,8 @@ void pass_flags_to_structure(Flags* flags, Data const* data) {
             flags->n = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-h")) {
             flags->h = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-o")) {
+            flags->o = TRUE;
         }
         ++index;
     }
@@ -431,4 +417,6 @@ void initialize_flags(Flags* flags) {
     flags->n = FALSE;
     flags->h = FALSE;
     flags->s = FALSE;
+    flags->f = FALSE;
+    flags->o = FALSE;
 }

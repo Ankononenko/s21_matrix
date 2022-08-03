@@ -7,7 +7,7 @@
 #include <ctype.h>
 #include <regex.h>
 
-#define TOTAL_NUM_FLAGS 10
+#define TOTAL_NUM_FLAGS 11
 #define MAX_LENGHT_OF_FLAG 5
 #define TOTAL_NUM_FILENAMES 50
 #define MAX_LENGHT_OF_FILENAME 100
@@ -21,7 +21,7 @@ enum true_of_false{
 };
 // TODO: NULL flag implementation
 static const char possible_flags[TOTAL_NUM_FLAGS][MAX_LENGHT_OF_FLAG] = {
-    "-e", "-i", "-v", "-c", "-l", "-n", "-h", "-s", "-f", "NULL"
+    "-e", "-i", "-v", "-c", "-l", "-n", "-h", "-s", "-f", "-o", "NULL"
 };
 
 typedef struct Flags {
@@ -34,7 +34,7 @@ typedef struct Flags {
     int h;  // Output matching lines without preceding them by file names
     int s;  // Suppress error messages about nonexistent or unreadable files
     int f;  // Take regexes from a file
-//    int o;  // Output the matched parts of a matching line
+    int o;  // Output the matched parts of a matching line
 } Flags;
 
 typedef struct Data {
@@ -71,13 +71,14 @@ int check_if_flags_are_valid(const int counter_for_flags, Flags* flags, Data* da
 int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
-void handle_flags(FILE *file, Flags const* flags, Data* data, const int index_for_files);
+void check_pattern(Flags const* flags, Data* data);
 int parse_line(FILE *file, Data* data);
 int compare_strings(Data* data);
-void filenames_should_be_printed(Data* data);
+void filenames_should_be_printed(Flags const* flags, Data* data);
 void print_filename(const int index_for_files, Data const* data, char custom_char);
 void print_number_of_matching_lines(Data const* data);
-void print_line(Data const* data);
+void print_line(Flags const* flags, Data* data, int pattern_index);
+void print_line_array(Flags const* flags, Data const* data)
 void print_number_of_the_line(const int line_number);
 void print_error_message(Data const* data, char* error_message);
 void reset_num_values(Data* data);
@@ -87,10 +88,10 @@ void handle_i(Data* data);
 void handle_v(Data* data);
 void handle_c(Data* data);
 void handle_l(const int index_for_files, Data const* data);
-void handle_n(const int line_number);
+void handle_n(Flags const* flags, const int line_number);
 void handle_h(int* filenames_should_be_printed);
 void handle_s(int* error_message_should_be_printed);
-// int handle_f(FILE* file, Data const*data);
 void parse_patterns_handle_f(Flags const* flags, Data* data);
+void handle_o(Flags const* flags, Data* data, int pattern_index);
 
 #endif  // SRC_S21_GREP_H
