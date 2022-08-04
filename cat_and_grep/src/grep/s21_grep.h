@@ -77,7 +77,7 @@ int compare_strings(Data* data, const int pattern_index);
 void filenames_should_be_printed(Flags const* flags, Data* data);
 void print_filename(const int index_for_files, Data const* data, char custom_char);
 void print_number_of_matching_lines(Data const* data);
-void print_line(Flags const* flags, Data* data, int pattern_index);
+void print_line(Flags const* flags, Data* data, int pattern_index, int index_for_files);
 void print_line_array(Flags const* flags, Data const* data);
 void print_result_no_line(Flags const* flags, Data* data, const int index_for_files);
 void print_number_of_the_line(const int line_number);

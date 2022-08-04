@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 void print_result(Flags const* flags, Data* data) {
     const int number_of_files = data->number_of_files;
     // If file with patterns doesn't exist, even if "-s" error is thrown and grep doesn't run
-    int should_run = FALSE;
+    int should_run = TRUE;
     if (flags->f) {
         should_run = check_if_files_exist(0, data);
     }
@@ -46,12 +46,13 @@ void print_result(Flags const* flags, Data* data) {
                 // Check pattern with no flags, -e pattern and -f pattern
                 while (parse_line(file, data)) {
                     int pattern_index = 0;
+                    data->line_should_be_printed = FALSE;
                     while (pattern_index <= data->pattern_index && !data->line_should_be_printed) {
                         check_pattern(flags, data, pattern_index);
                         ++pattern_index;
                     }
                     if (data->line_should_be_printed) {
-                        print_line(flags, data, pattern_index);
+                        print_line(flags, data, pattern_index, index_for_files);
                     }
                 }
                 print_result_no_line(flags, data, index_for_files);
@@ -66,18 +67,23 @@ void print_result(Flags const* flags, Data* data) {
 }
 
 void print_result_no_line(Flags const* flags, Data* data, const int index_for_files) {
-    handle_h(&data->filename_should_be_printed);
-    print_filename(index_for_files, data, data->colon);
-    if (flags->l) {
-        printf("%d\n", data->pattern_found_in_the_file);
+    if (flags->c || flags->l) {
+        handle_h(&data->filename_should_be_printed);
+        // print_filename(index_for_files, data, data->colon);
+        if (flags->l && flags->c) {
+            printf("%d\n", data->pattern_found_in_the_file);
+        }
+        handle_c(flags, data);
+        handle_l(flags, index_for_files, data);
     }
-    handle_c(flags, data);
-    handle_l(flags, index_for_files, data);
 }
 
-void print_line(Flags const* flags, Data* data, int pattern_index) {
+void print_line(Flags const* flags, Data* data, int pattern_index, int index_for_files) {
     if (!flags->c && !flags->l) {
         filenames_should_be_printed(flags, data);
+        if (data->filename_should_be_printed) {
+            print_filename(index_for_files, data, data->colon);
+        }
         handle_n(flags, data->number_of_the_line);
         handle_o(flags, data, pattern_index);
         print_line_array(flags, data);
@@ -122,6 +128,7 @@ void handle_h(int* filenames_should_be_printed) {
 void reset_num_values(Data* data) {
     data->number_of_the_line = 0;
     data->number_of_matching_lines = 0;
+    data->pattern_found_in_the_file = 0;
 }
 
 void reset_line_values(Data* data) {
