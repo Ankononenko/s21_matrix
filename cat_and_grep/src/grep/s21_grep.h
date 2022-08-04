@@ -67,7 +67,7 @@ int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data);
 void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index);
 void parse_pattern(Data* data, char *argv[], int* element_index);
 void parse_filenames(Flags* flags, Data* data, char *argv[], int* element_index);
-int check_if_flags_are_valid(const int counter_for_flags, Flags* flags, Data* data);
+int check_if_flags_are_valid(const int counter_for_flags, Data* data);
 int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);

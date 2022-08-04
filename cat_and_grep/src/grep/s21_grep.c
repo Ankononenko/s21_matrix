@@ -58,7 +58,9 @@ void print_result(Flags const* flags, Data* data) {
                 print_result_no_line(flags, data, index_for_files);
                 reset_num_values(data);
             } else {
-                print_error_message(data, "File doesn't exist");
+                if (!flags->s) {
+                    print_error_message(data, "File doesn't exist");
+                }
             }
         }
     } else {
@@ -272,7 +274,7 @@ int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data) {
     parse_flags(argv, flags, data, &counter_for_flags, &element_index);
     // Parse filenames to the array of filenames
     parse_filenames(flags, data, argv, &element_index);
-    if (check_if_flags_are_valid(counter_for_flags, flags, data)) {
+    if (check_if_flags_are_valid(counter_for_flags, data)) {
             is_valid_input = TRUE;
     }
     // Parse the patterns from the filename here for -f flag
@@ -303,8 +305,10 @@ void parse_patterns_handle_f(Flags const* flags, Data* data) {
             }
             if (current_character == data->newline) {
                 strcpy(data->pattern_array[pattern_array_index], temp_pattern_array);
+                memset(temp_pattern_array, 0, MAX_LENGHT_OF_PATTERN * sizeof(char));
                 char_index = 0;
                 ++pattern_array_index;
+                ++data->pattern_index;
             }
         }
     }
@@ -331,6 +335,8 @@ void pass_flags_to_structure(Flags* flags, Data const* data) {
             flags->n = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-h")) {
             flags->h = TRUE;
+        } else if (!strcmp(data->all_flags_array[index], "-s")) {
+            flags->s = TRUE;
         } else if (!strcmp(data->all_flags_array[index], "-o")) {
             flags->o = TRUE;
         }
@@ -349,16 +355,11 @@ int check_if_files_exist(const int filename_index, Data const* data) {
     return files_exist;
 }
 
-int check_if_flags_are_valid(const int counter_for_flags, Flags* flags, Data* data) {
+int check_if_flags_are_valid(const int counter_for_flags, Data* data) {
     int flags_are_valid = FALSE, index_all_flags = 0, number_of_valid_flags = 0;
     while (index_all_flags != counter_for_flags) {
         for (int index_possible_flags = 0;
         index_possible_flags < TOTAL_NUM_FLAGS; ++index_possible_flags) {
-            // If flag == '-s', don't display errors
-            if (!strcmp(data->all_flags_array[index_all_flags], "-s")) {
-                flags->s = TRUE;
-                handle_s(&data->error_message_should_be_printed);
-            }
             if (!strcmp(data->all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
                 ++number_of_valid_flags;
             }
