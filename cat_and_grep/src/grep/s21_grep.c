@@ -115,7 +115,9 @@ void print_error_message(Data const* data, char* error_message) {
 
 void handle_o(Flags const* flags, Data* data, int pattern_index) {
     if (flags->o) {
-        printf("%s", data->pattern_array[pattern_index]);
+        for (int index = 0; index < data->pattern_found_in_the_line; ++index) {
+            printf("%s\n", data->pattern_array[pattern_index - 1]);
+        }
     }
 }
 
@@ -217,7 +219,29 @@ int compare_strings(Data* data, const int pattern_index) {
         }
     }
     regfree(&reegex);
+    find_how_many_times_pattern_is_in_the_file(data, pattern_index);
     return are_equal;
+}
+
+void find_how_many_times_pattern_is_in_the_file(Data* data, int pattern_index) {
+    int number_of_occurrences = 0, i_two = 0;
+    int line_lenght = (int)strlen(data->line_array_copy);
+    int pattern_lenght = (int)strlen(data->pattern_array[pattern_index]);
+    for (int i_one = 0; i_one <= line_lenght; ++i_one) {
+        if (data->line_array_copy[i_one] == data->pattern_array[pattern_index][i_two]) {
+            while (data->line_array_copy[i_one] == data->pattern_array[pattern_index][i_two] && i_two < pattern_lenght) {
+                ++i_one;
+                if (!(i_two == (line_lenght - 1))) {
+                    ++i_two;
+                }
+                if (data->line_array_copy[i_one] == data->pattern_array[pattern_index][i_two] && (i_two == pattern_lenght - 1)) {
+                    ++number_of_occurrences;
+                }
+            }
+            i_two = 0;
+        }
+    }
+    data->pattern_found_in_the_line = number_of_occurrences;
 }
 
 int parse_line(FILE *file, Data* data) {
@@ -429,6 +453,7 @@ void initialize_data(Data* data) {
     data->filename_should_be_printed = FALSE;
     data->number_of_matching_lines = 0;
     data->pattern_found_in_the_file = FALSE;
+    data->pattern_found_in_the_line = 0;
 }
 
 void initialize_flags(Flags* flags) {

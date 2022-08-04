@@ -43,7 +43,7 @@ typedef struct Data {
     // And an array for filenames. Valid and invalid. Going to sort them out later
     char all_filenames_array[TOTAL_NUM_FILENAMES][MAX_LENGHT_OF_FILENAME];
     // Array to store patterns for -e and -f 
-    char pattern_array[MAX_LENGHT_OF_PATTERN][MAX_NUM_OF_PATTERNS];
+    char pattern_array[MAX_NUM_OF_PATTERNS][MAX_LENGHT_OF_PATTERN];
     int pattern_index;
     // Array to hold the current line
     char line_array[MAX_LENGHT_OF_LINE];
@@ -57,6 +57,7 @@ typedef struct Data {
     int number_of_matched_files;
     int number_of_the_line;
     int pattern_found_in_the_file;
+    int pattern_found_in_the_line;
     char newline, colon;
 } Data;
 
@@ -94,5 +95,6 @@ void handle_h(int* filenames_should_be_printed);
 void handle_s(int* error_message_should_be_printed);
 void parse_patterns_handle_f(Flags const* flags, Data* data);
 void handle_o(Flags const* flags, Data* data, int pattern_index);
+void find_how_many_times_pattern_is_in_the_file(Data* data, int pattern_index);
 
 #endif  // SRC_S21_GREP_H
