@@ -191,6 +191,9 @@ void handle_c(Flags const* flags, Data* data) {
 
 void handle_v(Data* data) {
     data->line_should_be_printed = !data->line_should_be_printed;
+    if (!data->pattern_found_in_the_file && data->line_should_be_printed) {
+        data->pattern_found_in_the_file = TRUE;
+    }
 }
 
 void handle_i(Data* data, const int pattern_index) {
