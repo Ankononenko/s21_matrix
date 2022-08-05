@@ -71,13 +71,17 @@ void print_result(Flags const* flags, Data* data) {
 void print_result_no_line(Flags const* flags, Data* data, const int index_for_files) {
     if (flags->c || flags->l) {
         handle_h(flags, &data->filename_should_be_printed);
-        if (!flags->h) {
+        if (!flags->h && !flags->l) {
             filenames_should_be_printed(flags, data);
             if (data->filename_should_be_printed) {
                 print_filename(index_for_files, data, data->colon);
             }
         }
         if (flags->l && flags->c) {
+            filenames_should_be_printed(flags, data);
+            if (data->filename_should_be_printed) {
+                print_filename(index_for_files, data, data->colon);
+            }
             printf("%d\n", data->pattern_found_in_the_file);
         }
         handle_c(flags, data);
