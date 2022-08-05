@@ -12,7 +12,6 @@ The resulting executable file must be placed in the directory src/grep/ and name
 
 #include "s21_grep.h"
 
-// TODO: grep pattern file
 // TODO: Check if values are being reset
 // TODO: Fix all highlighted code
 int main(int argc, char *argv[]) {
@@ -48,7 +47,7 @@ void print_result(Flags const* flags, Data* data) {
                 while (parse_line(file, data)) {
                     int pattern_index = 0;
                     data->line_should_be_printed = FALSE;
-                    while (pattern_index <= data->pattern_index && !data->line_should_be_printed) {
+                    while (pattern_index < data->pattern_index && !data->line_should_be_printed) {
                         check_pattern(flags, data, pattern_index);
                         ++pattern_index;
                     }
@@ -72,7 +71,9 @@ void print_result(Flags const* flags, Data* data) {
 void print_result_no_line(Flags const* flags, Data* data, const int index_for_files) {
     if (flags->c || flags->l) {
         handle_h(&data->filename_should_be_printed);
-        // print_filename(index_for_files, data, data->colon);
+        if (!flags->h) {
+            print_filename(index_for_files, data, data->colon);
+        }
         if (flags->l && flags->c) {
             printf("%d\n", data->pattern_found_in_the_file);
         }
@@ -99,7 +100,7 @@ void check_pattern(Flags const* flags, Data* data, const int pattern_index) {
     }
     handle_e(data, pattern_index);
     if (flags->v) {
-        handle_v(data, pattern_index);
+        handle_v(data);
     }
     if (data->line_should_be_printed) {
         ++data->number_of_matching_lines;
@@ -183,8 +184,8 @@ void handle_c(Flags const* flags, Data* data) {
     }
 }
 
-void handle_v(Data* data, const int pattern_index) {
-    data->line_should_be_printed = !compare_strings(data, pattern_index);
+void handle_v(Data* data) {
+    data->line_should_be_printed = !data->line_should_be_printed;
 }
 
 void handle_i(Data* data, const int pattern_index) {
@@ -282,24 +283,25 @@ int check_start_conditions(const int argc, char *argv[], Flags* flags, Data* dat
 }
 
 int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data) {
-    int is_valid_input = FALSE;
+    int is_valid_input = TRUE;
     // Counters to know when to stop in iterating over the arrays
     int counter_for_flags = 0;
     // Iterate over the argv to sort out flags, pattern and filenames
     int element_index = 1;
-    parse_flags(argv, flags, data, &counter_for_flags, &element_index);
+    parse_flags(argv, flags, data, &counter_for_flags, &element_index, &is_valid_input);
     // When first index of argv element != '-' read the first pattern (for -e -f) and then the rest may be continuation of flags and the filenames
     // Write to the array of patters only if the pattern wasn't written previously
     if (data->pattern_array[0][0] == 0) {
         parse_pattern(data, argv, &element_index);
     }
     // Parse flags in case of -e pattern -c filename
-    parse_flags(argv, flags, data, &counter_for_flags, &element_index);
+    parse_flags(argv, flags, data, &counter_for_flags, &element_index, &is_valid_input);
     // Parse filenames to the array of filenames
-    parse_filenames(flags, data, argv, &element_index);
-    if (check_if_flags_are_valid(counter_for_flags, data)) {
-            is_valid_input = TRUE;
-    }
+    parse_filenames(data, argv, &element_index);
+// Going to do that check in parse_flags function
+// if (check_if_flags_are_valid(counter_for_flags, data)) {
+//         is_valid_input = TRUE;
+// }
     // Parse the patterns from the filename here for -f flag
     // Flags->f value is set in the parse flags function prior to this call
     if (flags->f) {
@@ -312,8 +314,6 @@ void parse_patterns_handle_f(Flags const* flags, Data* data) {
     FILE *file = NULL;
     int first_file = 0;
     if ((file = fopen(data->all_filenames_array[first_file], "r")) == NULL) {
-        // Probably excessive print error message. I already perform this check in print result
-        // Should test this later
         print_error_message(data, "Pattern file doesn't exist");
     } else {
         char temp_pattern_array[MAX_LENGHT_OF_PATTERN];
@@ -344,23 +344,23 @@ void pass_flags_to_structure(Flags* flags, Data const* data) {
     // I iterate over it and pass the values to the Flags structure
     // strcmp returns 0 if the values are equal, so I use !(not) to invert the value of zero to true
     while (strcmp(data->all_flags_array[index], "\0")) {
-        if (!strcmp(data->all_flags_array[index], "-e")) {
+        if (!strcmp(data->all_flags_array[index], "-e") || !strcmp(data->all_flags_array[index], "e")) {
             flags->e = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-i")) {
+        } else if (!strcmp(data->all_flags_array[index], "-i") || !strcmp(data->all_flags_array[index], "i")) {
             flags->i = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-v")) {
+        } else if (!strcmp(data->all_flags_array[index], "-v") || !strcmp(data->all_flags_array[index], "v")) {
             flags->v = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-c")) {
+        } else if (!strcmp(data->all_flags_array[index], "-c") || !strcmp(data->all_flags_array[index], "c")) {
             flags->c = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-l")) {
+        } else if (!strcmp(data->all_flags_array[index], "-l") || !strcmp(data->all_flags_array[index], "l")) {
             flags->l = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-n")) {
+        } else if (!strcmp(data->all_flags_array[index], "-n") || !strcmp(data->all_flags_array[index], "n")) {
             flags->n = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-h")) {
+        } else if (!strcmp(data->all_flags_array[index], "-h") || !strcmp(data->all_flags_array[index], "h")) {
             flags->h = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-s")) {
+        } else if (!strcmp(data->all_flags_array[index], "-s") || !strcmp(data->all_flags_array[index], "s")) {
             flags->s = TRUE;
-        } else if (!strcmp(data->all_flags_array[index], "-o")) {
+        } else if (!strcmp(data->all_flags_array[index], "-o") || !strcmp(data->all_flags_array[index], "o")) {
             flags->o = TRUE;
         }
         ++index;
@@ -378,19 +378,13 @@ int check_if_files_exist(const int filename_index, Data const* data) {
     return files_exist;
 }
 
-int check_if_flags_are_valid(const int counter_for_flags, Data* data) {
-    int flags_are_valid = FALSE, index_all_flags = 0, number_of_valid_flags = 0;
-    while (index_all_flags != counter_for_flags) {
-        for (int index_possible_flags = 0;
-        index_possible_flags < TOTAL_NUM_FLAGS; ++index_possible_flags) {
-            if (!strcmp(data->all_flags_array[index_all_flags], possible_flags[index_possible_flags])) {
-                ++number_of_valid_flags;
-            }
+int check_if_flag_is_valid(char* flag_array) {
+    int flags_are_valid = FALSE, index_possible_flags = 0;
+    while (index_possible_flags < TOTAL_NUM_FLAGS && !flags_are_valid) {
+        if (!strcmp(flag_array, possible_flags[index_possible_flags])) {
+            flags_are_valid = TRUE;
         }
-        ++index_all_flags;
-    }
-    if (counter_for_flags == number_of_valid_flags) {
-        flags_are_valid = TRUE;
+        ++index_possible_flags;
     }
     return flags_are_valid;
 }
@@ -400,37 +394,43 @@ void parse_pattern(Data* data, char *argv[], int* element_index) {
     ++data->pattern_index;
     ++*element_index;
 }
-
-void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index) {
-    int letter_index = 0, is_previous_e_flag = FALSE;
-    // TODO: For -enslh input changes the while condition. It can be a passed character or
-    // You can use || condition. '-' or one of the possible flags in a row, without anything else
+// TODO: Rework parse flags function so all types of flags input could be taken
+void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index, int* is_valid_input) {
+    int letter_index = 0, is_previous_e_flag = FALSE, first_element = 0;
+    // Create a temp array for single char flags to use strcpy()
+    char single_char_flag[MAX_LENGHT_OF_FLAG];
+    memset(single_char_flag, 0, MAX_LENGHT_OF_FLAG * sizeof(char));
+    // Iterate over the elements which start with '-', 
+    // Check if they are valid flags and pass them to an array
     while (argv[*element_index][letter_index] == '-') {
-        // When flag is -e and the pattern starts with '-', it should be read to the pattern array
-        if (!strcmp(argv[*element_index], "-e")) {
-            is_previous_e_flag = TRUE;
-            flags->e = TRUE;
+        ++letter_index;
+        // Here I iterate over letters of the flags when they are written in one word
+        while (argv[*element_index][letter_index] && is_valid_input) {
+            single_char_flag[first_element] = argv[*element_index][letter_index];
+            *is_valid_input = check_if_flag_is_valid(single_char_flag);
+            strcpy(data->all_flags_array[*counter_for_flags], single_char_flag);
+            ++*counter_for_flags;
+            ++letter_index;
+            if (single_char_flag[first_element] == 'e') {
+                is_previous_e_flag = TRUE;
+                flags->e = TRUE;
+            }
+            if (single_char_flag[first_element] == 'f') {
+                flags->f = TRUE;
+            }
         }
-        if (!strcmp(argv[*element_index], "-f")) {
-            flags->f = TRUE;
-        }
-        strcpy(data->all_flags_array[*counter_for_flags], argv[*element_index]);
-        ++*counter_for_flags;
         ++*element_index;
         // The pattern is being copied to the array of patterns in case the previous flag was -e
         if (is_previous_e_flag) {
             parse_pattern(data, argv, element_index);
             is_previous_e_flag = FALSE;
         }
+        letter_index = 0;
     }
 }
 
-void parse_filenames(Flags* flags, Data* data, char *argv[], int* element_index) {
+void parse_filenames(Data* data, char *argv[], int* element_index) {
     while (argv[*element_index]) {
-        // TODO: If -f parse with filename to the array of the flags 
-        if (flags->f) {
-
-        }
         strcpy(data->all_filenames_array[data->number_of_files], argv[*element_index]);
         ++data->number_of_files;
         ++*element_index;

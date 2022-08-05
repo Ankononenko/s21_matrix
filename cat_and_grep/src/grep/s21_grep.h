@@ -21,7 +21,7 @@ enum true_of_false{
 };
 // TODO: NULL flag implementation
 static const char possible_flags[TOTAL_NUM_FLAGS][MAX_LENGHT_OF_FLAG] = {
-    "-e", "-i", "-v", "-c", "-l", "-n", "-h", "-s", "-f", "-o", "NULL"
+    "e", "i", "v", "c", "l", "n", "h", "s", "f", "o", "NULL"
 };
 
 typedef struct Flags {
@@ -65,10 +65,10 @@ void initialize_flags(Flags* flags);
 void initialize_data(Data* data);
 int check_start_conditions(const int argc, char *argv[], Flags* flags, Data* data);
 int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data);
-void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index);
+void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index, int* is_valid_input);
 void parse_pattern(Data* data, char *argv[], int* element_index);
-void parse_filenames(Flags* flags, Data* data, char *argv[], int* element_index);
-int check_if_flags_are_valid(const int counter_for_flags, Data* data);
+void parse_filenames(Data* data, char *argv[], int* element_index);
+int check_if_flag_is_valid(char* flag_array);
 int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
@@ -87,7 +87,7 @@ void reset_num_values(Data* data);
 void reset_line_values(Data* data);
 void handle_e(Data* data, const int pattern_index);
 void handle_i(Data* data, const int pattern_index);
-void handle_v(Data* data, const int pattern_index);
+void handle_v(Data* data);
 void handle_c(Flags const* flags, Data* data);
 void handle_l(Flags const* flags, const int index_for_files, Data const* data);
 void handle_n(Flags const* flags, const int line_number);
