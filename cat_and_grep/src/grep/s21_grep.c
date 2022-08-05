@@ -14,6 +14,7 @@ The resulting executable file must be placed in the directory src/grep/ and name
 
 // TODO: grep pattern file
 // TODO: Check if values are being reset
+// TODO: Fix all highlighted code
 int main(int argc, char *argv[]) {
     Flags flags = {0};
     initialize_flags(&flags);
@@ -105,8 +106,6 @@ void check_pattern(Flags const* flags, Data* data, const int pattern_index) {
     }
 }
 
-// TODO: Probably should remove the function for flags
-// Library grep doesn't ignore incorrect flags
 void print_error_message(Data const* data, char* error_message) {
     if (!data->error_message_should_be_printed) {
         fprintf(stderr, "%s\n", error_message);
@@ -291,7 +290,7 @@ int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data) {
     parse_flags(argv, flags, data, &counter_for_flags, &element_index);
     // When first index of argv element != '-' read the first pattern (for -e -f) and then the rest may be continuation of flags and the filenames
     // Write to the array of patters only if the pattern wasn't written previously
-    if (data->pattern_array[0] == 0) {
+    if (data->pattern_array[0][0] == 0) {
         parse_pattern(data, argv, &element_index);
     }
     // Parse flags in case of -e pattern -c filename
