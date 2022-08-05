@@ -91,7 +91,7 @@ void handle_v(Data* data);
 void handle_c(Flags const* flags, Data* data);
 void handle_l(Flags const* flags, const int index_for_files, Data const* data);
 void handle_n(Flags const* flags, const int line_number);
-void handle_h(int* filenames_should_be_printed);
+void handle_h(Flags const* flags, int* filenames_should_be_printed);
 void handle_s(int* error_message_should_be_printed);
 void parse_patterns_handle_f(Flags const* flags, Data* data);
 void handle_o(Flags const* flags, Data* data, int pattern_index);
