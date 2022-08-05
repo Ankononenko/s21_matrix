@@ -58,6 +58,7 @@ typedef struct Data {
     int number_of_the_line;
     int pattern_found_in_the_file;
     int pattern_found_in_the_line;
+    int is_last_newline;
     char newline, colon;
 } Data;
 
@@ -96,5 +97,7 @@ void handle_s(int* error_message_should_be_printed);
 void parse_patterns_handle_f(Flags const* flags, Data* data);
 void handle_o(Flags const* flags, Data* data, int pattern_index);
 void find_how_many_times_pattern_is_in_the_file(Data* data, int pattern_index);
+void check_if_last_newline(Data* data, const int index_for_files);
+void print_newline(Data const* data);
 
 #endif  // SRC_S21_GREP_H

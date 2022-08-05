@@ -56,6 +56,8 @@ void print_result(Flags const* flags, Data* data) {
                     }
                 }
                 print_result_no_line(flags, data, index_for_files);
+                check_if_last_newline(data, index_for_files);
+                print_newline(data);
                 reset_num_values(data);
             } else {
                 if (!flags->s) {
@@ -101,6 +103,18 @@ void print_line(Flags const* flags, Data* data, int pattern_index, int index_for
     }
 }
 
+void check_if_last_newline(Data* data, const int index_for_files) {
+    if (!strcmp(data->line_array, "\n") && index_for_files < data->number_of_files - 1) {
+        data->is_last_newline = TRUE;
+    }
+}
+
+void print_newline(Data const* data) {
+    if (data->is_last_newline) {
+        printf("%c", data->newline);
+    }
+}
+
 void check_pattern(Flags const* flags, Data* data, const int pattern_index) {
     if (flags->i) {
         handle_i(data, pattern_index);
@@ -141,7 +155,8 @@ void handle_h(Flags const* flags, int* filenames_should_be_printed) {
 void reset_num_values(Data* data) {
     data->number_of_the_line = 0;
     data->number_of_matching_lines = 0;
-    data->pattern_found_in_the_file = 0;
+    data->pattern_found_in_the_file = FALSE;
+    data->is_last_newline = FALSE;
 }
 
 void reset_line_values(Data* data) {
@@ -465,6 +480,7 @@ void initialize_data(Data* data) {
     data->number_of_matching_lines = 0;
     data->pattern_found_in_the_file = FALSE;
     data->pattern_found_in_the_line = 0;
+    data->is_last_newline = FALSE;
 }
 
 void initialize_flags(Flags* flags) {
