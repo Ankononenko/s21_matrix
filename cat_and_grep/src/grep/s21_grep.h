@@ -97,7 +97,7 @@ void handle_s(int* error_message_should_be_printed);
 void parse_patterns_handle_f(Flags const* flags, Data* data);
 void handle_o(Flags const* flags, Data* data, int pattern_index);
 void find_how_many_times_pattern_is_in_the_file(Data* data, int pattern_index);
-void check_if_last_newline(Data* data, const int index_for_files);
-void print_newline(Data const* data);
+void check_if_last_newline(Data* data);
+void print_newline(Flags const* flags, Data const* data, const int index_for_files);
 
 #endif  // SRC_S21_GREP_H
