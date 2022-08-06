@@ -14,6 +14,7 @@
 #define MAX_NUM_OF_PATTERNS 100
 #define MAX_LENGHT_OF_PATTERN 100
 #define MAX_LENGHT_OF_LINE 500
+#define MAX_LINES_IN_FILE 500
 
 enum true_of_false{
     FALSE,
@@ -49,6 +50,7 @@ typedef struct Data {
     char line_array[MAX_LENGHT_OF_LINE];
     // Copy is going to be compared as it changes when flags are applied
     char line_array_copy[MAX_LENGHT_OF_LINE];
+    char inverted_matched_parts_array[MAX_LENGHT_OF_LINE][MAX_LINES_IN_FILE];
     int number_of_files;
     int line_should_be_printed;
     int filename_should_be_printed;
@@ -87,7 +89,7 @@ void print_error_message(Data const* data, char* error_message);
 void reset_num_values(Data* data);
 void reset_line_values(Data* data);
 void handle_e(Data* data, const int pattern_index);
-void handle_i(Data* data, const int pattern_index);
+void handle_i(Flags const* flags, Data* data, const int pattern_index);
 void handle_v(Data* data);
 void handle_c(Flags const* flags, Data* data);
 void handle_l(Flags const* flags, const int index_for_files, Data const* data);
@@ -95,9 +97,10 @@ void handle_n(Flags const* flags, const int line_number);
 void handle_h(Flags const* flags, int* filenames_should_be_printed);
 void handle_s(int* error_message_should_be_printed);
 void parse_patterns_handle_f(Flags const* flags, Data* data);
-void handle_o(Flags const* flags, Data* data, int pattern_index);
+void handle_o(Flags const* flags, Data* data, int pattern_index/*, const int index_for_files*/);
 void find_how_many_times_pattern_is_in_the_file(Data* data, int pattern_index);
 void check_if_last_newline(Data* data);
 void print_newline(Flags const* flags, Data const* data, const int index_for_files);
+void get_inverted_matched_parts(Data* data, const int pattern_index);
 
 #endif  // SRC_S21_GREP_H

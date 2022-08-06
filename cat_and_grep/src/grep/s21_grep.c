@@ -82,7 +82,9 @@ void print_result_no_line(Flags const* flags, Data* data, const int index_for_fi
         if (flags->l && flags->c) {
             filenames_should_be_printed(flags, data);
             if (data->filename_should_be_printed) {
-                print_filename(index_for_files, data, data->colon);
+                if (!flags->h) {
+                    print_filename(index_for_files, data, data->colon);
+                }
             }
             printf("%d\n", data->pattern_found_in_the_file);
         }
@@ -98,7 +100,7 @@ void print_line(Flags const* flags, Data* data, int pattern_index, int index_for
             print_filename(index_for_files, data, data->colon);
         }
         handle_n(flags, data->number_of_the_line);
-        handle_o(flags, data, pattern_index);
+        handle_o(flags, data, pattern_index/*, index_for_files*/);
         print_line_array(flags, data);
     }
 }
@@ -111,7 +113,7 @@ void print_newline(Flags const* flags, Data const* data, const int index_for_fil
     int last_file_index = data->number_of_files - 1;
     int is_last_file = index_for_files == last_file_index ? TRUE : FALSE;
     if (!flags->c && !flags->l) {
-        if (!data->is_last_newline && !is_last_file && data->pattern_found_in_the_file) {
+        if (!data->is_last_newline && !is_last_file && data->line_should_be_printed) {
             printf("%c", data->newline);
         }
     }
@@ -119,7 +121,7 @@ void print_newline(Flags const* flags, Data const* data, const int index_for_fil
 
 void check_pattern(Flags const* flags, Data* data, const int pattern_index) {
     if (flags->i) {
-        handle_i(data, pattern_index);
+        handle_i(flags, data, pattern_index);
     }
     handle_e(data, pattern_index);
     if (flags->v) {
@@ -136,11 +138,23 @@ void print_error_message(Data const* data, char* error_message) {
     }
 }
 
-void handle_o(Flags const* flags, Data* data, int pattern_index) {
-    if (flags->o) {
+void handle_o(Flags const* flags, Data* data, int pattern_index/*, const int index_for_files*/) {
+    if (flags->o && !flags->v && !flags->i) {
         for (int index = 0; index < data->pattern_found_in_the_line; ++index) {
             printf("%s\n", data->pattern_array[pattern_index - 1]);
         }
+    }
+    // Here I should print the oridinal capitalization that was in the line
+    // I'll write the original flags in the handle_i function and will iterate over them to print them our here
+    if (flags->o && !flags->v && flags->i) {
+        for (int index = 0; index < data->pattern_found_in_the_line; ++index) {
+            printf("%s\n", data->inverted_matched_parts_array[index]);
+            // check_if_last_newline(data);
+            // print_newline(flags, data, index_for_files);
+        }
+    }
+    if (flags->o && flags->v && !flags->i) {
+        printf("%s", data->line_array);
     }
 }
 
@@ -164,6 +178,7 @@ void reset_num_values(Data* data) {
 void reset_line_values(Data* data) {
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    memset(data->inverted_matched_parts_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
 }
 
 void print_number_of_the_line(const int line_number) {
@@ -217,7 +232,7 @@ void handle_v(Data* data) {
     }
 }
 
-void handle_i(Data* data, const int pattern_index) {
+void handle_i(Flags const* flags, Data* data, const int pattern_index) {
     int line_lenght = 0, pattern_lenght = 0;
     line_lenght = strlen(data->line_array);
     pattern_lenght = strlen(data->pattern_array[pattern_index]);
@@ -229,7 +244,38 @@ void handle_i(Data* data, const int pattern_index) {
     for (int index = 0; index <= pattern_lenght; ++ index) {
         data->pattern_array[pattern_index][index] = tolower(data->pattern_array[pattern_index][index]);
     }
-    // data->line_should_be_printed = compare_strings(data);
+    if (flags->i && flags->o) {
+        get_inverted_matched_parts(data, pattern_index);
+    }
+}
+
+void get_inverted_matched_parts(Data* data, const int pattern_index) {
+    int line_lenght = 0, pattern_lenght = 0, temp_array_index = 0, inverted_index = 0, matches = 0;
+    char temp_array[MAX_LENGHT_OF_LINE] = {0};
+    memset(temp_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    line_lenght = strlen(data->line_array);
+    pattern_lenght = strlen(data->pattern_array[pattern_index]);
+    for (int l_index = 0; l_index < line_lenght; ++l_index) {
+        for (int p_index = 0; p_index < pattern_lenght; ++p_index) {
+            if (data->pattern_array[pattern_index][p_index] == data->line_array_copy[l_index]) {
+                temp_array[temp_array_index] = data->line_array[l_index];
+                ++temp_array_index;
+                ++matches;
+                if (p_index != pattern_lenght - 1) {
+                    ++l_index;
+                }
+                if (p_index == pattern_lenght - 1 && matches >= pattern_lenght) {
+                    strcpy(data->inverted_matched_parts_array[inverted_index], temp_array);
+                    ++inverted_index;
+                    // printf("\n temp array = %s \n", temp_array);
+                }
+            } else {
+                matches = 0;
+            }
+        }
+        memset(temp_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+        temp_array_index = 0;
+    }
 }
 
 void handle_e(Data* data, const int pattern_index) {
@@ -327,10 +373,6 @@ int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data) {
     parse_flags(argv, flags, data, &counter_for_flags, &element_index, &is_valid_input);
     // Parse filenames to the array of filenames
     parse_filenames(data, argv, &element_index);
-// Going to do that check in parse_flags function
-// if (check_if_flags_are_valid(counter_for_flags, data)) {
-//         is_valid_input = TRUE;
-// }
     // Parse the patterns from the filename here for -f flag
     // Flags->f value is set in the parse flags function prior to this call
     if (flags->f) {
@@ -423,7 +465,7 @@ void parse_pattern(Data* data, char *argv[], int* element_index) {
     ++data->pattern_index;
     ++*element_index;
 }
-// TODO: Rework parse flags function so all types of flags input could be taken
+
 void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index, int* is_valid_input) {
     int letter_index = 0, is_previous_e_flag = FALSE, first_element = 0;
     // Create a temp array for single char flags to use strcpy()
@@ -473,6 +515,7 @@ void initialize_data(Data* data) {
     data->pattern_index = 0;
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    memset(data->inverted_matched_parts_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     data->number_of_files = 0;
     data->number_of_the_line = 0;
     data->newline = '\n';
