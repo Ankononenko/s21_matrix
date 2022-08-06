@@ -58,6 +58,7 @@ typedef struct Data {
     int number_of_matching_lines;
     int number_of_matched_files;
     int number_of_the_line;
+    int handle_o_printed_newline;
     int pattern_found_in_the_file;
     int pattern_found_in_the_line;
     int is_last_newline;

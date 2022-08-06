@@ -113,7 +113,7 @@ void print_newline(Flags const* flags, Data const* data, const int index_for_fil
     int last_file_index = data->number_of_files - 1;
     int is_last_file = index_for_files == last_file_index ? TRUE : FALSE;
     if (!flags->c && !flags->l) {
-        if (!data->is_last_newline && !is_last_file && data->line_should_be_printed) {
+        if (!data->is_last_newline && !is_last_file && data->line_should_be_printed && !data->handle_o_printed_newline) {
             printf("%c", data->newline);
         }
     }
@@ -142,6 +142,7 @@ void handle_o(Flags const* flags, Data* data, int pattern_index/*, const int ind
     if (flags->o && !flags->v && !flags->i) {
         for (int index = 0; index < data->pattern_found_in_the_line; ++index) {
             printf("%s\n", data->pattern_array[pattern_index - 1]);
+            data->handle_o_printed_newline = TRUE;
         }
     }
     // Here I should print the oridinal capitalization that was in the line
@@ -149,11 +150,19 @@ void handle_o(Flags const* flags, Data* data, int pattern_index/*, const int ind
     if (flags->o && !flags->v && flags->i) {
         for (int index = 0; index < data->pattern_found_in_the_line; ++index) {
             printf("%s\n", data->inverted_matched_parts_array[index]);
-            // check_if_last_newline(data);
-            // print_newline(flags, data, index_for_files);
+            // TODO - figure out the newline bug
+            data->handle_o_printed_newline = TRUE;
+            // int inverted_arrray_length = 0;
+            // inverted_arrray_length = strlen(data->inverted_matched_parts_array[index]) - 1;
+            // if (data->inverted_matched_parts_array[index][inverted_arrray_length] != data->newline) {
+            //     printf("\n");
+            // }
         }
     }
     if (flags->o && flags->v && !flags->i) {
+        printf("%s", data->line_array);
+    }
+    if (flags->o && flags->v && flags->i) {
         printf("%s", data->line_array);
     }
 }
@@ -173,6 +182,7 @@ void reset_num_values(Data* data) {
     data->number_of_matching_lines = 0;
     data->pattern_found_in_the_file = FALSE;
     data->is_last_newline = FALSE;
+    data->handle_o_printed_newline = FALSE;
 }
 
 void reset_line_values(Data* data) {
@@ -518,6 +528,7 @@ void initialize_data(Data* data) {
     memset(data->inverted_matched_parts_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     data->number_of_files = 0;
     data->number_of_the_line = 0;
+    data->handle_o_printed_newline = FALSE;
     data->newline = '\n';
     data->colon = ':';
     data->line_should_be_printed = FALSE;
