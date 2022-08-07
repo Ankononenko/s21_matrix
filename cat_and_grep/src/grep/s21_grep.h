@@ -43,7 +43,10 @@ typedef struct Data {
     char all_flags_array[TOTAL_NUM_FLAGS][MAX_LENGHT_OF_FLAG];
     // And an array for filenames. Valid and invalid. Going to sort them out later
     char all_filenames_array[TOTAL_NUM_FILENAMES][MAX_LENGHT_OF_FILENAME];
-    // Array to store patterns for -e and -f 
+    // Array to store the filename of pattern file for -f
+    char pattern_file[MAX_LENGHT_OF_FILENAME];
+    int is_prefious_flag_f;
+    // Array to store patterns for -e and -f ;
     char pattern_array[MAX_NUM_OF_PATTERNS][MAX_LENGHT_OF_PATTERN];
     int pattern_index;
     // Array to hold the current line
@@ -70,9 +73,9 @@ int check_start_conditions(const int argc, char *argv[], Flags* flags, Data* dat
 int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data);
 void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index, int* is_valid_input);
 void parse_pattern(Data* data, char *argv[], int* element_index);
-void parse_filenames(Data* data, char *argv[], int* element_index);
+void parse_filenames(/*Flags const* flags, */Data* data, char *argv[], int* element_index);
 int check_if_flag_is_valid(char* flag_array);
-int check_if_files_exist(const int filename_index, Data const* data);
+int check_if_files_exist(Flags const* flags, const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data* data);
 void check_pattern(Flags const* flags, Data* data, const int pattern_index);

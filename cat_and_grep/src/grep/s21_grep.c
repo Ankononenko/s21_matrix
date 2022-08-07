@@ -31,15 +31,14 @@ void print_result(Flags const* flags, Data* data) {
     // If file with patterns doesn't exist, even if "-s" error is thrown and grep doesn't run
     int should_run = TRUE;
     if (flags->f) {
-        should_run = check_if_files_exist(0, data);
-    }
+        should_run = check_if_files_exist(flags, 0, data);
+    } 
     if (should_run) {
         // If -f then index_for_files++ else index_for_files = 0 
         // So I don't open the file with patterns
         int index_for_files = 0;
-        index_for_files = flags->f ? 1 : 0;
         for (; index_for_files < number_of_files; ++index_for_files) {
-            if (check_if_files_exist(index_for_files, data)) {
+            if (check_if_files_exist(flags, index_for_files, data)) {
                 FILE *file = fopen(data->all_filenames_array[index_for_files], "r");
                 // Check pattern with no flags, -e pattern and -f pattern
                 while (parse_line(file, data)) {
@@ -368,13 +367,16 @@ int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data) {
     parse_flags(argv, flags, data, &counter_for_flags, &element_index, &is_valid_input);
     // When first index of argv element != '-' read the first pattern (for -e -f) and then the rest may be continuation of flags and the filenames
     // Write to the array of patters only if the pattern wasn't written previously
-    if (data->pattern_array[0][0] == 0) {
-        parse_pattern(data, argv, &element_index);
+    // !!! HERE 
+    if (!data->is_prefious_flag_f) {
+        if (data->pattern_array[0][0] == 0) {
+            parse_pattern(data, argv, &element_index);
+        }
     }
     // Parse flags in case of -e pattern -c filename
     parse_flags(argv, flags, data, &counter_for_flags, &element_index, &is_valid_input);
     // Parse filenames to the array of filenames
-    parse_filenames(data, argv, &element_index);
+    parse_filenames(/*flags, */data, argv, &element_index);
     // Parse the patterns from the filename here for -f flag
     // Flags->f value is set in the parse flags function prior to this call
     if (flags->f) {
@@ -385,8 +387,7 @@ int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data) {
 
 void parse_patterns_handle_f(Flags const* flags, Data* data) {
     FILE *file = NULL;
-    int first_file = 0;
-    if ((file = fopen(data->all_filenames_array[first_file], "r")) == NULL) {
+    if ((file = fopen(data->pattern_file, "r")) == NULL) {
         print_error_message(data, "Pattern file doesn't exist");
     } else {
         char temp_pattern_array[MAX_LENGHT_OF_PATTERN];
@@ -408,6 +409,7 @@ void parse_patterns_handle_f(Flags const* flags, Data* data) {
             }
         }
     }
+    data->is_prefious_flag_f = FALSE;
     fclose(file);
 }
 
@@ -440,13 +442,21 @@ void pass_flags_to_structure(Flags* flags, Data const* data) {
     }
 }
 
-int check_if_files_exist(const int filename_index, Data const* data) {
+int check_if_files_exist(Flags const* flags, const int filename_index, Data const* data) {
     int files_exist = TRUE;
     FILE *file = NULL;
-    if ((file = fopen(data->all_filenames_array[filename_index], "r")) == NULL) {
-        files_exist = FALSE;
+    if (flags->f) {
+        if ((file = fopen(data->pattern_file, "r")) == NULL) {
+            files_exist = FALSE;
+        } else {
+            fclose(file);
+        }
     } else {
-        fclose(file);
+        if ((file = fopen(data->all_filenames_array[filename_index], "r")) == NULL) {
+            files_exist = FALSE;
+        } else {
+            fclose(file);
+        }
     }
     return files_exist;
 }
@@ -489,6 +499,7 @@ void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags,
                 flags->e = TRUE;
             }
             if (single_char_flag[first_element] == 'f') {
+                data->is_prefious_flag_f = TRUE;
                 flags->f = TRUE;
             }
         }
@@ -498,11 +509,21 @@ void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags,
             parse_pattern(data, argv, element_index);
             is_previous_e_flag = FALSE;
         }
+        // !!! HERE
+        if (data->is_prefious_flag_f) {
+            ++*element_index;
+            strcpy(data->pattern_file, argv[*element_index]);
+        }
         letter_index = 0;
     }
 }
 
-void parse_filenames(Data* data, char *argv[], int* element_index) {
+void parse_filenames(/*Flags const* flags, */Data* data, char *argv[], int* element_index) {
+    // !!! HERE
+    // if (flags->f) {
+    //     strcpy(data->pattern_file, argv[*element_index]);
+    //     ++*element_index;        
+    // }
     while (argv[*element_index]) {
         strcpy(data->all_filenames_array[data->number_of_files], argv[*element_index]);
         ++data->number_of_files;
@@ -513,7 +534,8 @@ void parse_filenames(Data* data, char *argv[], int* element_index) {
 void initialize_data(Data* data) {
     memset(data->all_flags_array, 0, sizeof data->all_flags_array);
     memset(data->all_filenames_array, 0, sizeof data->all_filenames_array);
-    memset(data->pattern_array, 0, sizeof data->pattern_array);
+    memset(data->all_filenames_array, 0, sizeof data->all_filenames_array);
+    memset(data->pattern_file, 0, MAX_LENGHT_OF_FILENAME * sizeof(char));
     data->pattern_index = 0;
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
@@ -529,6 +551,7 @@ void initialize_data(Data* data) {
     data->pattern_found_in_the_file = FALSE;
     data->pattern_found_in_the_line = 0;
     data->is_last_newline = FALSE;
+    data->is_prefious_flag_f = FALSE;
 }
 
 void initialize_flags(Flags* flags) {
