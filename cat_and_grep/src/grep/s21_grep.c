@@ -12,8 +12,6 @@ The resulting executable file must be placed in the directory src/grep/ and name
 
 #include "s21_grep.h"
 
-// TODO: Check if values are being reset
-// TODO: Fix all highlighted code
 int main(int argc, char *argv[]) {
     Flags flags = {0};
     initialize_flags(&flags);
@@ -145,18 +143,12 @@ void handle_o(Flags const* flags, Data* data, int pattern_index/*, const int ind
             data->handle_o_printed_newline = TRUE;
         }
     }
-    // Here I should print the oridinal capitalization that was in the line
-    // I'll write the original flags in the handle_i function and will iterate over them to print them our here
+    // Here I print the original capitalization that was in the line
+    // I write the original mathches found in the handle_i function and iterate over them to print them out here
     if (flags->o && !flags->v && flags->i) {
         for (int index = 0; index < data->pattern_found_in_the_line; ++index) {
             printf("%s\n", data->inverted_matched_parts_array[index]);
-            // TODO - figure out the newline bug
             data->handle_o_printed_newline = TRUE;
-            // int inverted_arrray_length = 0;
-            // inverted_arrray_length = strlen(data->inverted_matched_parts_array[index]) - 1;
-            // if (data->inverted_matched_parts_array[index][inverted_arrray_length] != data->newline) {
-            //     printf("\n");
-            // }
         }
     }
     if (flags->o && flags->v && !flags->i) {
@@ -188,7 +180,7 @@ void reset_num_values(Data* data) {
 void reset_line_values(Data* data) {
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
-    memset(data->inverted_matched_parts_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    memset(data->inverted_matched_parts_array, 0, sizeof * data->inverted_matched_parts_array);
 }
 
 void print_number_of_the_line(const int line_number) {
@@ -261,7 +253,7 @@ void handle_i(Flags const* flags, Data* data, const int pattern_index) {
 
 void get_inverted_matched_parts(Data* data, const int pattern_index) {
     int line_lenght = 0, pattern_lenght = 0, temp_array_index = 0, inverted_index = 0, matches = 0;
-    char temp_array[MAX_LENGHT_OF_LINE] = {0};
+    char temp_array[MAX_LENGHT_OF_LINE];
     memset(temp_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     line_lenght = strlen(data->line_array);
     pattern_lenght = strlen(data->pattern_array[pattern_index]);
@@ -277,7 +269,6 @@ void get_inverted_matched_parts(Data* data, const int pattern_index) {
                 if (p_index == pattern_lenght - 1 && matches >= pattern_lenght) {
                     strcpy(data->inverted_matched_parts_array[inverted_index], temp_array);
                     ++inverted_index;
-                    // printf("\n temp array = %s \n", temp_array);
                 }
             } else {
                 matches = 0;
@@ -295,7 +286,8 @@ void handle_e(Data* data, const int pattern_index) {
 int compare_strings(Data* data, const int pattern_index) {
     int are_equal = FALSE;
     regex_t reegex;
-    int compare_result = regcomp(&reegex, data->pattern_array[pattern_index], 0);
+    regcomp(&reegex, data->pattern_array[pattern_index], 0);
+    int compare_result = 0;
     compare_result = regexec(&reegex, data->line_array_copy, 0, NULL, 0);
     if (!compare_result) {
         are_equal = TRUE;
@@ -519,13 +511,13 @@ void parse_filenames(Data* data, char *argv[], int* element_index) {
 }
 
 void initialize_data(Data* data) {
-    memset(data->all_flags_array, 0, TOTAL_NUM_FLAGS * sizeof(char));
-    memset(data->all_filenames_array, 0, TOTAL_NUM_FILENAMES * sizeof(char));
-    memset(data->pattern_array, 0, MAX_NUM_OF_PATTERNS * sizeof(char));
+    memset(data->all_flags_array, 0, sizeof data->all_flags_array);
+    memset(data->all_filenames_array, 0, sizeof data->all_filenames_array);
+    memset(data->pattern_array, 0, sizeof data->pattern_array);
     data->pattern_index = 0;
     memset(data->line_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
     memset(data->line_array_copy, 0, MAX_LENGHT_OF_LINE * sizeof(char));
-    memset(data->inverted_matched_parts_array, 0, MAX_LENGHT_OF_LINE * sizeof(char));
+    memset(data->inverted_matched_parts_array, 0, sizeof data->inverted_matched_parts_array);
     data->number_of_files = 0;
     data->number_of_the_line = 0;
     data->handle_o_printed_newline = FALSE;
