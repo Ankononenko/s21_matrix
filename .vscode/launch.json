@@ -11,12 +11,12 @@
             // "program": "${workspaceFolder}/src/grep/s21_grep.out",
             "program": "${workspaceFolder}/cat_and_grep/src/grep/s21_grep",
             // "program": "${workspaceFolder}/src/cat/s21_cat.out",
-            // "program": "${workspaceFolder}/src/cat/s21_cat",
+            // "program": "${workspaceFolder}/cat_and_grep/src/cat/s21_cat",
             // "args": ["-b", "${workspaceFolder}/src/cat/s21_cat.c"],
             // "args": ["-e", "${workspaceFolder}/src/cat/bytes.txt"],
             // "args": ["-b", "${workspaceFolder}/texts/test1.txt", "${workspaceFolder}/texts/test3.txt"],
             // "args": ["-e", "${workspaceFolder}/src/cat/test1.txt"],
-            "args": ["-e", "Hello", "${workspaceFolder}/cat_and_grep/src/grep/test.txt"],
+            "args": ["-vnf", "${workspaceFolder}/cat_and_grep/src/grep/patterns.txt", "${workspaceFolder}/cat_and_grep/src/grep/1.txt"],
             "cwd": "${workspaceFolder}"
         }
     ]
