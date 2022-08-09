@@ -291,8 +291,8 @@ void initialize_flags(Flags* flags) {
 }
 
 void initialize_data(Data* data) {
-    memset(data->all_flags_array, '\0', NMAX * sizeof(char));
-    memset(data->all_text_files_array, '\0', NMAX * sizeof(char));
+    memset(data->all_flags_array, '\0', sizeof(char));
+    memset(data->all_text_files_array, '\0', sizeof(char));
     data->number_of_files = 0;
     data->newline = '\n';
     data->tabulator = '\t';

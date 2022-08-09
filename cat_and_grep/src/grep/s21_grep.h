@@ -1,5 +1,5 @@
-#ifndef SRC_S21_GREP_H
-#define SRC_S21_GREP_H
+#ifndef SRC_GREP_S21_GREP_H_
+#define SRC_GREP_S21_GREP_H_
 
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +20,7 @@ enum true_of_false{
     FALSE,
     TRUE
 };
-// TODO: NULL flag implementation
+
 static const char possible_flags[TOTAL_NUM_FLAGS][MAX_LENGHT_OF_FLAG] = {
     "e", "i", "v", "c", "l", "n", "h", "s", "f", "o", "NULL"
 };
@@ -71,9 +71,10 @@ void initialize_flags(Flags* flags);
 void initialize_data(Data* data);
 int check_start_conditions(const int argc, char *argv[], Flags* flags, Data* data);
 int parse_flags_patterns_filenames(char *argv[], Flags* flags, Data* data);
-void parse_flags(char *argv[], Flags* flags, Data* data, int* counter_for_flags, int* element_index, int* is_valid_input);
+void parse_flags(char *argv[], Flags* flags,
+    Data* data, int* counter_for_flags, int* element_index, int* is_valid_input);
 void parse_pattern(Data* data, char *argv[], int* element_index);
-void parse_filenames(/*Flags const* flags, */Data* data, char *argv[], int* element_index);
+void parse_filenames(Data* data, char *argv[], int* element_index);
 int check_if_flag_is_valid(char* flag_array);
 int check_if_files_exist(Flags const* flags, const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
@@ -98,12 +99,11 @@ void handle_c(Flags const* flags, Data* data);
 void handle_l(Flags const* flags, const int index_for_files, Data const* data);
 void handle_n(Flags const* flags, const int line_number);
 void handle_h(Flags const* flags, int* filenames_should_be_printed);
-void handle_s(int* error_message_should_be_printed);
 void parse_patterns_handle_f(Flags const* flags, Data* data);
 void handle_o(Flags const* flags, Data* data, int pattern_index/*, const int index_for_files*/);
-void find_how_many_times_pattern_is_in_the_file(Data* data, int pattern_index);
+void find_how_many_times_pattern_is_in_the_line(Data* data, int pattern_index);
 void check_if_last_newline(Data* data);
 void print_newline(Flags const* flags, Data const* data, const int index_for_files);
 void get_inverted_matched_parts(Data* data, const int pattern_index);
 
-#endif  // SRC_S21_GREP_H
+#endif  // SRC_GREP_S21_GREP_H_

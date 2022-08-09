@@ -1,5 +1,5 @@
-#ifndef SRC_S21_CAT_H_
-#define SRC_S21_CAT_H_
+#ifndef SRC_CAT_S21_CAT_H_
+#define SRC_CAT_S21_CAT_H_
 
 #include <stdio.h>
 #include <string.h>
@@ -48,7 +48,8 @@ int check_if_files_exist(const int filename_index, Data const* data);
 void pass_flags_to_structure(Flags* flags, Data const* data);
 void print_result(Flags const* flags, Data const* data);
 void handle_b(const int current_character, const int is_previous_newline, Data const* data, int* ordinal);
-void handle_s(const int current_character, int* next_character, int is_previous_newline, Data const* data, FILE *file);
+void handle_s(const int current_character, int* next_character,
+    int is_previous_newline, Data const* data, FILE *file);
 void handle_n(int* ordinal);
 void handle_e();
 void handle_t(int* current_character, int* next_character, FILE *file, Data const* data);
@@ -59,4 +60,4 @@ int is_tabulator(const int current_character, Data const* data);
 void handle_flags(int* current_character, int* next_character,
     int* is_previous_newline, int* ordinal, Data const* data, Flags const* flags, FILE* file);
 
-#endif  // SRC_S21_CAT_H_
+#endif  // SRC_CAT_S21_CAT_H_
