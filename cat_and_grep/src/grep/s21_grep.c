@@ -517,7 +517,6 @@ void parse_flags(char *argv[], Flags* flags, Data* data,
             parse_pattern(data, argv, element_index);
             is_previous_e_flag = FALSE;
         }
-        // !!! HERE
         if (data->is_prefious_flag_f) {
             ++*element_index;
             strcpy(data->pattern_file, argv[*element_index]);
