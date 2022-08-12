@@ -102,3 +102,10 @@ _Sudo command grants root power to administrators (members of group admin or sud
     
     Hostname changed after the reboot
 ![Hostname changed after the reboot](../misc/images/my_screenshots/Screen_Shot_2022-08-11_at_8.25.11_PM.png)
+
+_<h2 align="left"> Part 6. Installing and configuring the time service:</h2>_
+
+    - Install and set up Chrony to synchronize time:
+
+    Synchronized using Chrony
+![Synchronized using Chrony](../misc/images/my_screenshots/Screen_Shot_2022-08-12_at_8.46.58_PM.png)
