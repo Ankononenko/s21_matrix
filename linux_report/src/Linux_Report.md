@@ -353,5 +353,5 @@ Remove all tasks from the job scheduler:
 1. `$ crontab -r` - remove all tasks;
 2. `$ crontab -l` - list all tasks;
 
-_The list of current tasks for CRON:_
+_The list of current tasks for CRON:_ \
 <img src="../misc/images/my_screenshots/A_list_of_current_jobs_for_CRON_02.png" alt="A list of current jobs for CRON" width="800"/>
