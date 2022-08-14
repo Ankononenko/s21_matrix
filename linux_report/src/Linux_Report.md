@@ -334,7 +334,7 @@ _<h2 align="left"> Part 14. Working with system logs:</h2>_
 _The last successful login time, user name and login method:_ \
 <img src="../misc/images/my_screenshots/The_last_successful_login_time_user_name_and_login_method.png" alt="The last successful login time, user name and login method" width="800"/>
 
-_Stopped and restarted SSH:_
+_Stopped and restarted SSH:_ \
 <img src="../misc/images/my_screenshots/Stopped_and_restarted_SSH.png" alt="Stopped and restarted SSH" width="800"/>
 
 _<h2 align="left"> Part 15. Using the CRON job scheduler:</h2>_
