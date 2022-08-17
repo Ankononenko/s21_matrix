@@ -4,9 +4,16 @@
 #include <stdio.h>
 #include <math.h>
 
-#define NAN 0.0/0.0
+#define S21_NAN 0.0/0.0
+#define S21_PI 3.141592
+#define S21_EPSILON 1e-6
 
-long double s21_sin(double x);
-long double s21_factorial(double x);
+enum is_true{
+    FALSE,
+    TRUE
+};
 
-#endif SRC_S21_SIN_H_
+long double s21_sin(const double x);
+long double s21_factorial(const int x);
+
+#endif // SRC_S21_SIN_H_
