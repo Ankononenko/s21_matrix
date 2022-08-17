@@ -20,16 +20,10 @@ long double s21_sin(const double x) {
     if (__builtin_isnan(x) || __builtin_isinf(x)) {
         sum = S21_NAN;
     }
-    // Use epsilon e-6 instead of the for-loop
-    // for (int index = 0; index < 30; ++index) {
-    //     sum += (pow(-1, index) / s21_factorial(1 + 2 * index)) * pow(x, 1 + 2 * index);
-    //     printf("Complete formula %d = %Lf \n", index, (pow(-1, index) / s21_factorial(1 + 2 * index)) * pow(x, 1 + 2 * index));
-    //     printf("Only the divided part %d = %Lf \n", index, (pow(-1, index) / s21_factorial(1 + 2 * index)));
-    // }
-
     int index = 0, should_run = TRUE;
-    double sin = 0;
+    // Run the while loop while the sin is bigger than the 1e-6 precision
     while (should_run) {
+        double sin = 0.0;
         sin = pow(-1, index) / s21_factorial(1 + 2 * index) * pow(x, 1 + 2 * index);
         sum += sin;
         ++index;
