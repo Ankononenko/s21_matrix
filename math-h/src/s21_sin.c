@@ -1,6 +1,7 @@
 // Copyright 2022 finchren
 
 #include "s21_sin.h"
+#include "s21_factorial.c"
 
 int main() {
     printf("s21: Zero sin = %Lf \n", s21_sin(0));
@@ -27,17 +28,8 @@ long double s21_sin(const double x) {
         sin = pow(-1, index) / s21_factorial(1 + 2 * index) * pow(x, 1 + 2 * index);
         sum += sin;
         ++index;
+        // fabs() should be replaced by s21 function when completed
         should_run = fabs(sin) > S21_EPSILON;
     }
     return sum;
-}
-
-// Unsigned long double to be able to work with the maximum needed numbers
-// Until the epsilon for the precision is reached
-long double s21_factorial(const int x) {
-    long double result = 1.0L;
-    for (int index = 1; index <= x; ++index) {
-        result *= index;
-    }
-    return result;
 }
