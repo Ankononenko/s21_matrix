@@ -9,6 +9,7 @@
 #define S21_NAN 0.0/0.0
 #define S21_PI 3.141592
 #define S21_EPSILON 1e-6
+#define S21_EPSILON_7 1e-7
 
 enum is_true{
     FALSE,
