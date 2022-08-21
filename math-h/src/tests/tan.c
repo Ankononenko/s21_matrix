@@ -234,4 +234,5 @@ void tan_tests(TCase *tc) {
     tcase_add_test(tc, tan_20_pole);
     tcase_add_test(tc, tan_21_pole);
     tcase_add_loop_test(tc, tan_22_poles, -10, 10);
+    UNUSED_SHIT(tan_tests);
 }

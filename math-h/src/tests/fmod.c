@@ -269,4 +269,5 @@ void fmod_tests(TCase *tc) {
     tcase_add_test(tc, s21_fmod_test_25);
     tcase_add_test(tc, s21_fmod_test_26);
     tcase_add_test(tc, s21_fmod_test_27);
+    UNUSED_SHIT(fmod_tests);
 }

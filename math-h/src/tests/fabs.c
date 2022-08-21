@@ -109,4 +109,5 @@ void fabs_tests(TCase *tc) {
     tcase_add_test(tc, fabs_13);
     tcase_add_test(tc, fabs_14);
     tcase_add_test(tc, fabs_15);
+    UNUSED_SHIT(fabs_tests);
 }

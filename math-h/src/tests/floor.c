@@ -143,5 +143,6 @@ void floor_tests(TCase *tc) {
     tcase_add_test(tc, floor_13);
     tcase_add_test(tc, floor_14);
     tcase_add_test(tc, floor_15);
+    UNUSED_SHIT(floor_tests);
 }
 

@@ -3,8 +3,12 @@
 
 #include <math.h>
 
+#ifndef M_PI
+#    define M_PI 3.14159265358979323846L
+#endif
+
 #ifndef s21_PI
-#    define s21_PI 3.14159265358979323846
+#    define s21_PI 3.14159265358979323846L
 #endif
 
 #ifndef s21_NAN

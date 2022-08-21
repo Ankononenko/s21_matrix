@@ -255,4 +255,5 @@ void sin_tests(TCase *tc) {
     tcase_add_test(tc, sin_23);
     tcase_add_test(tc, sin_24);
     tcase_add_test(tc, sin_25);
+    UNUSED_SHIT(sin_tests);
 }

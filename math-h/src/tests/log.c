@@ -292,5 +292,5 @@ void log_tests(TCase *tc) {
     tcase_add_test(tc, log_32);
     tcase_add_test(tc, log_33);
     tcase_add_test(tc, log_34);
+    UNUSED_SHIT(log_tests);
 }
-

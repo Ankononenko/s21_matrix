@@ -1,10 +1,3 @@
-//
-//  abs.c
-//  S21 Math.h
-//
-//  Created by Joramun Sasin on 6/8/22.
-//
-
 #include "tests.h"
 
 START_TEST(negative_one) {
@@ -69,4 +62,5 @@ void abs_tests(TCase *tc) {
     tcase_add_test(tc, abs_8);
     tcase_add_test(tc, abs_9);
     tcase_add_test(tc, abs_10);
+    UNUSED_SHIT(abs_tests);
 }

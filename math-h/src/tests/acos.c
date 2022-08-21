@@ -1,10 +1,3 @@
-//
-//  acos.c
-//  debug
-//
-//  Created by Joramun Sasin on 6/10/22.
-//
-
 #include "tests.h"
 
 START_TEST(zero) {
@@ -171,5 +164,5 @@ void acos_tests(TCase *tc) {
     tcase_add_test(tc, acos_17);
     tcase_add_test(tc, acos_18);
     tcase_add_test(tc, acos_19);
+    UNUSED_SHIT(acos_tests);
 }
-

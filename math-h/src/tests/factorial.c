@@ -27,4 +27,5 @@ void fact_tests(TCase *tc) {
     tcase_add_test(tc, fifty);
     tcase_add_test(tc, negative);
     tcase_add_test(tc, thirteen);
+    UNUSED_SHIT(fact_tests);
 }

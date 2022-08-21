@@ -65,11 +65,14 @@ START_TEST(atan_2) {
 }
 END_TEST
 
-START_TEST(atan_3) { ck_assert_float_eq(-9999999999, -9999999999); }
+START_TEST(atan_3) {
+  ck_assert_float_eq(-9999999999, -9999999999);
+}
 END_TEST
+
 START_TEST(atan_4) {
-  ck_assert_ldouble_eq(s21_atan(INFINITY), atan(INFINITY));
-  ck_assert_ldouble_eq(s21_atan(-INFINITY), atan(-INFINITY));
+  ck_assert_ldouble_eq_tol(s21_atan(INFINITY), atan(INFINITY), 1e-7L);
+  ck_assert_ldouble_eq_tol(s21_atan(-INFINITY), atan(-INFINITY), 1e-7L);
 }
 END_TEST
 
@@ -222,4 +225,5 @@ void atan_tests(TCase *tc) {
     tcase_add_test(tc, atan_22);
     tcase_add_test(tc, atan_23);
     tcase_add_test(tc, atan_24);
+    UNUSED_SHIT(atan_tests);
 }

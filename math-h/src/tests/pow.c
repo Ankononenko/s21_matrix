@@ -604,6 +604,19 @@ START_TEST(pow_74) {
 }
 END_TEST
 
+START_TEST(pow_75) {
+  long double exp = -3.0L;
+  ck_assert_ldouble_infinite(s21_pow(+0.0, exp));
+  ck_assert_ldouble_infinite(pow(+0.0, exp));
+}
+END_TEST
+
+START_TEST(pow_76) {
+  long double exp = 0.0L;
+  ck_assert_ldouble_eq_tol(s21_pow(1.0, exp), pow(1.0, exp), 1e-06);
+}
+END_TEST
+
 void pow_tests(TCase *tc) {
     tcase_add_test(tc, mpow_1);
     tcase_add_test(tc, min_int);
@@ -695,4 +708,7 @@ void pow_tests(TCase *tc) {
     tcase_add_test(tc, pow_72);
     tcase_add_test(tc, pow_73);
     tcase_add_test(tc, pow_74);
+    tcase_add_test(tc, pow_75);
+    tcase_add_test(tc, pow_76);
+    UNUSED_SHIT(pow_tests);
 }

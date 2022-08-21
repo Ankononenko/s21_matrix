@@ -11,6 +11,8 @@
 
 #include "../s21_types.h"
 
+#define UNUSED_SHIT(fucking_shit) do { (void)(fucking_shit); } while (0)
+
 void abs_tests(TCase *tc);
 void pow_tests(TCase *tc);
 void sqrt_tests(TCase *tc);

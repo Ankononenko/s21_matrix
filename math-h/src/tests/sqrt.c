@@ -144,4 +144,5 @@ void sqrt_tests(TCase *tc) {
     tcase_add_test(tc, sqrt_14);
     tcase_add_test(tc, sqrt_15);
     tcase_add_test(tc, sqrt_16);
+    UNUSED_SHIT(sqrt_tests);
 }

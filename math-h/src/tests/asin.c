@@ -1,10 +1,3 @@
-//
-//  asin.c
-//  debug
-//
-//  Created by Joramun Sasin on 6/10/22.
-//
-
 #include "tests.h"
 
 START_TEST(zero) {
@@ -195,4 +188,5 @@ void asin_tests(TCase *tc) {
     tcase_add_test(tc, asin_18);
     tcase_add_test(tc, asin_19);
     tcase_add_test(tc, asin_20);
+    UNUSED_SHIT(asin_tests);
 }

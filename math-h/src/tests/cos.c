@@ -229,4 +229,5 @@ void cos_tests(TCase *tc) {
     tcase_add_test(tc, cos_19);
     tcase_add_test(tc, cos_20);
     tcase_add_test(tc, cos_21);
+    UNUSED_SHIT(cos_tests);
 }

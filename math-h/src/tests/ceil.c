@@ -144,4 +144,5 @@ void ceil_tests(TCase *tc) {
     tcase_add_test(tc, ceil_14);
     tcase_add_test(tc, ceil_15);
     tcase_add_test(tc, ceil_16);
+    UNUSED_SHIT(ceil_tests);
 }

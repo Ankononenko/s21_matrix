@@ -257,4 +257,5 @@ void exp_tests(TCase *tc) {
     tcase_add_test(tc, exp_31);
     tcase_add_test(tc, exp_32);
     tcase_add_test(tc, exp_33);
+    UNUSED_SHIT(exp_tests);
 }
