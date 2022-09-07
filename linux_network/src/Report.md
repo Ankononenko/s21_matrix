@@ -67,3 +67,36 @@ _<h2 align="left"> Part 2. Static routing between two machines:</h2>_
 _View existing network interfaces with the ip a command:_ \
 <img src="../misc/images/my_screenshots/ip_a.png" alt="View existing network interfaces with the ip a command" width="800"/>
 
+Describe the network interface corresponding to the internal network on both machines and set the following addresses and masks: ws1 - 192.168.100.10, mask */16 *, ws2 - 172.24.116.8, mask /12:
+
+_ws1 - 192.168.100.10, mask */16 *, ws2 - 172.24.116.8, mask /12:_ \
+<img src="../misc/images/my_screenshots/set_ip_and_mask.png" alt="ws1 - 192.168.100.10, mask */16 *, ws2 - 172.24.116.8, mask /12" width="800"/>
+
+Run the netplan apply command to restart the network service:
+
+_Network restarted and changed took effect:_ \
+<img src="../misc/images/my_screenshots/netplan_apply.png" alt="Network restarted and changed took effect" width="800"/>
+
+_<h3 align="left"> 2.1. Adding a static route manually:</h3>_
+
+_Add a static route from one machine to another and back using a `$ ip r add` command and ping the connection between the machines:_ \
+<img src="../misc/images/my_screenshots/ip_r_add_and_ping.png" alt="Ip route added and the machines pinged" width="800"/>
+
+_<h3 align="left"> 2.2. Adding a static route with saving:</h3>_
+
+1. Restart the machines - `$ sudo reboot`.
+2. Add static route from one machine to another using etc/netplan/00-installer-config.yaml file.
+3. Ping the connection between the machines.
+
+_Static route added and pinged:_ \
+<img src="../misc/images/my_screenshots/static_route_and_ping.png" alt="Static route added and pinged" width="800"/>
+
+_<h2 align="left"> Part 3. iperf3 utility:</h2>_
+
+_<h3 align="left"> 3.1. Connection speed:</h3>_
+Convert and write results in the report: 8 Mbps to MB/s, 100 MB/s to Kbps, 1 Gbps to Mbps:
+
+8 Mbps to MB/s: 1MB/s
+100 MB/s to Kbps: 800 000 Kbps
+1 Gbps to Mbps: 1 000 Mbps
+
