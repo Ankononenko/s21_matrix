@@ -96,7 +96,40 @@ _<h2 align="left"> Part 3. iperf3 utility:</h2>_
 _<h3 align="left"> 3.1. Connection speed:</h3>_
 Convert and write results in the report: 8 Mbps to MB/s, 100 MB/s to Kbps, 1 Gbps to Mbps:
 
-8 Mbps to MB/s: 1MB/s
-100 MB/s to Kbps: 800 000 Kbps
+8 Mbps to MB/s: 1MB/s \
+100 MB/s to Kbps: 800 000 Kbps \
 1 Gbps to Mbps: 1 000 Mbps
+
+_<h3 align="left"> 3.2. iperf3 utility:</h3>_
+Measure connection speed between ws1 and ws2:
+
+To download iperf3 I need internet access set up. To do it I need to do the following:
+1. Turn on the second interface to be able to set up the Internet.
+2. Turn on DHCP for the second interface in the netplan.
+3. Netplan apply.
+4. Ping an address to be sure that it works.
+
+`$ sudo apt-get install iperf3` \
+On the server `$ iperf3 -s` \
+On the client `$ iperf3 -c 172.24.116.8 -p 5201`
+
+_Output of the speed measurement:_ \
+<img src="../misc/images/my_screenshots/iperf3_test.png" alt="Static route added and pinged" width="800"/>
+
+_<h2 align="left"> Part 4. Network firewall:</h2>_
+
+
+1. `$sudo vim /etc/firewall.sh` 
+2. Enter the flush and and delete chain commands:
+```
+#!/bin/sh
+
+# Deleting all the rules in the "filter" table (default).
+iptables -F
+iptables –X
+```
+3. Enter the iptable commands for ws1 and ws2 according to the instructions: 
+
+_firewall.sh for ws1 and ws2:_ \
+<img src="../misc/images/my_screenshots/firewall_sh.png" alt="firewall.sh for ws1 and ws2" width="800"/>
 
