@@ -97,8 +97,8 @@ _<h3 align="left"> 3.1. Connection speed:</h3>_
 Convert and write results in the report: 8 Mbps to MB/s, 100 MB/s to Kbps, 1 Gbps to Mbps:
 
 8 Mbps to MB/s: 1MB/s \
-100 MB/s to Kbps: 800 000 Kbps \
-1 Gbps to Mbps: 1 000 Mbps
+100 MB/s to Kbps: 819 200 Kbps (in binary) (* 8 * 1024), 800 000 Kbps (in decimal) (* 8 * 1000)\
+1 Gbps to Mbps: 1 024 Mbps
 
 _<h3 align="left"> 3.2. iperf3 utility:</h3>_
 Measure connection speed between ws1 and ws2:
@@ -133,3 +133,73 @@ iptables –X
 _firewall.sh for ws1 and ws2:_ \
 <img src="../misc/images/my_screenshots/firewall_sh.png" alt="firewall.sh for ws1 and ws2" width="800"/>
 
+4. `$ sudo chmod +x /etc/firewall.sh`
+5. `$ sudo /etc/firewall.sh`
+6. List the created rules: `$ sudo iptables -L`
+
+_Rules listed:_ \
+<img src="../misc/images/my_screenshots/iptables_L.png" alt="Rules listed" width="800"/>
+
+_Flags explained:_ \
+<img src="../misc/images/my_screenshots/iptables_flags.png" alt="Flags explained" width="800"/>
+
+7. Describe in the report the difference between the strategies used in the first and second files: \
+First suitable rule met is going to be executed. Rules that are applied after are going to be ignored.
+
+_<h2 align="left"> 4.2. nmap utility:</h2>_
+
+Use ping command to find a machine which is not pinged, then use nmap utility to show that the machine host is up.
+
+1. `$ sudo apt-get install nmap`
+
+_Contents of firewall.sh:_ \
+<img src="../misc/images/my_screenshots/contents_firewall.png" alt="Contents of firewall.sh" width="800"/>
+
+2. Add screenshots with the call and output of the ping and nmap commands to the report:
+
+_Ping and nmap:_ \
+<img src="../misc/images/my_screenshots/ping_and_nmap.png" alt="Ping and nmap" width="800"/>
+
+3. Save dumps of the virtual machines:
+
+_Exports to files:_ \
+<img src="../misc/images/my_screenshots/export_to_file.png" alt="Exports to files" width="800"/>
+
+_Shapshots:_ \
+<img src="../misc/images/my_screenshots/snapshot_ws1.png" alt="snapshot_ws1.png" width="800"/>
+<img src="../misc/images/my_screenshots/snapshot_ws2.png" alt="snapshot_ws2.png" width="800"/>
+
+_<h2 align="left"> Part 5. Static network routing:</h2>_
+
+_Start five virtual machines (3 workstations (ws11, ws21, ws22) and 2 routers (r1, r2)):_ \
+<img src="../misc/images/my_screenshots/five_vm_started.png" alt="Five virtual machines started" width="1600"/>
+
+_<h3 align="left"> 5.1. Configuration of machine addresses:</h3>_
+
+_Configuration of the machines applied in the netplan:_ \
+<img src="../misc/images/my_screenshots/netplan_written_for_5_machines.png" alt="Configuration of the machines applied in the netplan" width="800"/>
+
+_Check that the machine address is correct with the `$ ip -4 a` command. Also ping ws22 from ws21. Similarly ping r1 from ws11:_ \
+<img src="../misc/images/my_screenshots/ip_a_and_ping.png" alt="Ip a and ping result" width="1600"/>
+
+_<h3 align="left"> 5.2. Enabling IP forwarding:</h3>_
+
+`$ sysctl -w net.ipv4.ip_forward=1:` \
+<img src="../misc/images/my_screenshots/ip_forward_r1.png" alt="ip_forward_r1.png" width="800"/>
+<img src="../misc/images/my_screenshots/ip_forward_r2.png" alt="ip_forward_r2.png" width="800"/>
+
+`$ net.ipv4.ip_forward = 1` added to /etc/sysctl.conf: \
+<img src="../misc/images/my_screenshots/sysctl_conf_perm.png" alt="sysctl_conf_perm.png" width="800"/>
+
+_<h3 align="left"> 5.3. Default route configuration:</h3>_
+
+_Default gateway set:_ \
+<img src="../misc/images/my_screenshots/default_gateway_set.png" alt="default_gateway_set.png" width="800"/>
+
+_`$ ip r` command output:_ \
+<img src="../misc/images/my_screenshots/ip_r_command_output.png" alt="ip_r_command_output.png" width="800"/>
+
+_Ping r2 router from ws11 and show on r2 that the ping is reaching. To do this, use the `$ tcpdump -tn -i eth1`:_ \
+<img src="../misc/images/my_screenshots/ping_r2_from_w11.png" alt="ping_r2_from_w11.png" width="800"/>
+
+_<h3 align="left"> 5.4. Adding static routes:</h3>_
