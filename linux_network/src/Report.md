@@ -217,3 +217,19 @@ _Explain in the report why a different route other than 0.0.0.0/0 had been selec
 First IP and mask suits the route that is set in netplan (10.10.0.0/18) and the other one doesn't (one of the things that doesn't fit under the rule - 0.0.0.0/0 is out of the set mask), so it follows the default route set.
 
 _<h2 align="left"> 5.5. Making a router list:</h2>_
+
+_Traceroute utility output after adding a gateway and `$ tcpdump -tnv -i eth0`:_ \
+<img src="../misc/images/my_screenshots/traceroute_after_adding_gateway_and_tcpdump.png" alt="traceroute_after_adding_gateway_and_tcpdump.png" width="800"/>
+
+_Based on the output of the dump on r1, explain in the report how path construction works using traceroute:_ \
+First the data goes to the eth0 interface of the r1 router, then it gets routed to the second router using eth0 interface of r2 and finally gets routed to destination 10.20.0.10.
+
+_<h2 align="left"> 5.6. Using ICMP protocol in routing:</h2>_ 
+
+_`$ tcpdump -n -i eth0 icmp` command on the r1 and `$ ping -c 1 10.30.0.111` from the ws11 machine:_ \
+<img src="../misc/images/my_screenshots/ping_non_existent_with_tcpdump.png" alt="ping_non_existent_with_tcpdump.png" width="800"/>
+
+_Save dumps of the virtual machine images:_ \
+<img src="../misc/images/my_screenshots/snapshot_part_5_6.png" alt="snapshot_part_5_6.png" width="800"/>
+
+_<h2 align="left"> Part 6. Dynamic IP configuration using DHCP:</h2>_
