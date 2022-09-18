@@ -323,3 +323,24 @@ _Save dumps of virtual machine images:_ \
 <img src="../misc/images/my_screenshots/snapshots_part_7_finished.png" alt="snapshots_part_7_finished.png" width="800"/>
 
 _<h2 align="left"> Part 8. Bonus. Introduction to SSH Tunnels:</h2>_
+
+_Run a firewall on r2 with the rules from Part 7:_ \
+<img src="../misc/images/my_screenshots/run_firewall_on_r2.png" alt="run_firewall_on_r2.png" width="800"/>
+
+_In /etc/apache2/ports.conf file change the line Listen 80 to Listen 0.0.0.0:80 on ws22 and start the service:_ \
+<img src="../misc/images/my_screenshots/apache2_on_ws22_to_localhost.png" alt="apache2_on_ws22_to_localhost.png" width="800"/>
+
+_Use Local TCP forwarding from ws21 to ws22 to access the web server on ws22 from ws21 (`$ ssh -L [port]:localhost:80 finchren:[ip_of_the_machine]`):_
+<img src="../misc/images/my_screenshots/local_tcp_forwarding_using_ssh_ws22_from_ws21.png" alt="local_tcp_forwarding_using_ssh_ws22_from_ws21.png" width="800"/>
+
+_Use Remote TCP forwarding from ws11 to ws22 to access the web server on ws22 from ws11 (`$ ssh -R [port]:localhost:80 finchren:[ip_of_the_machine]`):_
+<img src="../misc/images/my_screenshots/remote_tcp_forwarding_using_ssh_ws22_from_ws11.png" alt="remote_tcp_forwarding_using_ssh_ws22_from_ws11.png" width="800"/>
+
+_Telnet port on ws21 - 6666:_ \
+<img src="../misc/images/my_screenshots/telnet_6666_from_ws21.png" alt="telnet_6666_from_ws21.png" width="800"/>
+
+_Telnet port on ws11 - 6667:_ \
+<img src="../misc/images/my_screenshots/telnet_6667_from_ws11.png" alt="telnet_6667_from_ws11.png" width="800"/>
+
+_Save dumps of virtual machine images:_ \
+<img src="../misc/images/my_screenshots/snapshot_part8_finished.png" alt="snapshot_part8_finished.png" width="800"/>
