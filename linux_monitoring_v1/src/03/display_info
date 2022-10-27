@@ -2,53 +2,56 @@
 
 display_info() {
 
+
+	clear='\033[0m'
+
 	# Show hostname
-	echo "HOSTNAME = $HOSTNAME"
+	printf "\033[0;${f1};${bg1}mHOSTNAME${clear}        = \033[0;${f2};${bg2}m$HOSTNAME${clear}\n"
 
 	# Show timezone
-	echo "TIMEZONE = $(< /etc/timezone)"
+	printf "\033[0;${f1};${bg1}mTIMEZONE${clear}        = \033[0;${f2};${bg2}m$(< /etc/timezone)${clear}\n"
 
 	# Show username
-	echo "USER = $USER"
+	printf "\033[0;${f1};${bg1}mUSER${clear}            = \033[0;${f2};${bg2}m$USER${clear}\n"
 
 	# Show type and verson of the operating system
-	echo "OS = $(hostnamectl | grep -oP '(?<=Operating System: ).*')"
+	printf "\033[0;${f1};${bg1}mOS${clear}              = \033[0;${f2};${bg2}m$(hostnamectl | grep -oP '(?<=Operating System: ).*')${clear}\n"
 
 	# Show date
-	echo "DATE = $(date '+%d %B %Y %H:%M:%S')"
+	printf "\033[0;${f1};${bg1}mDATE${clear}            = \033[0;${f2};${bg2}m$(date '+%d %B %Y %H:%M:%S')${clear}\n"
 
 	# Display the system's uptime
-	echo "UPTIME = $(uptime -p)"
+	printf "\033[0;${f1};${bg1}mUPTIME${clear}          = \033[0;${f2};${bg2}m$(uptime -p)${clear}\n"
 
 	# Display the system's uptime in seconds
 	uptime=$(</proc/uptime)
 	uptime=${uptime%%.*}
-	echo "UPTIME_SEC = $uptime"
+	printf "\033[0;${f1};${bg1}mUPTIME_SEC${clear}      = \033[0;${f2};${bg2}m$uptime${clear}\n"
 
 	# Display the IP of the local machine
-	echo "IP = $(hostname -I)"
+	printf "\033[0;${f1};${bg1}mIP${clear}              = \033[0;${f2};${bg2}m$(hostname -I)${clear}\n"
 
 	# Get the network mask
-	echo "MASK = $( ifconfig | grep -m2 'inet '| awk '{ if (NR==2) printf $4}' )"
+	printf "\033[0;${f1};${bg1}mMASK${clear}            = \033[0;${f2};${bg2}m$( ifconfig | grep -m2 'inet '| awk '{ if (NR==2) printf $4}' )${clear}\n"
 
 	# Display the default gateway
-	echo "GATEWAY = $( ip n | awk '{print $1 }' )"
+	printf "\033[0;${f1};${bg1}mGATEWAY${clear}         = \033[0;${f2};${bg2}m$( ip n | awk '{print $1 }' )${clear}\n"
 
 	# Display the total RAM in GB with three decimal places
-	echo "RAM_TOTAL = $( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$1 / 1024) }' ) GB"
+	printf "\033[0;${f1};${bg1}mRAM_TOTAL${clear}       = \033[0;${f2};${bg2}m$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$1 / 1024) }' ) GB${clear}\n"
 
 	# Display the used RAM in GBs with three decimal places
-	echo "RAM_USED = $( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$2 /1024) }' ) GB"
+	printf "\033[0;${f1};${bg1}mRAM_USED${clear}        = \033[0;${f2};${bg2}m$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$2 /1024) }' ) GB${clear}\n"
 
 	# Display the free RAM in GBs with three decimal places
-	echo "RAM_FREE = $( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$3 / 1024) }' ) GB"
+	printf "\033[0;${f1};${bg1}mRAM_FREE${clear}        = \033[0;${f2};${bg2}m$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$3 / 1024) }' ) GB${clear}\n"
 
 	# Display the size of the root partion in MBs with two decimal spaces
-	echo "SPACE_ROOT = $( df -hk / | awk 'sub(/dev/,""){printf("%.2f\n",$2 / 1024) }' ) MB"
+	printf "\033[0;${f1};${bg1}mSPACE_ROOT${clear}      = \033[0;${f2};${bg2}m$( df -hk / | awk 'sub(/dev/,""){printf("%.2f\n",$2 / 1024) }' ) MB${clear}\n"
 
 	# Display the used space of the root partion in MBs with two decimal places
-	echo "SPACE_ROOT_USED = $( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$3 / 1024) }' ) MB"
+	printf "\033[0;${f1};${bg1}mSPACE_ROOT_USED${clear} = \033[0;${f2};${bg2}m$( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$3 / 1024) }' ) MB${clear}\n"
 
 	# Display the free space of the root partion in MBs with two decimal places
-	echo "SPACE_ROOT_FREE = $( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$4 / 1024) }' ) MB"
+	printf "\033[0;${f1};${bg1}mSPACE_ROOT_FREE${clear} = \033[0;${f2};${bg2}m$( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$4 / 1024) }' ) MB${clear}\n"
 }
