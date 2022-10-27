@@ -1,36 +1,108 @@
 #!/bin/bash
 
 . ./display_info
-display_info
 
-white_font='\033[0;37m'
-white_bg='\033[0;47m'
-red_font='\033[031;m'
-red_bg='\033[041;m'
-green_font='\033[032;m'
-green_bg='\033[042;m'
-blue_font='\033[034;m'
-blue_bg='\033[044;m'
-purple_font='\033[035;m'
-purple_bg='\033[045;m'
-black_font='\033[030;m'
-black_bg='\033[040;m'
-
-clear='\033[0m'
+white_font='37'
+white_bg='47'
+red_font='31'
+red_bg='41'
+green_font='32'
+green_bg='42'
+blue_font='34'
+blue_bg='44'
+purple_font='35'
+purple_bg='45'
+black_font='30'
+black_bg='40'
 
 case $1 in
 	1)
-		background_value_names=$white_bg
-		printf "${background_value_names}Test${clear}\n"
-		printf "${white_bg}Test${clear}\n"
+		bg1=$white_bg
 		;;
 	2)
-		echo 2
+		bg1=$red_bg
 		;;
 	3)
-		echo 3
+		bg1=$green_bg
 		;;
-	*)
-		echo "unknown"
+	4)
+		bg1=$blue_bg
+		;;
+	5)
+		bg1=$purple_bg
+		;;
+	6)
+		bg1=$black_bg
 		;;
 esac
+
+case $2 in
+	1)
+		f1=$white_font
+		;;
+	2)
+		f1=$red_font
+		;;
+	3)
+		f1=$green_font
+		;;
+	4)
+		f1=$blue_font
+		;;
+	5)
+		f1=$purple_font
+		;;
+	6)
+		f1=$black_font
+		;;
+esac
+
+
+case $3 in
+	1)
+		bg2=$white_bg
+		;;
+	2)
+		bg2=$red_bg
+		;;
+	3)
+		bg2=$green_bg
+		;;
+	4)
+		bg2=$blue_bg
+		;;
+	5)
+		bg2=$purple_bg
+		;;
+	6)
+		bg2=$black_bg
+		;;
+esac
+
+
+case $4 in
+	1)
+		f2=$white_font
+		;;
+	2)
+		f2=$red_font
+		;;
+	3)
+		f2=$green_font
+		;;
+	4)
+		f2=$blue_font
+		;;
+	5)
+		f2=$purple_font
+		;;
+	6)
+		f2=$black_font
+		;;
+esac
+
+#clear='\033[0m'
+#printf "\033[0;${f1};${bg1}mFinal test${clear}\n"
+#echo -e "\033[9;${f2};${bg2}mTest test${clear}\n"
+
+display_info
