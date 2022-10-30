@@ -1,57 +1,53 @@
 #!bin/bash
 
-display_info() {
+clear='\033[0m'
 
+# Show hostname
+printf "${f1}${bg1}HOSTNAME${clear}        = ${f2}${bg2}$HOSTNAME${clear}\n"
 
-	clear='\033[0m'
+# Show timezone
+printf "${f1}${bg1}TIMEZONE${clear}        = ${f2}${bg2}$(< /etc/timezone)${clear}\n"
 
-	# Show hostname
-	printf "${f1}${bg1}HOSTNAME${clear}        = ${f2}${bg2}$HOSTNAME${clear}\n"
+# Show username
+printf "${f1}${bg1}USER${clear}            = ${f2}${bg2}$USER${clear}\n"
 
-	# Show timezone
-	printf "${f1}${bg1}TIMEZONE${clear}        = ${f2}${bg2}$(< /etc/timezone)${clear}\n"
+# Show type and verson of the operating system
+printf "${f1}${bg1}OS${clear}              = ${f2}${bg2}$(hostnamectl | grep -oP '(?<=Operating System: ).*')${clear}\n"
 
-	# Show username
-	printf "${f1}${bg1}USER${clear}            = ${f2}${bg2}$USER${clear}\n"
+# Show date
+printf "${f1}${bg1}DATE${clear}            = ${f2}${bg2}$(date '+%d %B %Y %H:%M:%S')${clear}\n"
 
-	# Show type and verson of the operating system
-	printf "${f1}${bg1}OS${clear}              = ${f2}${bg2}$(hostnamectl | grep -oP '(?<=Operating System: ).*')${clear}\n"
+# Display the system's uptime
+printf "${f1}${bg1}UPTIME${clear}          = ${f2}${bg2}$(uptime -p)${clear}\n"
 
-	# Show date
-	printf "${f1}${bg1}DATE${clear}            = ${f2}${bg2}$(date '+%d %B %Y %H:%M:%S')${clear}\n"
+# Display the system's uptime in seconds
+uptime=$(</proc/uptime)
+uptime=${uptime%%.*}
+printf "${f1}${bg1}UPTIME_SEC${clear}      = ${f2}${bg2}$uptime${clear}\n"
 
-	# Display the system's uptime
-	printf "${f1}${bg1}UPTIME${clear}          = ${f2}${bg2}$(uptime -p)${clear}\n"
+# Display the IP of the local machine
+printf "${f1}${bg1}IP${clear}              = ${f2}${bg2}$(hostname -I)${clear}\n"
 
-	# Display the system's uptime in seconds
-	uptime=$(</proc/uptime)
-	uptime=${uptime%%.*}
-	printf "${f1}${bg1}UPTIME_SEC${clear}      = ${f2}${bg2}$uptime${clear}\n"
+# Get the network mask
+printf "${f1}${bg1}MASK${clear}            = ${f2}${bg2}$( ifconfig | grep -m2 'inet '| awk '{ if (NR==2) printf $4}' )${clear}\n"
 
-	# Display the IP of the local machine
-	printf "${f1}${bg1}IP${clear}              = ${f2}${bg2}$(hostname -I)${clear}\n"
+# Display the default gateway
+printf "${f1}${bg1}GATEWAY${clear}         = ${f2}${bg2}$( ip n | awk '{print $1 }' )${clear}\n"
 
-	# Get the network mask
-	printf "${f1}${bg1}MASK${clear}            = ${f2}${bg2}$( ifconfig | grep -m2 'inet '| awk '{ if (NR==2) printf $4}' )${clear}\n"
+# Display the total RAM in GB with three decimal places
+printf "${f1}${bg1}RAM_TOTAL${clear}       = ${f2}${bg2}$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$1 / 1024) }' ) GB${clear}\n"
 
-	# Display the default gateway
-	printf "${f1}${bg1}GATEWAY${clear}         = ${f2}${bg2}$( ip n | awk '{print $1 }' )${clear}\n"
+# Display the used RAM in GBs with three decimal places
+printf "${f1}${bg1}RAM_USED${clear}        = ${f2}${bg2}$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$2 /1024) }' ) GB${clear}\n"
 
-	# Display the total RAM in GB with three decimal places
-	printf "${f1}${bg1}RAM_TOTAL${clear}       = ${f2}${bg2}$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$1 / 1024) }' ) GB${clear}\n"
+# Display the free RAM in GBs with three decimal places
+printf "${f1}${bg1}RAM_FREE${clear}        = ${f2}${bg2}$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$3 / 1024) }' ) GB${clear}\n"
 
-	# Display the used RAM in GBs with three decimal places
-	printf "${f1}${bg1}RAM_USED${clear}        = ${f2}${bg2}$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$2 /1024) }' ) GB${clear}\n"
+# Display the size of the root partion in MBs with two decimal spaces
+printf "${f1}${bg1}SPACE_ROOT${clear}      = ${f2}${bg2}$( df -hk / | awk 'sub(/dev/,""){printf("%.2f\n",$2 / 1024) }' ) MB${clear}\n"
 
-	# Display the free RAM in GBs with three decimal places
-	printf "${f1}${bg1}RAM_FREE${clear}        = ${f2}${bg2}$( free -m | awk 'sub(/Mem:/,""){printf("%.3f\n",$3 / 1024) }' ) GB${clear}\n"
+# Display the used space of the root partion in MBs with two decimal places
+printf "${f1}${bg1}SPACE_ROOT_USED${clear} = ${f2}${bg2}$( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$3 / 1024) }' ) MB${clear}\n"
 
-	# Display the size of the root partion in MBs with two decimal spaces
-	printf "${f1}${bg1}SPACE_ROOT${clear}      = ${f2}${bg2}$( df -hk / | awk 'sub(/dev/,""){printf("%.2f\n",$2 / 1024) }' ) MB${clear}\n"
-
-	# Display the used space of the root partion in MBs with two decimal places
-	printf "${f1}${bg1}SPACE_ROOT_USED${clear} = ${f2}${bg2}$( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$3 / 1024) }' ) MB${clear}\n"
-
-	# Display the free space of the root partion in MBs with two decimal places
-	printf "${f1}${bg1}SPACE_ROOT_FREE${clear} = ${f2}${bg2}$( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$4 / 1024) }' ) MB${clear}\n"
-}
+# Display the free space of the root partion in MBs with two decimal places
+printf "${f1}${bg1}SPACE_ROOT_FREE${clear} = ${f2}${bg2}$( df -hk / | awk 'sub(/dev/,""){printf("%.2f",$4 / 1024) }' ) MB${clear}\n"
