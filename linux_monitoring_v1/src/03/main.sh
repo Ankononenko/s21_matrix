@@ -2,18 +2,18 @@
 
 . ./display_info
 
-white_font='37'
-white_bg='47'
-red_font='31'
-red_bg='41'
-green_font='32'
-green_bg='42'
-blue_font='34'
-blue_bg='44'
-purple_font='35'
-purple_bg='45'
-black_font='30'
-black_bg='40'
+white_font='\033[0;37;'
+white_bg='47m'
+red_font='\033[0;31;'
+red_bg='41m'
+green_font='\033[0;32;'
+green_bg='42m'
+blue_font='\033[0;34;'
+blue_bg='44m'
+purple_font='\033[0;35;'
+purple_bg='45m'
+black_font='\033[0;30;'
+black_bg='40m'
 
 bg1_result=0
 f1_result=0
@@ -148,7 +148,8 @@ then
 	then
 		# Shoud replace that part of code - clean the previous colors and ask the input again
 		printf "\033[0m"
-		bash main.sh
+		read -p "Please enter the color for the output again"  bg1 f1 bg2 f2
+
 	else
 		exit
 	fi
@@ -161,9 +162,5 @@ then
 	echo "Where 1 - white, 2 - ted, 3 - green, 4 - blue, 5 - purple, 5 - black"
 	exit
 fi
-
-#clear='\033[0m'
-#printf "\033[0;${f1};${bg1}mFinal test${clear}\n"
-#echo -e "\033[9;${f2};${bg2}mTest test${clear}\n"
 
 display_info
