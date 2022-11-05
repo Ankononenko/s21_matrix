@@ -33,4 +33,36 @@ echo "Archive files = $num_archives"
 num_sym_links=$(find $1 -type l | wc -l)
 echo "Symbolic links = $num_sym_links"
 
+# Top 10 files with the largest size in descending order (path, size and type)
+echo "TOP 10 files of maximum size arranged in descending order (path, size and type:"
+for index in {1..10}
+do
+	file_max=$(find $1 -type f -exec du -h {} + | sort -rh | head -10 | sed "${index}q;d")
+	if ! [[ -z $file_max ]]
+	then
+		echo -n "$index - "
+		echo -n "$(echo $file_max | awk '{print $2}'), "
+		echo -n "$(echo $file_max | awk '{print $1}'), "
+		echo "$(echo $file_max | grep -m 1 -o -E "\.[^/.]+$" | awk -F . '{print $2}')"
+	else
+		echo "No files found"
+	fi
+done
 
+# Top 10 executable files with the largest size in descending order (path, size and hash)
+for index in {1..10}
+do
+	exe_file_max=$(find $1 -type f -executable -exec du -h {} + | sort -rh | head -10 | sed "${index}q;d")
+	if ! [[ -z $exe_file_max ]]
+	then
+		echo -n "$index - "
+		echo -n "$(echo $exe_file_max | awk '{print $2}'), "
+		echo -n "$(echo $exe_file_max | awk '{print $1}'), "
+
+		path_exe_file_max=$(echo $exe_file_max | awk '{print $2}')
+		MD5_exe_file_max=$(md5sum $path_exe_file_max | awk '{print $1}')
+		echo "$MD5_exe_file_max"
+	else
+		echo "No executables found"
+	fi
+done
