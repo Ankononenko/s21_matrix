@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Check the existance of the variables
-if [ ! -z "$2" ] || [ -z "$1" ]
+if [ ! -z "$2" ]
 then
-	echo "There can be only one path"
+	echo "There can be only one path to a folder"
 	exit 1
 fi
 
