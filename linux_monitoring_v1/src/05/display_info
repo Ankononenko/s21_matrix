@@ -50,6 +50,7 @@ do
 done
 
 # Top 10 executable files with the largest size in descending order (path, size and hash)
+echo "TOP 10 executable files of the maximum size arranged in descending order (path, size and MD5 hash of file)"
 for index in {1..10}
 do
 	exe_file_max=$(find $1 -type f -executable -exec du -h {} + | sort -rh | head -10 | sed "${index}q;d")
