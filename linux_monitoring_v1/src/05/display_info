@@ -17,6 +17,10 @@ echo "Number of:"
 num_conf=$(find $1 -type f -name "*.conf" | wc -l)
 echo "Configuration files (with the .conf extension) = $num_conf"
 
+# Number of text files
+num_text=$(find $1 -type f -name "*.txt" | wc -l)
+echo "Text files = $num_text"
+
 # Number of executable files
 num_exec=$(find $1 -type f -executable | wc -l)
 echo "Executable files = $num_exec"
