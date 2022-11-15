@@ -1,0 +1,29 @@
+#!/bin/bash/
+
+function create_folders {
+
+folder_name=""
+
+for (( index_n_f=0; index_n_f<num_folders; ++index_n_f ))
+do
+	folder_name+="${folder_names: 0:1}"
+	#TODO: implement repetition of chars for bigger amout of folders
+	counter_to_repeat=1
+	for (( index_f_n=1; index_f_n<=${#folder_names}; ++index_f_n ))
+	do
+		last_char="${folder_name: -1}"
+		current_char="${folder_names: index_f_n:1}"
+		if [[ $last_char != $current_char ]]
+		then
+			folder_name+=$current_char
+		fi
+	done
+	
+	folder_name+="_"
+	folder_name+=$(date +"%d%m%y")
+	echo $folder_name
+	folder_name=""
+	counter_to_repeat=1
+done
+
+}
