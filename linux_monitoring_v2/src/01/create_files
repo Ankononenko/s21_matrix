@@ -1,0 +1,82 @@
+#!/bin/bash/
+
+. ./check_empty_space
+
+function create_files {
+
+file_name=""
+counter_to_repeat_f=1
+name_w_ex=$(basename -- "$file_names")
+extension="${name_w_ex##*.}"
+name_w_ex="${name_w_ex%.*}"
+index_file_char_for_unique=0
+current_char="${name_w_ex: index_file_char:1}"
+unique_char=$(get_unique_char)
+max_length=240
+
+for dir in $(find $path -maxdepth 1 -mindepth 1 -type d); do
+  index_files=0
+  while [ $index_files -lt $num_files ]; do
+
+    free_space=$(check_empty_space)
+    if [[ $free_space == "Enough free space" ]]; then
+
+    # TODO: function to generate name for the file 
+
+    # While we are below the max filename length and there are still files to generate we repeat the current char
+    filename_length=${#file_name}
+    while [ $index_file -lt $num_files ] && [ $filename_length -le $max_length ]; do
+
+      for (( index_file_name=0; index_file_name<${#name_w_ex}; ++index_file_name  ))
+      do
+	# Here I add repeated chars. For example: a aa aaa aaaa
+        if [[ $index_file_name -eq $index_file_char_unique ]]
+        then
+          for (( index_repeat=0; index_repeat<counter_to_repeat; ++index_repeat ))
+	  do
+	  file_name+=$unique_char
+	  done
+        ((++index_file_name))
+        fi
+
+        # Here I should add current unique char. For example: bcdedg
+	last_char_ff="${file_name: -1}"
+	current_char_ff="${name_w_ex: index_file_name:1}"
+        if [[  $last_char_ff != $current_char_ff ]]
+	then
+	  file_name+=$current_char_ff
+        fi
+
+      done
+
+      fallocate -l $file_size"KB" $dir/$name_w_ex"."$extension
+      ((++index_files))
+      ((++counter_to_repeat_f))
+   done
+   ((++index_file_char_for_unique))
+   counter_to_repeat=0
+   unique_char=$(get_unique_char)
+
+    else
+      echo "There is less than 1GB free space left. Script will stop creating files"
+      exit 1
+    fi
+  done
+done
+
+}
+
+function get_unique_char {
+
+  local current_char="${name_w_ex: index_file_char_for_unique:1}"
+  local next_chat="${name_w_ex: index_file_char_for_unique+1:1}"
+
+  while [[ $current_char == $next_char ]]
+  do
+    ((++index_file_char_for_unique))
+  done
+
+  next_unique_char=current_char
+  echo $next_unique_char
+
+}
