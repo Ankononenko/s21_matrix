@@ -22,7 +22,8 @@ do
 	
 	folder_name+="_"
 	folder_name+=$(date +"%d%m%y")
-	mkdir $path$folder_name
+	mkdir $path/$folder_name
+	echo "Folder created: $(pwd $path)/$folder_name/ - $(date +"%d-%m-%Y") - $(du -h $path/$folder_name/ | awk '{print $1}')" >> log_file.log
 	folder_name=""
 	((++counter_to_repeat))
 done
