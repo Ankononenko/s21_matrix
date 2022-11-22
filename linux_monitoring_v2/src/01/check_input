@@ -62,18 +62,21 @@ fi
 
 # Check the filename
 filename_and_ext=$5
-strings=$(echo $filename_and_ext | tr "." "\n")
-filename=${strings[0]}
-ext=${strings[1]}
-echo "$filename"
-echo "$ext"
-last_string_len=${#strings[2]}
-echo "$last_string_len"
-if [ ! -z "$strings[2]" ]
+regex="^[a-zA-Z]{1,7}[.][a-zA-Z]{1,3}$"
+if ! [[ $filename_and_ext =~ $regex ]] 
 then
-	echo "There should be only one dot"
+	echo "Input should be only like the following: string.exe"
+	echo "First part should be >= 1 && <= 7"
+	echo "Second part should be >= 1 && <= 3"
 	exit 1
 fi
 
+# Check the file size
+filesize=$6
+if [[ filesize -le 0 ]] || [[ filesize -gt 100 ]]
+then
+	echo "Filesize cannot be zero, negative or greater than 100"
+	exit 1
+fi
 
 }
