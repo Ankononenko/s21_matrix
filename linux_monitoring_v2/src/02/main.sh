@@ -12,13 +12,11 @@ free_space=$(check_empty_space)
 if [[ $free_space == "Enough free space" ]]; then
 
 	path=test
-	num_folders=3
 	folder_names=$1
-	create_folders $path $num_folders $folder_names
-	num_files=4
+	#create_folders $path $folder_names
 	file_names=$2
 	file_size=$3
-	create_files $num_files $file_names $file_size
+	create_files $path $file_names $file_size
 else
 	echo "There isn't enough free space left"
 	echo "Should be over 1GB left to run the script"
