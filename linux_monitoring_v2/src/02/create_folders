@@ -6,8 +6,18 @@ function create_folders {
 
 folder_name=""
 counter_to_repeat=1
+num_folders=$(( $RANDOM % 3 + 1 ))
 
-while [[ $free_space == "Enough free space" ]]; do
+# I probably need to replace while loop with a for loop with a random number of folders
+# When the folders get created the files get created from the main.sh
+# And in the file creation I can call create folder function again to 
+# Make more folder if needed
+# Or there is another way to do this - call create file function each time that a folder is created
+# And fill the created folder with files
+# CALL IN MAIN WHILE THERE IS ENOUGH FREE SPACE
+for (( num_folders_index=0; num_folders_index<$num_folders; ++num_folders_index )); do
+
+#while [[ $free_space == "Enough free space" ]]; do
 
 	for dir in $(find $path -maxdepth 100 -mindepth 1 -type d); do
 		
@@ -48,4 +58,5 @@ while [[ $free_space == "Enough free space" ]]; do
 #	fi
 
 done
+#done
 }
