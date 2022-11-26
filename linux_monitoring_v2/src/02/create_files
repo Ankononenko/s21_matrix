@@ -11,14 +11,15 @@ extension="${name_with_ex##*.}"
 name_without_ex="${name_with_ex%.*}"
 name_without_ex_length=${#name_without_ex}
 max_repetitions=235
-num_files=$(( $RANDOM % 3 + 1 ))
+num_files=$(( $RANDOM % 100 + 1 ))
 created_files=0
 counter_to_repeat_file=0
 
 free_space=$(check_empty_space)
 
-for dir in $(find $path -type d -name '*231122*'); do
+for dir in $(find $path -maxdepth 100 -mindepth 1 -type d -name '*261122*'); do
 	echo $dir
+	echo $num_files
 	while [[ $free_space == "Enough free space" ]] && [ $created_files -le $num_files ]; do
 		file_name=$(generate_filename)
 		file_name+="_"
