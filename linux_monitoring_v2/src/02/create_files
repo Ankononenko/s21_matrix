@@ -11,15 +11,16 @@ extension="${name_with_ex##*.}"
 name_without_ex="${name_with_ex%.*}"
 name_without_ex_length=${#name_without_ex}
 max_repetitions=235
-num_files=$(( $RANDOM % 100 + 1 ))
+#num_files=$(( $RANDOM % 99 + 1 ))
+num_files=99
 created_files=0
 counter_to_repeat_file=0
 
 free_space=$(check_empty_space)
+max_file_name_len=250
+file_name_len=0
 
-for dir in $(find $path -maxdepth 100 -mindepth 1 -type d -name '*261122*'); do
-	echo $dir
-	echo $num_files
+for dir in $(find $path -maxdepth 100 -mindepth 1 -type d -name '*271122*'); do
 	while [[ $free_space == "Enough free space" ]] && [ $created_files -le $num_files ]; do
 		file_name=$(generate_filename)
 		file_name+="_"
@@ -29,12 +30,16 @@ for dir in $(find $path -maxdepth 100 -mindepth 1 -type d -name '*261122*'); do
 		echo "File created: $(pwd $dir)/$file_name"."$extension - $(date +"%d-%m-%Y") - $(du -h $dir/$file_name"."$extension | awk '{print $1}')" >> log_file.log
 		if [[ $counter_to_repeat -lt $max_repetitions ]]; then
 			((++counter_to_repeat_file))
-		else
+		fi
+		if [[ $counter_to_repeat -ge $max_repetitions ]] || [[ $file_name_len -ge $max_file_name_len ]]; then
 			counter_to_repeat_file=0
 			((++index_to_repeat_file))
 		fi
 		free_space=$(check_empty_space)
+		file_name_len=${#file_name}
 	done
+	created_files=0
+	index_to_repeat_file=0
 done
 
 }
