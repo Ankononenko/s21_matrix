@@ -14,12 +14,8 @@ folder_names=$1
 file_names=$2
 file_size=$3
 
-#if [[ $free_space == "Enough free space" ]]; then
-while [[ $free_space == "Enough free space" ]]
-do
-	create_folders $path $folder_names
-	create_files $path $file_names $file_size
-done
+create_folders $path $folder_names
+create_files $path $file_names $file_size
 
 if ! [[ $free_space == "Enough free space" ]]; then
 	echo "There isn't enough free space left"
