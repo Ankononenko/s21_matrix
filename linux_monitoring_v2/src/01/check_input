@@ -72,7 +72,8 @@ then
 fi
 
 # Check the file size
-filesize=$6
+filesize_full=$(basename -- "$6")
+filesize="${filesize_full%k*}"
 if [[ filesize -le 0 ]] || [[ filesize -gt 100 ]]
 then
 	echo "Filesize cannot be zero, negative or greater than 100"
