@@ -36,22 +36,13 @@ for dir in $(find $path -maxdepth 100 -mindepth 1 -type d); do
 			complete_path+="$dir"
 			complete_path+="$folder_name"
 			current_path_len=${#complete_path}
-			if [[ $current_path_len -ge $max_path_len ]]; then
-				break
-			fi
 			mkdir $dir/$folder_name
-			#create_files
-			echo "Folder created: $(pwd $dir)/$folder_name/ - $(date +"%d-%m-%Y") - $(du -h $dir/$folder_name/ | awk '{print $1}')" >> log_file.log
+			echo "Folder created: $(pwd $dir)/$dir/$folder_name/ - $(date +"%d-%m-%Y") - $(du -h $dir/$folder_name/ | awk '{print $1}')" >> log_file.log
 			folder_name=""
 			((++counter_to_repeat))
 		fi
 	done
 	
-	if [[ $current_path_let -gt max_path_len ]]; then
-		counter_to_repeat=1
-	else
-		((++counter_to_repeat))
-	fi
 	counter_to_repeat=1
 done
 }
