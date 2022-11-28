@@ -22,7 +22,7 @@ for dir in $(find $path -maxdepth 1 -mindepth 1 -type d); do
 			file_name=$(generate_filename)
 			file_name+="_"
 			file_name+=$(date +"%d%m%y")
-			fallocate -l $file_size"KB" $dir/$file_name"."$extension
+			fallocate -l $filesize"KB" $dir/$file_name"."$extension
 			((++index_files))
 			echo "File created: $(pwd $path)/$dir/$file_name"."$extension - $(date +"%d-%m-%Y") - $(du -h $dir/$file_name"."$extension | awk '{print $1}')" >> log_file.log
 			if [[ $counter_to_repeat -lt $max_repetitions ]]
