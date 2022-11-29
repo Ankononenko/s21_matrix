@@ -1,52 +1,82 @@
 #!/bin/bash/
 
-function check_input {
+. ./check_empty_space
 
-# Check the num of variables
-num_arv=3
-if [ $# -ne $num_arv ]
-then
-	echo "There should be only 3 parameters. No more, no less"
-	# 7 - Argument list is too long code
-	exit 7
-fi
+function create_files {
 
-# Check the number of chars for folders
-max_char_folder_name=7
-len_folder_name=${#1}
-if [ $len_folder_name -gt $max_char_folder_name ]
-then
-	echo "Folder name shouldn't be greater than 7 chars"
-	# 36 - File name too long
-	exit 36
-fi
+file_name=""
+index_to_repeat_file=0
+name_with_ex=$(basename -- "$file_names")
+extension="${name_with_ex##*.}"
+name_without_ex="${name_with_ex%.*}"
+name_without_ex_length=${#name_without_ex}
+max_repetitions=235
+num_files=$(( $RANDOM % 99 + 1 ))
+#num_files=99
+created_files=0
+counter_to_repeat_file=0
 
-# Check if the folder name is only letters
-folder_name=$1
-if [[ "${folder_name}" =~ [^a-zA-Z] ]]
-then
-	echo "Folder name should contain only letters"
-	exit 1
-fi
+free_space=$(check_empty_space)
+max_file_name_len=250
+file_name_len=0
+current_date=$(date +"%d%m%y")
 
-# Check the filename
-filename_and_ext=$2
-regex="^[a-zA-Z]{1,7}[.][a-zA-Z]{1,3}$"
-if ! [[ $filename_and_ext =~ $regex ]] 
-then
-	echo "Input of the file should be only like the following: string.exe"
-	echo "First part should be at least 1 char long and no more than 7 chars long"
-	echo "Second part should be at least 1 char long and no more than 3 chars long"
-	exit 1
-fi
-
-# Check the file size
-filesize_with_size_type=$(basename -- "$3")
-filesize="${filesize_with_size_type%M*}"
-if [[ filesize -le 0 ]] || [[ filesize -gt 100 ]]
-then
-	echo "Filesize cannot be zero, negative or greater than 100"
-	exit 1
-fi
+for dir in $(find $path -maxdepth 100 -mindepth 1 -type d -name "*$current_date*"); do
+	while [[ $free_space == "Enough free space" ]] && [ $created_files -le $num_files ]; do
+		file_name=$(generate_filename)
+		file_name+="_"
+		file_name+=$(date +"%d%m%y")
+		fallocate -l $filesize"MB" $dir/$file_name"."$extension
+		((++created_files))
+		echo "File created: $(pwd $dir)/$dir/$file_name"."$extension - $(date +"%d-%m-%Y") - $(du -h $dir/$file_name"."$extension | awk '{print $1}')" >> log_file.log
+		if [[ $counter_to_repeat -lt $max_repetitions ]]; then
+			((++counter_to_repeat_file))
+		fi
+		if [[ $counter_to_repeat -ge $max_repetitions ]] || [[ $file_name_len -ge $max_file_name_len ]]; then
+			counter_to_repeat_file=0
+			((++index_to_repeat_file))
+		fi
+		free_space=$(check_empty_space)
+		file_name_len=${#file_name}
+	done
+	created_files=0
+	index_to_repeat_file=0
+done
 
 }
+
+
+function generate_filename {
+
+	file_name_g_f=""
+
+	for (( letter_index=0; letter_index<$name_without_ex_length; ++letter_index ))
+	do
+		last_char_g_f="${file_name: -1}"
+		current_char_g_f="${name_without_ex: letter_index:1}"
+		if [[ $last_char_g_f != $current_char_g_f ]]
+		then
+			file_name_g_f+=$current_char_g_f;
+		fi
+
+		if [[ $letter_index -eq index_to_repeat_file ]]
+		then
+			for (( repeat_index=0; repeat_index<counter_to_repeat_file; ++repeat_index))
+			do
+			file_name_g_f+=$current_char_g_f;
+			done
+		fi
+	done
+
+	file_name_g_f_len=${#file_name_g_f}
+	last_char_file_name_g_f="${file_name_g_f: -1}"
+	while [ $file_name_g_f_len -lt 5 ]
+	do
+		file_name_g_f+=$last_char_file_name_g_f;
+		((++file_name_g_f_len))
+	done
+
+	echo $file_name_g_f
+
+}
+
