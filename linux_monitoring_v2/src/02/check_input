@@ -41,7 +41,8 @@ then
 fi
 
 # Check the file size
-filesize=$3
+filesize_with_size_type=$(basename -- "$3")
+filesize="${filesize_with_size_type%M*}"
 if [[ filesize -le 0 ]] || [[ filesize -gt 100 ]]
 then
 	echo "Filesize cannot be zero, negative or greater than 100"
