@@ -13,7 +13,7 @@ check_input $@
 
 
 free_space=$(check_empty_space)
-path=/home
+path=test
 folder_names=$1
 file_names=$2
 file_size=$3
