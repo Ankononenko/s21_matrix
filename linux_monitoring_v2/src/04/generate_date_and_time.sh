@@ -33,18 +33,43 @@ day=$(( $RANDOM % $max_day + 1 ))
 day=$(insert_zero $day)
 
 max_hour=24
-hour=$(( $RANDOM % $max_hour + 1))
-hour=$(insert_zero $hour)
-if [[ $hour == "$max_hour" ]]; then
-	hour="00"
-fi
+hour=$(( $RANDOM % 24))
 
 max_minute=59
-minute=$(( $RANDOM % $max_minute + 1))
-minute=$(insert_zero $minute)
+max_start_minute=42
+minute=$(( $RANDOM % $max_start_minute + 1))
 
 max_second=59
 second=$(( $RANDOM % $max_second + 1))
-second=$(insert_zero $second)
 
-echo "$year-$month-$day $hour:$minute:$second"
+
+max_repetitions=1000
+min_repetitions=100
+diff_repetitions=$max_repetitions-$min_repetitions
+number_of_lines=$(( $RANDOM % $diff_repetitions + $min_repetitions ))
+if [[ $number_of_lines -lt $min_repetitions ]]; then
+	number_of_lines=100
+fi
+
+for (( repetitions = 0; repetitions <= $number_of_lines; ++repetitions )); do
+	hour_s=$(insert_zero $hour)
+	if [[ $hour_s == "$max_hour" ]]; then
+		hour_s="00"
+	fi
+	minute_s=$(insert_zero $minute)
+	second_s=$(insert_zero $second)
+	echo "$year-$month-$day $hour_s:$minute_s:$second_s"
+	max_step_for_the_clock=60
+	second=$(( $RANDOM % $max_step_for_the_clock + 1 + $second ))
+	if [[ $second -gt $max_second ]]; then
+		second=0
+		((++minute))
+	fi
+	if [[ $minute -gt $max_minute ]]; then
+		minute=0
+		((++hour))
+	fi
+	if [[ $hour -eq $max_hour ]]; then
+		break;
+	fi
+done
