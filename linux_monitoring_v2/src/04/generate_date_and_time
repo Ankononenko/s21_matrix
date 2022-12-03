@@ -17,6 +17,44 @@ year=$(( $RANDOM % diff + min_year ))
 max_month=12
 month=$(( $RANDOM % max_month  + 1 ))
 leap_year=$(( year % 4 ))
+case $month in
+	1)
+		month_s="Jan"
+		;;
+	2)
+		month_s="Feb"
+		;;
+	3)
+		month_s="Mar"
+		;;
+	4)
+		month_s="Apr"
+		;;
+	5)
+		month_s="May"
+		;;
+	6)
+		month_s="Jun"
+		;;
+	7)
+		month_s="Jul"
+		;;
+	8)
+		month_s="Aug"
+		;;
+	9)
+		month_s="Sep"
+		;;
+	10)
+		month_s="Oct"
+		;;
+	11)
+		month_s="Nov"
+		;;
+	12)
+		month_s="Dec"
+		;;
+esac
 month=$(insert_zero $month)
 month_without_zero=${month#0}
 if [[ $month_without_zero  -eq 1 ]] || [[ $month_without_zero -eq 3 ]] || [[ $month_without_zero -eq 5 ]] || [[ $month_without_zero -eq 7 ]] || [[ $month_without_zero -eq 8 ]] || [[ $month_without_zero -eq 10 ]] || [[ $month_without_zero -eq 12 ]]; then
@@ -41,3 +79,4 @@ minute=$(( $RANDOM % $max_start_minute + 1))
 
 max_second=59
 second=$(( $RANDOM % $max_second + 1))
+
