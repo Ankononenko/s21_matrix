@@ -15,7 +15,7 @@ max_repetitions=235
 for dir in $(find $path -maxdepth 1 -mindepth 1 -type d); do
 	index_files=0
 	counter_to_repeat=0
-	while [ $index_files -le $num_files ]; do
+	while [ $index_files -lt $num_files ]; do
 		free_space=$(check_empty_space)
 		if [[ $free_space == "Enough free space" ]]; then
 
