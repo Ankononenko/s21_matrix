@@ -8,8 +8,8 @@
 . ./generate_bytes
 . ./generate_user_agent
 
-#generate_date_and_time
-#generate_ip
+log_name="$day-$month-$year.log"
+touch $log_name
 
 max_repetitions=1000
 min_repetitions=100
@@ -36,10 +36,7 @@ for (( repetitions = 0; repetitions <= $number_of_lines; ++repetitions )); do
 	# HTTP referer is the name of an optional HTTP header field that identifies the address of the web page, from which the resource has been requested
 	http_referer="-"
 	user_agent=$(generate_user_agent)
-#	Below is old incorrect format that I've got from running nginx on Docker	
-#	echo "$year-$month-$day $hour_s:$minute_s:$second_s $ip"
-#	New log format from nginx.org manual. This one is the combined format
-	echo "$ip - $username - [$day/$month_s/$year:$hour_s:$minute_s:$second_s $utc_offset] \"$method\" $response_code $bytes_sent \"$http_referer\" \"$user_agent\""
+	echo "$ip - $username - [$day/$month_s/$year:$hour_s:$minute_s:$second_s $utc_offset] \"$method\" $response_code $bytes_sent \"$http_referer\" \"$user_agent\"" >> $log_name
 	max_step_for_the_clock=60
 	second=$(( $RANDOM % $max_step_for_the_clock + 1 + $second ))
 	if [[ $second -gt $max_second ]]; then
