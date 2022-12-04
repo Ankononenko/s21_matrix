@@ -3,6 +3,7 @@
 . ./sort_by_response_code
 . ./get_unique_ips
 . ./get_errors
+. ./get_ips_with_errors
 
 regex="../04/[0-9]{2}-[0-9]{2}-[0-9]{4}.log"
 
@@ -56,7 +57,26 @@ case $choice in
 	;;
 	
 	4)
-		echo "Forth option"
+
+		name_of_dir="ips_of_reqests_with_errors"
+		echo "The with errors are going to get created in the \"$name_of_dir\" directory"
+		mkdir $name_of_dir
+
+		for dir in ../04/*; do
+			if [[ $dir =~ $regex ]]; then
+			get_ips_with_errors $dir $name_of_dir
+		fi
+		done
+
+	;;
+
+	*)
+		echo "The only allowed input parameters are:"
+		echo "1 - All entries sorted by response code"
+		echo "2 - All unique IPs found in the entries"
+		echo "3 - All requests with errors - 4xx, 5xx"
+		echo "4 - All unique IPs found among the erroneous requests"
+		echo "Please try again"
 	;;
 
 esac	
