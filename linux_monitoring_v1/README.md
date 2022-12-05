@@ -9,8 +9,6 @@
 
 ## Part 1. First effort
 
-Before you start helping your colleague, you decide to test your knowledge on a very simple program.
-
 **== Task ==**
 
 Write a bash script. The script is run with one parameter. It is a text parameter.  
@@ -18,8 +16,6 @@ The script outputs the value of the parameter.
 If the parameter is a number, the script must output an invalid input message.
 
 ## Part 2. System research
-
-Now you’re sure that you’re ready to get down to the initial idea. You quickly think of the information about the system you need to output and get to work.
 
 **== Task ==**
 
@@ -50,8 +46,6 @@ The file name must looks like: **DD_MM_YY_HH_MM_SS.status** (The time in the fil
 
 ## Part 3. Visual output design for the system research script
 
-Everything is ready! But it looks so boring... We need to add more colours to this world!
-
 **== Task ==**
 
 Write a bash script. Use the script from [**Part 2**](#part-2-system-research) and remove the part where the data is saved to a file.  The script is run with 4 parameters. The parameters are numeric. From 1 to 6, for example:  
@@ -69,8 +63,6 @@ If matching values are entered, there must be a message describing the problem a
 After the message output, the program should exit correctly.
 
 ## Part 4. Configuring visual output design for the system research script
-
-Now everything looks nice! But I don't want to have to enter the colours as parameters every time... I'll have to come up with something more convenient.
 
 **== Task ==**
 
@@ -104,8 +96,6 @@ Column 2 font color = default (blue)
 ```
 
 ## Part 5. File system research
-
-Now that the system information output is prepared, looks nice and is convenient, you can get down to the second part of the plan.
 
 **== Task ==**
 
