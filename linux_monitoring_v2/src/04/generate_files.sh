@@ -11,4 +11,4 @@ done
 directory_for_logs="logs"
 mkdir $directory_for_logs
 mv *.log $directory_for_logs
-echo "The logs are in the \"dir\" directory"
+echo "The logs are in the \"$directory_for_logs\" directory"
