@@ -24,7 +24,7 @@ C mathematical operations are a group of functions in the standard library of th
 | 14 | `long double sqrt(double x)` | computes square root |
 | 15 | `long double tan(double x)` | computes tangent |  
 
-## Part 1. Implementing the math.h library functions
+## Implementing the math.h library functions
 
 The functions of the math.h library must be implemented (only those directly described [above](#overview-of-some-mathh-functions)):
 
