@@ -10,12 +10,6 @@
 
 ## Part 1. File generator
 
-After a brief look at the information found on Seb's computer, you walk into the break room and find out that Mike has taken your delicious sandwich, which you specially brought from home.
-
-You can't just let it slide, you have to prank him in return and teach him a lesson.
-
-This will give you a chance to practice working with files in bash scripts. It may be useful in preparing a test environment to set up monitoring tasks.
-
 **== Task ==**
 
 Write a bash script. The script is run with 6 parameters. An example of running a script: \
@@ -41,8 +35,6 @@ Make a log file with data on all created folders and files (full path, creation 
 
 
 ## Part 2. File system clogging
-
-And now it's time to show Mike what a man whose sandwich has been stolen is capable of.
 
 **== Task ==**
 
@@ -71,8 +63,6 @@ At the end of the script, display the start time, end time and total running tim
 
 ## Part 3. Cleaning the file system
 
-Damn it! You ran the script on the wrong computer. Now you urgently need to write a script to fix it.
-
 **== Task ==**
 
 Write a bash script. The script is run with 1 parameter. The script should be able to clear the system from the folders and files created in [Part 2](#part-2-file-system-clogging) in 3 ways:
@@ -87,10 +77,6 @@ The cleaning method is set as a parameter with a value of 1, 2 or 3 when you run
 
 
 ## Part 4. Log generator
-
-You are finally done with your stuff and ready to continue working out the monitoring.
-
-To begin with, it would be a good idea to create logs that can be analysed.
 
 **== Task ==**
 
@@ -111,8 +97,6 @@ Specify in the comments of your script/program what each of the response codes u
 
 ## Part 5. Monitoring
 
-Now that you have the files to analyse, you can move on to monitoring.
-
 **== Task ==**
 
 Write a bash script to parse **nginx** logs from [Part 4](#part-4-log-generator) via **awk**.
@@ -128,8 +112,6 @@ Depending on the value of the parameter, output the following:
 
 ## Part 6. **GoAccess**
 
-Watching the results of your efforts in the console is certainly nice, but why not also use a ready-made solution that provides a user-friendly interface?
-
 **== Task ==**
 
 Use the GoAccess utility to get the same information as in [Part 5](#part-5-monitoring)
@@ -138,8 +120,6 @@ Open the web interface of the utility on the local machine.
 
 
 ## Part 7. **Prometheus** and **Grafana**
-
-Practice with the logs is over for now. It's time to monitor the state of the system in general.
 
 **== Task ==**
 
@@ -157,9 +137,6 @@ Practice with the logs is over for now. It's time to monitor the state of the sy
 
 ## Part 8. A ready-made dashboard
 
-After all, why make your own dashboard when, as they say, "everything has already been stolen before us"?
-Why not get a ready-made dashboard that has all the metrics you need?
-
 **== Task ==**
 
 ##### Download the ready-made dashboard *Node Exporter Quickstart and Dashboard* from **Grafana Labs** official website.
@@ -173,8 +150,6 @@ Why not get a ready-made dashboard that has all the metrics you need?
 
 
 ## Part 9. Bonus. Your own *node_exporter*
-
-It is always useful and convenient to analyse the system with special utilities, but you have always wanted to understand how they work.
 
 **== Task ==**
 
