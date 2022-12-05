@@ -7,3 +7,8 @@ for (( index = 0; index < num_files; ++index )); do
 	. ./main.sh
 
 done
+
+directory_for_logs="logs"
+mkdir $directory_for_logs
+mv *.log $directory_for_logs
+echo "The logs are in the \"dir\" directory"
