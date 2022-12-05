@@ -70,8 +70,9 @@ fi
 day=$(( $RANDOM % $max_day + 1 ))
 day=$(insert_zero $day)
 
+# Adjusted $RANDOM divisor so the logs are more spread
 max_hour=24
-hour=$(( $RANDOM % 24))
+hour=$(( $RANDOM % 10))
 
 max_minute=59
 max_start_minute=42
@@ -79,4 +80,5 @@ minute=$(( $RANDOM % $max_start_minute + 1))
 
 max_second=59
 second=$(( $RANDOM % $max_second + 1))
+
 
