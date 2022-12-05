@@ -4,7 +4,7 @@ num_files=5
 
 for (( index = 0; index < num_files; ++index )); do
 	
-	. ./main.sh
+	. ./generate_file.sh
 
 done
 
