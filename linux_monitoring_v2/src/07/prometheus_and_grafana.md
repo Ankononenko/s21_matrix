@@ -76,3 +76,68 @@ WantedBy=multi-user.target
 
 _Prometheus service running:_ \
 <img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/01_-_Prometheus_started.png?raw=true" alt="01_-_Prometheus_started.png" width="800"/>
+
+## Node Exporter set up:
+
+_Node Exporter is used to collect Linux system metrics like CPU load and disk I/O. Node Exporter will expose these as Prometheus-style metrics._
+
+### 1. Create system user:
+`$ sudo useradd --system --no-create-home --shell /bin/false node_exporter`
+
+### 2. Download Node Exporter:
+
+`$ sudo useradd --system --no-create-home --shell /bin/false node_exporter`
+
+### 3. Extract:
+
+`$ tar -xvf node_exporter-1.3.1.linux-amd64.tar.gz`
+
+### 4. Move and clean up the files:
+
+`$ sudo mv node_exporter-1.3.1.linux-amd64/node_exporter /usr/local/bin/` \
+`$ rm -rf node_exporter*`
+
+### 5. Check that it has installed:
+
+`$ node_exporter --version`
+
+### 6. Systemd unit file for the service:
+
+`$ sudo vim /etc/systemd/system/node_exporter.service`
+
+_node_exporter.service_
+
+```
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/bin/node_exporter \
+    --collector.logind
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 8. Start Node Exporter:
+
+`$ sudo systemctl enable node_exporter` - To automatically start the Node Exporter after reboot, enable the service. \
+`$ sudo systemctl start node_exporter` - Start the Node Exporter. \
+`$ sudo systemctl status node_exporter` - Check the status of Node Exporter. 
+
+_Node Exporter service running:_ 
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/02_-_Node_Exporter_started.png?raw=true" alt="02_-_Node_Exporter_started.png" width="800"/>
+
+## Grafana set up:
+
+1. 
