@@ -141,6 +141,9 @@ WantedBy=multi-user.target
 _Node Exporter service running:_ 
 <img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/02_-_Node_Exporter_started.png?raw=true" alt="02_-_Node_Exporter_started.png" width="800"/>
 
+_Targets in Prometheus web UI:_ 
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/04_-_Targets_in_Prometheus_web_UI.png" alt="04_-_Targets_in_Prometheus_web_UI.png" width="800"/>
+
 ## Grafana set up:
 
 1. 
