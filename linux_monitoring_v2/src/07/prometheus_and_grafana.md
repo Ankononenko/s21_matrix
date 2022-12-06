@@ -63,9 +63,9 @@ ExecStart=/usr/local/bin/prometheus \
 [Install]
 WantedBy=multi-user.target
 ```
-`--config.file=/etc/prometheus/prometheus.yml` - Path to the main Prometheus configuration file.
-`--storage.tsdb.path=/data` - Location to store Prometheus data.
-`--web.listen-address=0.0.0.0:9090` - Configure to listen on all network interfaces.
+`--config.file=/etc/prometheus/prometheus.yml` - Path to the main Prometheus configuration file. \
+`--storage.tsdb.path=/data` - Location to store Prometheus data. \
+`--web.listen-address=0.0.0.0:9090` - Configure to listen on all network interfaces. \
 `--web.enable-lifecycle` - Allows to manage Prometheus, for example, to reload configuration without restarting the service.
 
 ### 8. Start Prometheus:
@@ -73,3 +73,6 @@ WantedBy=multi-user.target
 `$ sudo systemctl enable prometheus` - To automatically start the Prometheus after reboot. \
 `$ sudo systemctl start prometheus` - Start the Prometheus. \
 `$ sudo systemctl status prometheus` - Check the status of the service.
+
+_Prometheus service running:_ \
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/01_-_Prometheus_started.png?raw=true" alt="01_-_Prometheus_started.png" width="800"/>
