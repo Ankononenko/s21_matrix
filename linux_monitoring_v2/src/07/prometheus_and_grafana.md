@@ -177,3 +177,22 @@ _Grafana web UI from virtual machine accessed from local:_ \
 
 _Datasource created, Grafana dashboard imported:_ \
 <img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/07_-_Grafana_dashboard_imported.png" alt="07_-_Grafana_dashboard_imported.png" width="1000"/>
+
+## Exploring Grafana:
+
+_Metrics added (CPU, available RAM, free space and the number of I/O operations on the hard disk, space used, network traffic):_ \
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/08_-_Metrics%20added.png?raw=true" alt="09_-_Script_from_part_2_runned.png" width="1000"/>
+
+_Script to fill up the free disk space of the server up to 1GB left completed:_ \
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/09_-_Script_from_part_2_runned.png" alt="09_-_Script_from_part_2_runned.png" width="1000"/>
+
+## Stress utility: 
+
+### Install the utility:
+`$ sudo apt install -y stress`
+
+### Run Stress utility and observe the result:
+`$ stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s`
+
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/10_-_Stress_utility_runned.png" alt="10_-_Stress_utility_runned.png" width="1000"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/11_-_Result_of_Stress_utility_run.png" alt="11_-_Result_of_Stress_utility_run.png" width="1000"/>
