@@ -77,6 +77,9 @@ WantedBy=multi-user.target
 _Prometheus service running:_ \
 <img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/01_-_Prometheus_started.png?raw=true" alt="01_-_Prometheus_started.png" width="800"/>
 
+_Prometheus web UI from virtual machine accessed from local:_ 
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/03_-_Prometheus_web_UI.png" alt="03_-_Prometheus_web_UI.png" width="800"/>
+
 ## Node Exporter set up:
 
 _Node Exporter is used to collect Linux system metrics like CPU load and disk I/O. Node Exporter will expose these as Prometheus-style metrics._
