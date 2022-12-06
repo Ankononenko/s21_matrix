@@ -1,4 +1,6 @@
-## Report on setting up Prometheus and Grafana
+# Report on setting up Prometheus and Grafana
+
+## Prometheus set up:
 
 ### 1. Create system user:
 `$ sudo useradd --system --no-create-home --shell /bin/false prometheus`
