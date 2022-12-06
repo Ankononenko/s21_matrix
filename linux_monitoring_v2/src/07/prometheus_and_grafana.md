@@ -75,10 +75,10 @@ WantedBy=multi-user.target
 `$ sudo systemctl status prometheus` - Check the status of the service.
 
 _Prometheus service running:_ \
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/01_-_Prometheus_started.png?raw=true" alt="01_-_Prometheus_started.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/01_-_Prometheus_started.png?raw=true" alt="01_-_Prometheus_started.png" width="1000"/>
 
 _Prometheus web UI from virtual machine accessed from local:_ 
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/03_-_Prometheus_web_UI.png" alt="03_-_Prometheus_web_UI.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/03_-_Prometheus_web_UI.png" alt="03_-_Prometheus_web_UI.png" width="1000"/>
 
 ## Node Exporter set up:
 
@@ -139,10 +139,10 @@ WantedBy=multi-user.target
 `$ sudo systemctl status node_exporter` - Check the status of Node Exporter. 
 
 _Node Exporter service running:_ 
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/02_-_Node_Exporter_started.png?raw=true" alt="02_-_Node_Exporter_started.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/02_-_Node_Exporter_started.png?raw=true" alt="02_-_Node_Exporter_started.png" width="1000"/>
 
 _Targets in Prometheus web UI:_ 
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/04_-_Targets_in_Prometheus_web_UI.png" alt="04_-_Targets_in_Prometheus_web_UI.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/04_-_Targets_in_Prometheus_web_UI.png" alt="04_-_Targets_in_Prometheus_web_UI.png" width="1000"/>
 
 ## Grafana set up:
 
@@ -168,8 +168,10 @@ _Targets in Prometheus web UI:_
 `$sudo systemctl status grafana-server` - To check the status of Grafana.
 
 _Grafana service running:_ \
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/05_-_Grafana_service_running.png" alt="05_-_Grafana_service_running.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/05_-_Grafana_service_running.png" alt="05_-_Grafana_service_running.png" width="1000"/>
 
 _Grafana web UI from virtual machine accessed from local:_ \
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/06_-_Grafana_web_UI.png" alt="06_-_Grafana_web_UI.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/06_-_Grafana_web_UI.png" alt="06_-_Grafana_web_UI.png" width="1000"/>
 
+_Datasource created, Grafana dashboard imported:_ \
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/07_-_Grafana_dashboard_imported.png" alt="07_-_Grafana_dashboard_imported.png" width="1000"/>
