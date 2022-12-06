@@ -3,9 +3,9 @@
 ### 1. Create system user:
 `$ sudo useradd --system --no-create-home --shell /bin/false prometheus`
 
-`--system` - Will create a system account.
-`--no-create-home` - We don't need a home directory for Prometheus or any other system accounts in our case.
-`--shell /bin/false` - It prevents logging in as a Prometheus user.
+`--system` - Will create a system account. \
+`--no-create-home` - We don't need a home directory for Prometheus or any other system accounts in our case. \
+`--shell /bin/false` - It prevents logging in as a Prometheus user. \
 `prometheus` - Will create Prometheus user and a group with the exact same name.
 
 ### 2. Download Prometheus:
@@ -18,10 +18,10 @@
 
 ### 4. Create a data directory for Prometheus and move the unpacked files there:
 
-`$ sudo mkdir -p /data /etc/prometheus`
-`$ cd prometheus-2.32.1.linux-amd64`
-`$ sudo mv prometheus promtool /usr/local/bin/`
-`$ sudo mv prometheus.yml /etc/prometheus/prometheus.yml`
+`$ sudo mkdir -p /data /etc/prometheus` \
+`$ cd prometheus-2.32.1.linux-amd64` \
+`$ sudo mv prometheus promtool /usr/local/bin/` \
+`$ sudo mv prometheus.yml /etc/prometheus/prometheus.yml` 
 
 ### 5. To avoid permission issues, you need to set correct ownership for the /etc/prometheus/ and data directory:
 
@@ -29,8 +29,8 @@
 
 ### 6. Check that the Prometheus was installed successfully and delete the no longer needed archive and folder: 
 
-`$ prometheus --version`
-`$ cd ..`
+`$ prometheus --version` \
+`$ cd ..` \
 `$ rm -rf prometheus*`
 
 ### 7. We're going to use systemd, which is a system and service manager for Linux operating systems. For that, we need to create a systemd unit configuration file:
@@ -70,6 +70,6 @@ WantedBy=multi-user.target
 
 ### 8. Start Prometheus:
 
-`$ sudo systemctl enable prometheus` - To automatically start the Prometheus after reboot.
-`$ sudo systemctl start prometheus` - Start the Prometheus.
+`$ sudo systemctl enable prometheus` - To automatically start the Prometheus after reboot. \
+`$ sudo systemctl start prometheus` - Start the Prometheus. \
 `$ sudo systemctl status prometheus` - Check the status of the service.
