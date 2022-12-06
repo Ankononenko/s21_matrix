@@ -146,4 +146,30 @@ _Targets in Prometheus web UI:_
 
 ## Grafana set up:
 
-1. 
+### 1. Make sure that the dependencies are installed:
+`$ sudo apt-get install -y apt-transport-https software-properties-common`
+
+### 2. Add GPG key:
+
+`$ get -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -`
+
+### 3. Add this repository for stable releases:
+`$ echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list`
+
+### 4. Update and install Grafana:
+
+`$ udo apt-get update`\
+`$sudo apt-get -y install grafana`
+
+### 5. Start Grafana:
+
+`$sudo systemctl enable grafana-server` - To automatically start the Grafana after reboot. \
+`$sudo systemctl start grafana-server` - To start the Grafana. \
+`$sudo systemctl status grafana-server` - To check the status of Grafana.
+
+_Grafana service running:_ \
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/05_-_Grafana_service_running.png" alt="05_-_Grafana_service_running.png" width="800"/>
+
+_Grafana web UI from virtual machine accessed from local:_ \
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/06_-_Grafana_web_UI.png" alt="06_-_Grafana_web_UI.png" width="800"/>
+
