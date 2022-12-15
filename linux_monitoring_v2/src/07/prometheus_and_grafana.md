@@ -199,13 +199,13 @@ _Script to fill up the free disk space of the server up to 1GB left completed:_ 
 
 ## Custom dashboard andindicators created: 
 
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/12_-_Custom_dashboard_and_indicators_created.png" alt="12_-_Custom_dashboard_and_indicators_created.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/12_-_Custom_dashboard_and_indicators_created.png" alt="12_-_Custom_dashboard_and_indicators_created.png" width="1000"/>
 
 ### Script from the Part 2 of the project executed. Dashboard output during the run of the script:
 
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/13_-_Dashboard_output.png" alt="13_-_Dashboard_output.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/13_-_Dashboard_output.png" alt="13_-_Dashboard_output.png" width="1000"/>
 
 ### Stress utility executed:
 
 _stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s_ \
-<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/14_-_Dashboard_output_stress.png" alt="14_-_Dashboard_output_stress.png" width="800"/>
+<img src="https://github.com/finchren/School21_main_education/blob/main/linux_monitoring_v2/src/screenshots/14_-_Dashboard_output_stress.png" alt="14_-_Dashboard_output_stress.png" width="1000"/>
