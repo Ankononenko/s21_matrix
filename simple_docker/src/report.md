@@ -87,3 +87,23 @@ _Copied configuration file:_
 <img src="screenshots/20_contents_of_nginx_config_fiile.png" alt="20_contents_of_nginx_config_fiile.png"/>
 
 ## Part 3. Mini web server:
+
+1. Write a mini server in C and FastCgi that will return a simple page saying Hello World!:
+<img src="screenshots/21_miniserver_in_c.png" alt="21_miniserver_in_c.png"/>
+
+2. Run the written mini server via spawn-fcgi on port 8080: \
+`$ apt install gcc` \
+`$ apt install libfcgi-dev` \
+`$ apt install spawn-fcgi` \
+`$ gcc -c miniserver.c -o miniserver.o` \
+`$ gcc -c miniserver.c -lfcgi -o miniserver.out` \
+`$ spawn-fcgi -a 127.0.0.1 -p 8080 ./miniserver.out`
+<img src="screenshots/22_spawned_successfully.png" alt="22_spawned_successfully.png"/>
+
+3. Write your own nginx.conf that will proxy all requests from port 81 to 127.0.0.1:8080:
+
+<img src="screenshots/23_cat_nginx_conf.png" alt="23_cat_nginx_conf.png"/>
+<img src="screenshots/24_nginx_reload.png" alt="24_nginx_reload.png"/>
+
+4. Check that browser on localhost:81 returns the page you wrote:
+<img src="screenshots/25_localhost_81_output.png" alt="25_localhost_81_output.png"/>
