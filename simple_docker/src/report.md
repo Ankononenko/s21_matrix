@@ -116,7 +116,7 @@ _Copied configuration file:_
 
 ## Part 4. Your own docker:
 
-1. Write your own docker image that builds mini server sources on FastCgi from Part 3, runs it on port 8080, copies inside the image written ./nginx/nginx.conf, runs nginx.
+Write your own docker image that builds mini server sources on FastCgi from Part 3, runs it on port 8080, copies inside the image written ./nginx/nginx.conf, runs nginx:
 
 Dockerfile: \
 <img src="screenshots/26_dockerfile.png" alt="26_dockerfile.png"/>
@@ -147,3 +147,14 @@ After the restart: \
 <img src="screenshots/34_after_restart.png" alt="34_after_restart.png"/>
 
 ## Part 5. Dockle:
+
+1. Check the image from the previous task with dockle `$docker run --rm -v //var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle:v0.4.9 my_server_part4:my_tag`:
+<img src="screenshots/35_dockle_check_output.png" alt="35_dockle_check_output.png"/>
+
+2. New image created considering Dockle output and checked again:
+<img src="screenshots/36_new_image.png" alt="36_new_image.png"/>
+
+3. New container running using the image from the part five:
+<img src="screenshots/37_new_image_running.png" alt="37_new_image_running.png"/>
+
+## Part 6. Basic Docker Compose:
