@@ -1,4 +1,10 @@
 # Simple Docker report
+1. [Ready-made docker](#part-1-ready-made-docker)
+2. [Operations with container](#part-2-operations-with-the-container)
+3. [Mini web server](#part-3-mini-web-server)
+4. [Your own docker](#part-4-your-own-docker)
+5. [Dockle](#part-5-dockle)
+6. [Basic Docker Compose](#part-6-basic-docker-compose)
 
 ## Part 1. Ready-made Docker
 
@@ -107,3 +113,37 @@ _Copied configuration file:_
 
 4. Check that browser on localhost:81 returns the page you wrote:
 <img src="screenshots/25_localhost_81_output.png" alt="25_localhost_81_output.png"/>
+
+## Part 4. Your own docker:
+
+1. Write your own docker image that builds mini server sources on FastCgi from Part 3, runs it on port 8080, copies inside the image written ./nginx/nginx.conf, runs nginx.
+
+Dockerfile: \
+<img src="screenshots/26_dockerfile.png" alt="26_dockerfile.png"/>
+
+Run_server.sh: \
+<img src="screenshots/27_run_server_sh.png" alt="27_run_server_sh.png"/>
+
+nginx.conf: \
+<img src="screenshots/28_cat_nginx_conf.png" alt="28_cat_nginx_conf.png"/>
+
+Docker build finished: \
+<img src="screenshots/29_docker_build_finished.png" alt="29_docker_build_finished.png"/>
+
+Image created: \
+<img src="screenshots/30_image_created.png" alt="30_image_created.png"/>
+
+Run the image: \
+`$ docker run -d -p 80:81 -v "/d/Code/Docker/DO5_SimpleDocker-0/src/Part 04/nginx/:/etc/nginx/" --name real_part_04 my_server_part4:my_tag ` \
+<img src="screenshots/31_docker_run.png" alt="31_docker_run.png"/>
+
+The page of the written mini server is available on localhost:80: \
+<img src="screenshots/32_localhost_80.png" alt="32_localhost_80.png"/>
+
+Add proxying of /status page in ./nginx/nginx.conf to return the nginx server status: \
+<img src="screenshots/33_server_status.png" alt="33_server_status.png"/>
+
+After the restart: \
+<img src="screenshots/34_after_restart.png" alt="34_after_restart.png"/>
+
+## Part 5. Dockle:
