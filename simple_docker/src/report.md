@@ -8,153 +8,196 @@
 
 ## Part 1. Ready-made Docker
 
-1. Download the official docker image from nginx using `$ docker pull`:
+**1. Download the official docker image from nginx using** `$ docker pull`:
 <img src="screenshots/01_Docker_nginx_pull.png" alt="01_Docker_nginx_pull.png" width="800"/>
 
-2. Check for the docker image with `$ docker images`:\
+**2. Check for the docker image with** `$ docker images`:\
 `REPOSITORY   TAG       IMAGE ID       CREATED      SIZE`\
 `nginx        latest    3964ce7b8458   6 days ago   142MB`
 
-3. Run docker image `$ docker run -d 3964ce7b8458`:\
+**3. Run docker image** `$ docker run -d 3964ce7b8458`:\
 `c6a176f8dfb6ebd3d011bf22fdd9f53c00e6531461d18d5c75ff62e1b89e1c18`
 
-4. Check that the image is running: `$ docker ps`:
+**4. Check that the image is running:** `$ docker ps`: \
 <img src="screenshots/02_Image_is_running.png" alt="02_Image_is_running.png" width="800"/>
 
-5. View container information `$ docker inspect c6a176f8dfb6`
+**5. View container information** `$ docker inspect c6a176f8dfb6`
 <img src="screenshots/03_Docker_inspect.png" alt="03_Docker_inspect.png" width="800"/>
 
 Container size: `"SizeRootFs": 141843741`\
 List of mapped ports: `"Ports": {"80/tcp": null}`\
 Container IP: `"IPAddress": "172.17.0.2"`
 
-6. Stop docker image `$ docker stop`: \
+**6. Stop docker image** `$ docker stop`: \
 `c6a176f8dfb6`
 
-7. Check that the image has stopped `$ docker ps`:
+**7. Check that the image has stopped** `$ docker ps`: \
 <img src="screenshots/04_Docker_stop.png" alt="04_Docker_stop.png" width="800"/>
 
-8. Run docker with mapped ports 80 and 443 on the local machine with run command: `$ docker run -d -p 80:80 -p 443:443 3964ce7b8458`:
+**8. Run docker with mapped ports 80 and 443 on the local machine with run command:** `$ docker run -d -p 80:80 -p 443:443 3964ce7b8458`:
 <img src="screenshots/05_Docker_map_ports.png" alt="05_Docker_map_ports.png" width="800"/>
 
-9. Check that the nginx start page is available in the browser at localhost:80:
+**9. Check that the nginx start page is available in the browser at localhost:80:**
 <img src="screenshots/06_nginx_available_at_localhost.png" alt="06_nginx_available_at_localhost.png" width="800"/>
 
-10. Restart docker container `$ docker restart c6a176f8dfb6` and check that the container is running:
+**10. Restart docker container** `$ docker restart c6a176f8dfb6` **and check that the container is running:**
 <img src="screenshots/07_Restart_and_check_that_container_is_running.png" alt="07_Restart_and_check_that_container_is_running.png" width="800"/>
 
 ## Part 2. Operations with the container
 
-1. Read the nginx.conf configuration file inside the docker container with the exec command `$ docker exec -it <container-id> bash`, `$ cat /etc/nginx/nginx.conf`:
+**1. Read the nginx.conf configuration file inside the docker container with the exec command** `$ docker exec -it <container-id> bash`, `$ cat /etc/nginx/nginx.conf`:\
 <img src="screenshots/08_cat_nginx_config.png" alt="08_cat_nginx_config.png" width="800"/>
 
-2. Create a nginx.conf file on a local machine: \
-`$ touch nginx.conf`
+**2. Create a nginx.conf file on a local machine:** \
+`$ touch nginx.conf` \
 <img src="screenshots/09_copied_nginx_conf_to_local_machine.png" alt="09_copied_nginx_conf_to_local_machine.png" width="800"/>
 
-3. Configure it on the /status path to return the nginx server status page:\
+**3. Configure it on the /status path to return the nginx server status page:**\
 _The ngx_http_stub_status_module module provides access to basic status information_
 <img src="screenshots/10_configure_nginx.png" alt="10_configure_nginx.png" width="800"/>
 
 _Line 30 is commented because nginx takes other files of configurations which don't let location '/status' work properly._
 
-4. Copy the created nginx.conf file inside the docker image using the docker cp command `$ docker cp nginx.conf c6e561c366ea:etc/nginx/`:\
-_Copied configuration file:_
+**4. Copy the created nginx.conf file inside the docker image using the docker cp comman**d `$ docker cp nginx.conf c6e561c366ea:etc/nginx/`:\
+_Copied configuration file:_ \
 <img src="screenshots/11_copied_the_file_on_the_container.png" alt="11_copied_the_file_on_the_container.png" width="800"/>
 
-5. Restarted nginx inside the docker image:
+**5. Restarted nginx inside the docker image:** \
 <img src="screenshots/12_restarted_nginx_with_new_config.png" alt="12_restarted_nginx_with_new_config.png" width="800"/>
 
-6. Check that localhost:80/status returns the nginx server status page:
+**6. Check that localhost:80/status returns the nginx server status page:** \
 <img src="screenshots/13_server_status_page.png" alt="13_server_status_page.png"/>
 
-7. Exported the container to a container.tar file with the export command `$ docker export -o container.tar 3ca2d50b57d5`:
+**7. Exported the container to a container.tar file with the export command** `$ docker export -o container.tar 3ca2d50b57d5`:
 <img src="screenshots/12_exported_the_container.png" alt="12_exported_the_container.png" width="800"/>
 
-8. Stoped the container `$ docker stop 3ca2d50b57d5`:
+**8. Stoped the container** `$ docker stop 3ca2d50b57d5`: \
 <img src="screenshots/14_stopped_the_container.png" alt="14_stopped_the_container.png"/>
 
-9. Deleted the image with docker rmi [image_id|repository]without removing the container first:
+**9. Deleted the image with docker rmi** [image_id|repository]without removing the container first:
 <img src="screenshots/15_deleted_the_nginx_image.png" alt="15_deleted_the_nginx_image.png"/>
 
-10. Deleted the stopped container:
+**10. Deleted the stopped container:** \
 <img src="screenshots/16_deleted_the_stopped_container.png" alt="16_deleted_the_stopped_container.png"/>
 
-11. Imported the container back using the import command `$ docker import --change "CMD /docker-entrypoint.sh nginx -g 'daemon off;'" container.tar nginx2:latest2`:
+**11. Imported the container back using the import command** `$ docker import --change "CMD /docker-entrypoint.sh nginx -g 'daemon off;'" container.tar nginx2:latest2`:
 <img src="screenshots/17_imported_the_container.png" alt="17_imported_the_container.png"/>
 
-12. Run the imported container `$ docker run -d -p 80:80 fd3a40bba97a`:
+**12. Run the imported container** `$ docker run -d -p 80:80 fd3a40bba97a`: 
 <img src="screenshots/18_run_the_imported_container.png" alt="18_run_the_imported_container.png"/>
 
-13. Localhost:80/status returns the nginx server status page:
+**13. Localhost:80/status returns the nginx server status page:** \
 <img src="screenshots/19_localhost_return_the_status_page.png" alt="19_localhost_return_the_status_page.png"/>
 
-14. The contents of the created nginx.conf file:
+**14. The contents of the created nginx.conf file:** \
 <img src="screenshots/20_contents_of_nginx_config_fiile.png" alt="20_contents_of_nginx_config_fiile.png"/>
 
 ## Part 3. Mini web server:
 
-1. Write a mini server in C and FastCgi that will return a simple page saying Hello World!:
+**1. Write a mini server in C and FastCgi that will return a simple page saying Hello World!**:
 <img src="screenshots/21_miniserver_in_c.png" alt="21_miniserver_in_c.png"/>
 
-2. Run the written mini server via spawn-fcgi on port 8080: \
+**2. Run the written mini server via spawn-fcgi on port 8080:** \
 `$ apt install gcc` \
 `$ apt install libfcgi-dev` \
 `$ apt install spawn-fcgi` \
 `$ gcc -c miniserver.c -o miniserver.o` \
 `$ gcc -c miniserver.c -lfcgi -o miniserver.out` \
-`$ spawn-fcgi -a 127.0.0.1 -p 8080 ./miniserver.out`
+`$ spawn-fcgi -a 127.0.0.1 -p 8080 ./miniserver.out` \
 <img src="screenshots/22_spawned_successfully.png" alt="22_spawned_successfully.png"/>
 
-3. Write your own nginx.conf that will proxy all requests from port 81 to 127.0.0.1:8080:
+**3. Write your own nginx.conf that will proxy all requests from port 81 to 127.0.0.1:8080:**
 
 <img src="screenshots/23_cat_nginx_conf.png" alt="23_cat_nginx_conf.png"/>
 <img src="screenshots/24_nginx_reload.png" alt="24_nginx_reload.png"/>
 
-4. Check that browser on localhost:81 returns the page you wrote:
+**4. Check that browser on localhost:81 returns the page you wrote**: \
 <img src="screenshots/25_localhost_81_output.png" alt="25_localhost_81_output.png"/>
 
 ## Part 4. Your own docker:
 
 Write your own docker image that builds mini server sources on FastCgi from Part 3, runs it on port 8080, copies inside the image written ./nginx/nginx.conf, runs nginx:
 
-Dockerfile: \
+**Dockerfile:** \
 <img src="screenshots/26_dockerfile.png" alt="26_dockerfile.png"/>
 
-Run_server.sh: \
+**Run_server.sh:** \
 <img src="screenshots/27_run_server_sh.png" alt="27_run_server_sh.png"/>
 
-nginx.conf: \
+**nginx.conf:** \
 <img src="screenshots/28_cat_nginx_conf.png" alt="28_cat_nginx_conf.png"/>
 
-Docker build finished: \
+**Docker build finished:** \
 <img src="screenshots/29_docker_build_finished.png" alt="29_docker_build_finished.png"/>
 
-Image created: \
+**Image created:** \
 <img src="screenshots/30_image_created.png" alt="30_image_created.png"/>
 
-Run the image: \
+**Run the image:** \
 `$ docker run -d -p 80:81 -v "/d/Code/Docker/DO5_SimpleDocker-0/src/Part 04/nginx/:/etc/nginx/" --name real_part_04 my_server_part4:my_tag ` \
 <img src="screenshots/31_docker_run.png" alt="31_docker_run.png"/>
 
-The page of the written mini server is available on localhost:80: \
+**The page of the written mini server is available on localhost:80:** \
 <img src="screenshots/32_localhost_80.png" alt="32_localhost_80.png"/>
 
-Add proxying of /status page in ./nginx/nginx.conf to return the nginx server status: \
+**Add proxying of /status page in ./nginx/nginx.conf to return the nginx server status:** \
 <img src="screenshots/33_server_status.png" alt="33_server_status.png"/>
 
-After the restart: \
+**After the restart:** \
 <img src="screenshots/34_after_restart.png" alt="34_after_restart.png"/>
 
 ## Part 5. Dockle:
 
-1. Check the image from the previous task with dockle `$docker run --rm -v //var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle:v0.4.9 my_server_part4:my_tag`:
+**1. Check the image from the previous task with dockle** `$docker run --rm -v //var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle:v0.4.9 my_server_part4:my_tag`:
 <img src="screenshots/35_dockle_check_output.png" alt="35_dockle_check_output.png"/>
 
-2. New image created considering Dockle output and checked again:
+**2. New image created considering Dockle output and checked again:**
 <img src="screenshots/36_new_image.png" alt="36_new_image.png"/>
 
-3. New container running using the image from the part five:
+**3. New container running using the image from the part five:**
 <img src="screenshots/37_new_image_running.png" alt="37_new_image_running.png"/>
 
 ## Part 6. Basic Docker Compose:
+
+**1. FastCgi Dockerfile:** \
+<img src="screenshots/38_fcgi_dockerfile.png" alt="38_fcgi_dockerfile.png"/>
+
+**2. FastCgi run_server.sh:** \
+<img src="screenshots/39_fcgi_miniserver.png" alt="39_fcgi_miniserver.png"/>
+
+**3. Nginx Dockerfile:** \
+<img src="screenshots/40_nginx_dockerfile.png" alt="40_nginx_dockerfile.png"/>
+
+**4. Nginx.conf:** \
+<img src="screenshots/41_nginx_conf.png" alt="41_nginx_conf.png"/>
+
+**5. FastCgi server image build:** \
+<img src="screenshots/42_fcgi_server_image_build.png" alt="42_fcgi_server_image_build.png"/>
+
+**6. Nginx server image build:** \
+<img src="screenshots/43_nginx_server_image_build.png" alt="43_nginx_server_image_build.png"/>
+
+**7. Create a network:** \
+<img src="screenshots/44_docker_network_create.png" alt="44_docker_network_create.png"/>
+
+**8. Run FastCgi container** `$  docker run -d -p 8080:8080 --name my_build_fcgi_container --network my_network my_fcgi_server:my_fcgi_tag`.
+<img src="screenshots/45_run_fcgi_server.png" alt="45_run_fcgi_server.png"/>
+
+**8. Run Nginx container** `$  docker run -d -it --user root -p 80:9999 -v "/d/Code/Docker/DO5_SimpleDocker-0/src/Part 06/nginx_server_folder/nginx/:/etc/nginx/" --name my_built_nginx_container --network my_network my_nginx_server:my_nginx_tag`.
+<img src="screenshots/46_run_nginx_server.png" alt="46_run_nginx_server.png"/>
+
+**9. Containers running:** \
+<img src="screenshots/47_containers_running.png" alt="47_containers_running.png"/>
+
+**10. Containers stopped:** 
+<img src="screenshots/48_containers_stopped.png" alt="48_containers_stopped.png"/>
+
+**11. docker-compose.yaml contents:** \
+<img src="screenshots/49_docker_compose.png" alt="49_docker_compose.png"/>
+
+**12. Docker compose build finished:** \
+<img src="screenshots/50_docker_compose_build_finished.png" alt="50_docker_compose_build_finished.png"/>
+
+**13. Docker compose run:** \
+<img src="screenshots/51_docker_compose_run.png" alt="51_docker_compose_run.png"/>
+<img src="screenshots/52_localhost_output.png" alt="52_localhost_output.png"/>
