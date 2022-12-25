@@ -2,9 +2,6 @@
 
 Development of a simple **CI/CD** for the *SimpleBashUtils* project. Building, testing, deployment.
 
-The russian version of the task can be found in the repository.
-
-
 ## Contents
 
    1. [Setting up the gitlab-runner](#part-1-setting-up-the-gitlab-runner)  
