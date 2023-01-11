@@ -5,7 +5,7 @@ s21_grep: s21_grep.c s21_grep.h
 	$(CC) $(C_FLAGS) -o s21_grep s21_grep.c
 
 test_grep:
-	sh ./test_grep.sh
+	bash ./test_grep.sh
 
 rebuild: clean s21_grep
 
