@@ -1,6 +1,8 @@
 build:
   stage: build
+  tags:
+    - ws1_cicd
   before_script:
-    - cd /src/C3_SimpleBashUtils-0/src/cat/
+    - cd src/C3_SimpleBashUtils-0/src/cat/
   script:
     - make
