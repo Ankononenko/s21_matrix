@@ -2,7 +2,14 @@ build:
   stage: build
   tags:
     - ws1_cicd
-  before_script:
-    - cd src/C3_SimpleBashUtils-0/src/cat/
   script:
+    - cd src/C3_SimpleBashUtils-0/src/cat/
     - make
+    - cd ..
+    - cd grep/
+    - make
+  artifacts:
+    paths:
+      - src/C3_SimpleBashUtils-0/src/cat/s21_cat
+      - src/C3_SimpleBashUtils-0/src/grep/s21_grep
+    expire_in: 1 month
