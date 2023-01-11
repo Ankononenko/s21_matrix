@@ -1,0 +1,6 @@
+build:
+  stage: build
+  before_script:
+    - cd /src/C3_SimpleBashUtils-0/src/cat/
+  script:
+    - make
