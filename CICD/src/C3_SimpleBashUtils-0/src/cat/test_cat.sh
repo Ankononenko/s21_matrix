@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/ bin / bash
 
 COUNTER_SUCCESS=0
 COUNTER_FAIL=0
