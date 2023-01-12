@@ -1,6 +1,7 @@
 # Report on completing the building stage
 
 [_Official .gitlab-ci.yml file manual_](https://docs.gitlab.com/ee/ci/yaml/gitlab_ci_yaml.html).\
+[_.gitlab-ci.yml keyword reference_](https://docs.gitlab.com/ee/ci/yaml/index.html).\
 [_Job artifacts manual_](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html).
 
 _Contents of the .gitlab-ci.yml file to complete the build stage and save the artifacts:_\
