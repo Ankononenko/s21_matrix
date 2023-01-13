@@ -9,7 +9,7 @@ _Contents of the .gitlab-ci.yml file to complete the style check stage:_\
 If the style check didn't pass the pipeline fails. For this I use the ["allow_failure: false" parameter.](https://docs.gitlab.com/ee/ci/yaml/index.html#allow_failure)\
 I display the output of the clang-format utility by saving the output to a text file. At the end of the script I cat the contents of the file to see the possible output.
 
-_Contents of check_clang_output.txt:_
+_Contents of check_clang_output.sh:_
 ```
 #!/ bin / bash
 
