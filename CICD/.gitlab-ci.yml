@@ -16,7 +16,7 @@ build:
     paths:
       - src/C3_SimpleBashUtils-0/src/cat/s21_cat
       - src/C3_SimpleBashUtils-0/src/grep/s21_grep
-    expire_in: 1 days
+    expire_in: 30 days
 
 style-check:
   stage: style-check
