@@ -1,6 +1,7 @@
 stages:
   - build
   - style-check
+  - test
 
 build:
   stage: build
@@ -35,4 +36,17 @@ style-check:
     #- clang-format -n grep/Makefile &>> clang_output.txt
     - bash pipeline_scripts/check_clang_output.sh
     - cat clang_output.txt
+  allow_failure: false
+
+test:
+  stage: test
+  tags:
+    - ws1_cicd
+  script:
+    - cd src/C3_SimpleBashUtils-0/src/cat/
+    - make test_cat
+    - cd ..
+    - cd grep/
+    - make test_grep
+    - bash ../pipeline_scripts/check_test_results.sh
   allow_failure: false
