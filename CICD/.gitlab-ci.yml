@@ -1,3 +1,7 @@
+stages:
+  - build
+  - style-check
+
 build:
   stage: build
   tags:
@@ -12,4 +16,22 @@ build:
     paths:
       - src/C3_SimpleBashUtils-0/src/cat/s21_cat
       - src/C3_SimpleBashUtils-0/src/grep/s21_grep
-    expire_in: 1 month
+    expire_in: 1 days
+
+style-check:
+  stage: style-check
+  tags:
+    - ws1_cicd
+  script:
+    - cd src/C3_SimpleBashUtils-0/src/
+    - clang-format -n cat/s21_cat.c &>> clang_output.txt
+    - clang-format -n cat/s21_cat.h &>> clang_output.txt
+    - clang-format -n cat/test_cat.sh &>> clang_output.txt
+    - bash cat/check_clang_output.sh
+    - clang-format -n grep/s21_grep.c &>> clang_output.txt
+    - clang-format -n grep/s21_grep.h &>> clang_output.txt
+    - clang-format -n grep/test_grep.sh &>> clang_output.txt
+    - clang-format -n grep/old_test_grep.sh &>> clang_output.txt
+    - bash grep/check_clang_output.sh
+    - cat clang_output.txt
+  allow_failure: false
