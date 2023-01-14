@@ -2,6 +2,7 @@ stages:
   - build
   - style-check
   - test
+  - deploy
 
 build:
   stage: build
@@ -15,8 +16,8 @@ build:
     - make
   artifacts:
     paths:
-      - src/C3_SimpleBashUtils-0/src/cat/s21_cat
-      - src/C3_SimpleBashUtils-0/src/grep/s21_grep
+    - src/C3_SimpleBashUtils-0/src/cat/s21_cat
+    - src/C3_SimpleBashUtils-0/src/grep/s21_grep
     expire_in: 30 days
 
 style-check:
@@ -50,3 +51,13 @@ test:
     - make test_grep
     - bash ../pipeline_scripts/check_test_results.sh
   allow_failure: false
+
+deploy:
+  stage: deploy
+  when: manual
+  tags:
+    - ws1_cicd
+  script:
+    - bash src/C3_SimpleBashUtils-0/src/pipeline_scripts/copy_files_to_ws2.sh
+  allow_failure: false
+ 
