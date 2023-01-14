@@ -2,6 +2,9 @@
 
 Development of a simple **CI/CD** for the *SimpleBashUtils* project. Building, testing, deployment.
 
+[_The solutions to the tasks - scripts and reports can be found in the src folder. Each part in each own folder.\
+For example part 1 is located in the "01" folder._](https://github.com/finchren/School21_main_education/tree/main/CICD/src)
+
 ## Contents
 
    1. [Setting up the gitlab-runner](#part-1-setting-up-the-gitlab-runner)  
