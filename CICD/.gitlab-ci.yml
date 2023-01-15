@@ -1,8 +1,16 @@
+variables:
+  TELEGRAM_BOT_TOKEN: "5832561739:AAHUw8ySKVVq2Bc_orcHuE_ewM1MeY47FMw"
+  TELEGRAM_USER_ID: "341749425"
+
 stages:
   - build
   - style-check
   - test
+  - ci_notify_success
+  - ci_notify_failure
   - deploy
+  - cd_notify_success
+  - cd_notify_failure
 
 build:
   stage: build
@@ -33,7 +41,7 @@ style-check:
     - clang-format -n grep/s21_grep.h &>> clang_output.txt
     - clang-format -n grep/test_grep.sh &>> clang_output.txt
     - clang-format -n grep/old_test_grep.sh &>> clang_output.txt
-    # Line below is used for testing to fail the stage
+    # Uncomment to fail the CI stage
     #- clang-format -n grep/Makefile &>> clang_output.txt
     - bash pipeline_scripts/check_clang_output.sh
     - cat clang_output.txt
@@ -52,6 +60,21 @@ test:
     - bash ../pipeline_scripts/check_test_results.sh
   allow_failure: false
 
+ci_notify_success:
+  stage: ci_notify_success
+  tags:
+    - ws1_cicd
+  script:
+  - bash src/06/ci_notify.sh ✅
+
+ci_notify_failure:
+  stage: ci_notify_failure
+  tags:
+    - ws1_cicd
+  script:
+  - bash src/06/ci_notify.sh ❌
+  when: on_failure
+
 deploy:
   stage: deploy
   when: manual
@@ -59,5 +82,21 @@ deploy:
     - ws1_cicd
   script:
     - bash src/C3_SimpleBashUtils-0/src/pipeline_scripts/copy_files_to_ws2.sh
+    # Uncomment to fail the CD stage
+    #- bash src/C3_SimpleBashUtils-0/src/pipeline_scripts/doesnt_exist.sh
   allow_failure: false
- 
+
+cd_notify_success:
+  stage: cd_notify_success
+  tags:
+    - ws1_cicd
+  script:
+  - bash src/06/cd_notify.sh ✅
+
+cd_notify_failure:
+  stage: cd_notify_failure
+  tags:
+    - ws1_cicd
+  script:
+  - bash src/06/cd_notify.sh ❌
+  when: on_failure
