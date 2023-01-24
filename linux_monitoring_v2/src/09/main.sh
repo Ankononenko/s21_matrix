@@ -16,8 +16,8 @@ if [ $# != 0 ]; then
 else
 
 	while true; do
-		if [[ -f "/var/www/html/index.html" ]]; then
-			rm /var/www/html/index.html
+		if [[ -f "/var/www/html/metrics/index.html" ]]; then
+			rm /var/www/html/metrics/index.html
 		fi
 		scrape_cpu
 		scrape_free_hd_space
