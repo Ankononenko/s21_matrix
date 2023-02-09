@@ -11,4 +11,8 @@
 
 enum return_value { SUCCESS, ERROR };
 
+int get_float_exponent(long double num);
+void get_bit_string(long double abs_src, char* bit_string, int exponent);
+void set_bits_from_string(char* bit_string, s21_decimal *dst);
+
 #endif
