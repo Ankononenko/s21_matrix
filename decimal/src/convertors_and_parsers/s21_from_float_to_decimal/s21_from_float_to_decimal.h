@@ -6,8 +6,10 @@
 
 #include "../../bit_control/bit_control.h"
 #include "../../helpers/helpers.h"
-#include "string.h"
+#include "../../s21_decimal.h"
+#include <string.h>
 #include <math.h>
+#include "../../helpers/helpers.h"
 
 enum return_value { SUCCESS, ERROR };
 

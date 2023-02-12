@@ -25,17 +25,16 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
 }
 
 void set_bits_from_string(char* bit_string, s21_decimal *dst) {
-  for (int index = 0; index < 128; ++index) {
-    if (bit_string[index]) {
-      // TODO: Change set bit to accept decimal structure
-      set_bit()
+  for (size_t index = strlen(bit_string) - 1; index < strlen(bit_string); --index) {
+    if (bit_string[index] - '0') {
+      ADD_BIT(dst->bits[index / 32], (index % 32));
     }
   }
 }
 
 void get_bit_string(long double abs_src, char* bit_string, int exponent) {
   long double max_exp = 28, epsilon = 1e-6;
-  abs_src *= powl((long double)10, (long double)(28 - exponent));
+  abs_src *= powl((long double)10, (long double)(max_exp - exponent));
   for (int index = 0; index > epsilon; ++index) {
     abs_src = floorl(abs_src) / 2;
     if (abs_src - floorl(abs_src) > epsilon) {
