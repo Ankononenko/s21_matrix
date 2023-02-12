@@ -8,11 +8,14 @@ void new_set_bit(s21_decimal* num, int bit, int index) {
   (bit == 1) ? (num->bits[index / 32] |= (1 << index % 32)) : (num->bits[index / 32] &= (1 << index % 32));
 }
 
+int get_bit(s21_decimal num, int index) {
+    return (num.bits[index / 32] >> (index % 32)) & 1;
+}
+
 int set_bit(int* num, int index) {
   (*num) |= (1 << index);
   return *num;
 }
-
 
 int reset_bit (int* num, int index) {
   (*num) = (*num) & ~(1 << index);

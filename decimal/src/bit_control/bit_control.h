@@ -4,6 +4,7 @@
 #include "../s21_decimal.h"
 
 // New version of bit control functions. Macros look a lot cleaner
+#define IS_BIT_SET(X, POS) ((X >> POS) & 1U)
 #define SET_BIT(X, BIT, POS) (X |= (BIT << POS))
 #define ADD_BIT(X, POS) ((X) |= (1U << (POS)))
 
@@ -13,6 +14,7 @@ typedef enum Bool {
 } Bool;
 
 int is_bit_set(int num, int index);
+int get_bit(s21_decimal num, int index);
 void new_set_bit(s21_decimal* num, int bit, int index);
 int set_bit(int* num, int index);
 int reset_bit(int* num, int index);
