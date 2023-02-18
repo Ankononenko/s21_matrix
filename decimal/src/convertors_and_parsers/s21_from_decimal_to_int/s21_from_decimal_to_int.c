@@ -1,7 +1,6 @@
 #include "s21_from_decimal_to_int.h"
 
 int s21_from_decimal_to_int(s21_decimal src, int *dst) {
-  memset(dst, 0, sizeof(int) * 4);
   int return_value = SUCCESS;
   if (dst) {
     *dst = src.bits[0];

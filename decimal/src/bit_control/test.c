@@ -11,8 +11,7 @@ int main(void) {
 void test_reset_bit() {
   int reset_bit_passed_tests = 0, reset_bit_total_tests = 0, reset_bit_failed_tests = 0;
 
-  int reset_bit_test_1 = 1;
-  reset_bit(&reset_bit_test_1, 0);
+  int reset_bit_test_1 = reset_bit(1, 0);
   printf("1. First bit of 1 set = %d\n", reset_bit_test_1);
   if (reset_bit_test_1 == 0) {
     printf("Passed\n");
@@ -24,8 +23,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_2 = 1;
-  reset_bit(&reset_bit_test_2, 2);
+  int reset_bit_test_2 = reset_bit(1, 2);
   printf("2. Second bit of 1 set = %d\n", reset_bit_test_2); 
   if (reset_bit_test_2 == 1) {
     printf("Passed\n");
@@ -37,8 +35,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_3 = 7;
-  reset_bit(&reset_bit_test_3, 0);
+  int reset_bit_test_3 = reset_bit(7, 0);
   printf("3. 3 bit of 7 set = %d\n", reset_bit_test_3); 
   if (reset_bit_test_3 == 6) {
     printf("Passed\n");
@@ -50,8 +47,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_4 = 7;
-  reset_bit(&reset_bit_test_4, 2);
+  int reset_bit_test_4 = reset_bit(7, 2);
   printf("4. 7 bit of 1 set = %d\n", reset_bit_test_4); 
   if (reset_bit_test_4 == 3) {
     printf("Passed\n");
@@ -63,8 +59,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_5 = 7;
-  reset_bit(&reset_bit_test_5, 31);
+  int reset_bit_test_5 = reset_bit(7, 31);
   printf("5. 31 bit of 1 set = %d\nn", reset_bit_test_5); 
   if (reset_bit_test_5 == 7) {
     printf("Passed\n");
@@ -76,8 +71,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_6 = -2147483648;
-  reset_bit(&reset_bit_test_6, 31);
+  int reset_bit_test_6 = reset_bit(-2147483648, 31);
   printf("6. 30 bit of -2147483648 set = %d\n", reset_bit_test_6); 
   if (reset_bit_test_6 == 0) {
     printf("Passed\n");
@@ -89,8 +83,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_7 = -2147483648;
-  reset_bit(&reset_bit_test_7, 0);
+  int reset_bit_test_7 = reset_bit(-2147483648, 0);
   printf("7. 0 bit of -2147483648 set = %d\n", reset_bit_test_7); 
   if (reset_bit_test_7 == -2147483648) {
     printf("Passed\n");
@@ -102,8 +95,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_8 = -2147483648;
-  reset_bit(&reset_bit_test_8, 15);
+  int reset_bit_test_8 = reset_bit(-2147483648, 15);
   printf("8. 15 bit of -2147483648 set = %d\n", reset_bit_test_8); 
   if (reset_bit_test_8 == -2147483648) {
     printf("Passed\n");
@@ -115,8 +107,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_9 = 2147483647;
-  reset_bit(&reset_bit_test_9, 1);
+  int reset_bit_test_9 = reset_bit(2147483647, 1);
   printf("9. 1 bit of 2147483647 set = %d\n", reset_bit_test_9); 
   if (reset_bit_test_9 == 2147483645) {
     printf("Passed\n");
@@ -128,8 +119,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_10 = 2147483647;
-  reset_bit(&reset_bit_test_10, 15);
+  int reset_bit_test_10 = reset_bit(2147483647, 15);
   printf("10. 15 bit of 2147483647 set = %d\n", reset_bit_test_10); 
   if (reset_bit_test_10 == 2147450879) {
     printf("Passed\n");
@@ -141,8 +131,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_11 = 2147483647;
-  reset_bit(&reset_bit_test_11, 30);
+  int reset_bit_test_11 = reset_bit(2147483647, 30);
   printf("11. 31 bit of 1 set = %d\n", reset_bit_test_11); 
   if (reset_bit_test_11 == 1073741823) {
     printf("Passed\n");
@@ -154,8 +143,7 @@ void test_reset_bit() {
     ++reset_bit_total_tests;
   }
 
-  int reset_bit_test_12 = 0;
-  reset_bit(&reset_bit_test_12, 0);
+  int reset_bit_test_12 = reset_bit(0, 0);
   printf("12. 0 bit of 0 set = %d\n", reset_bit_test_12); 
   if (reset_bit_test_12 == 0) {
     printf("Passed\n");
@@ -175,8 +163,7 @@ void test_reset_bit() {
 void test_set_bit() {
   int set_bit_passed_tests = 0, set_bit_total_tests = 0, set_bit_failed_tests = 0;
 
-  int set_bit_test_1 = 1;
-  set_bit(&set_bit_test_1, 1);
+  int set_bit_test_1 = set_bit(1, 1);
   printf("1. First bit of 1 set = %d\n", set_bit_test_1);
   if (set_bit_test_1 == 3) {
     printf("Passed\n");
@@ -188,8 +175,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_2 = 1;
-  set_bit(&set_bit_test_2, 2);
+  int set_bit_test_2 = set_bit(1, 2);
   printf("2. Second bit of 1 set = %d\n", set_bit_test_2); 
   if (set_bit_test_2 == 5) {
     printf("Passed\n");
@@ -201,8 +187,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_3 = 7;
-  set_bit(&set_bit_test_3, 3);
+  int set_bit_test_3 = set_bit(7, 3);
   printf("3. 3 bit of 7 set = %d\n", set_bit_test_3); 
   if (set_bit_test_3 == 15) {
     printf("Passed\n");
@@ -214,8 +199,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_4 = 7;
-  set_bit(&set_bit_test_4, 7);
+  int set_bit_test_4 = set_bit(7, 7);
   printf("4. 7 bit of 1 set = %d\n", set_bit_test_4); 
   if (set_bit_test_4 == 135) {
     printf("Passed\n");
@@ -227,8 +211,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_5 = 7;
-  set_bit(&set_bit_test_5, 31);
+  int set_bit_test_5 = set_bit(7, 31);
   printf("5. 31 bit of 1 set = %d\nn", set_bit_test_5); 
   if (set_bit_test_5 == -2147483641) {
     printf("Passed\n");
@@ -240,8 +223,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_6 = -2147483648;
-  set_bit(&set_bit_test_6, 30);
+  int set_bit_test_6 = set_bit(-2147483648, 30);
   printf("6. 30 bit of -2147483648 set = %d\n", set_bit_test_6); 
   if (set_bit_test_6 == -1073741824) {
     printf("Passed\n");
@@ -253,8 +235,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_7 = -2147483648;
-  set_bit(&set_bit_test_7, 0);
+  int set_bit_test_7 = set_bit(-2147483648, 0);
   printf("7. 0 bit of -2147483648 set = %d\n", set_bit_test_7); 
   if (set_bit_test_7 == -2147483647) {
     printf("Passed\n");
@@ -266,8 +247,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_8 = -2147483648;
-  set_bit(&set_bit_test_8, 15);
+  int set_bit_test_8 = set_bit(-2147483648, 15);
   printf("8. 15 bit of -2147483648 set = %d\n", set_bit_test_8); 
   if (set_bit_test_8 == -2147450880) {
     printf("Passed\n");
@@ -279,8 +259,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_9 = 2147483647;
-  set_bit(&set_bit_test_9, 1);
+  int set_bit_test_9 = set_bit(2147483647, 1);
   printf("9. 1 bit of 2147483647 set = %d\n", set_bit_test_9); 
   if (set_bit_test_9 == 2147483647) {
     printf("Passed\n");
@@ -292,8 +271,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_10 = 2147483647;
-  set_bit(&set_bit_test_10, 15);
+  int set_bit_test_10 = set_bit(2147483647, 15);
   printf("10. 15 bit of 2147483647 set = %d\n", set_bit_test_10); 
   if (set_bit_test_9 == 2147483647) {
     printf("Passed\n");
@@ -305,8 +283,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_11 = 2147483647;
-  set_bit(&set_bit_test_11, 31);
+  int set_bit_test_11 = set_bit(2147483647, 31);
   printf("11. 31 bit of 1 set = %d\n", set_bit_test_11); 
   if (set_bit_test_11 == -1) {
     printf("Passed\n");
@@ -318,8 +295,7 @@ void test_set_bit() {
     ++set_bit_total_tests;
   }
 
-  int set_bit_test_12 = 0;
-  set_bit(&set_bit_test_12, 0);
+  int set_bit_test_12 = set_bit(0, 0);
   printf("12. 0 bit of 0 set = %d\n", set_bit_test_12); 
   if (set_bit_test_12 == 1) {
     printf("Passed\n");
