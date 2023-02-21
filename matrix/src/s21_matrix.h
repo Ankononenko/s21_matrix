@@ -15,5 +15,6 @@ typedef struct matrix_struct {
 } matrix_t;
 
 int s21_create_matrix(int rows, int columns, matrix_t *result);
+void s21_remove_matrix(matrix_t *A);
 
 #endif // S21_MATRIX_H
