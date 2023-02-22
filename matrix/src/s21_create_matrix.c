@@ -12,10 +12,13 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
     }
     if (!result->matrix) {
       printf("Memory allocation failed\n");
-      return_code = ERROR;
+      return_code = ERROR_ENUM;
     }
+    // TODO: probably need to check if the matrix the was completely filled. But at this point it should be
+    // Not too sure
+    return_code = SUCCESS_ENUM;
   } else {
-    return_code = ERROR;
+    return_code = ERROR_ENUM;
   }
   return return_code;
 }
