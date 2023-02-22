@@ -84,6 +84,26 @@ int main(void) {
   s21_remove_matrix(&first);
   s21_remove_matrix(&second);
 
+  printf("Sum two matrix\n");
+  s21_create_matrix(3, 4, &first);
+  fill_in_the_matrix(&first, first_example);
+  print_out_matrix(first.rows, first.columns, first.matrix);
+  s21_create_matrix(3, 4, &second);
+  fill_in_the_matrix(&second, second_example);
+  print_out_matrix(second.rows, second.columns, second.matrix);
+  matrix_t third;
+  s21_sum_matrix(&first, &second, &third);
+  print_out_matrix(third.rows, third.columns, third.matrix);
+  printf("expected_result:\n"
+    "1.089362 0.736771 1.043193 1.172160\n"
+    "1.132722 0.547935 0.924353 0.201595\n"
+    "0.619526 1.236429 1.146961 0.794569\n"
+  "};{\n");
+  s21_remove_matrix(&first);
+  s21_remove_matrix(&second);
+  s21_remove_matrix(&third);
+  
+
   return 0;
 }
 
