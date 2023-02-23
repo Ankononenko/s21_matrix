@@ -1,5 +1,4 @@
 #include "s21_matrix.h"
-#include <stdlib.h>
 
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   int return_code;

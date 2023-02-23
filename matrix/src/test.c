@@ -13,10 +13,14 @@ int main(void) {
   s21_create_matrix(5, 5, &first);
   printf("rows = %d, columns = %d\n", first.rows, first.columns);
   print_out_matrix(first.rows, first.columns, first.matrix);
-  
+
+  printf("End of the test\n\n\n");
+
   printf("Remove:\n");
   s21_remove_matrix(&first);
   print_out_matrix(first.rows, first.columns, first.matrix);
+
+  printf("End of the test\n\n\n");
 
   printf("First compare:\n");
   s21_create_matrix(5, 5, &first);
@@ -34,10 +38,12 @@ int main(void) {
   s21_remove_matrix(&first);
   s21_remove_matrix(&second);
 
+  printf("End of the test\n\n\n");
+
+  printf("Second compare not equal test:\n");
   s21_create_matrix(1, 5, &first);
   printf("rows = %d, columns = %d\n", first.rows, first.columns);
   print_out_matrix(first.rows, first.columns, first.matrix);
-  printf("Second compare:\n");
   s21_create_matrix(5, 1, &second);
   printf("rows = %d, columns = %d\n", second.rows, second.columns);
   print_out_matrix(second.rows, second.columns, second.matrix);
@@ -47,6 +53,8 @@ int main(void) {
 
   s21_remove_matrix(&first);
   s21_remove_matrix(&second);
+
+  printf("End of the test\n\n\n");
 
   printf("Compare the double equal matrix\n");
   s21_create_matrix(3, 4, &first);
@@ -66,6 +74,8 @@ int main(void) {
   s21_remove_matrix(&first);
   s21_remove_matrix(&second);
 
+  printf("End of the test\n\n\n");
+
   printf("Compare the double not equal matrix\n");
   s21_create_matrix(3, 4, &first);
   double second_example[3][4] = {
@@ -83,6 +93,8 @@ int main(void) {
 
   s21_remove_matrix(&first);
   s21_remove_matrix(&second);
+
+  printf("End of the test\n\n\n");
 
   printf("Sum two matrix\n");
   s21_create_matrix(3, 4, &first);
@@ -103,6 +115,8 @@ int main(void) {
   s21_remove_matrix(&second);
   s21_remove_matrix(&third);
 
+  printf("End of the test\n\n\n");
+
   printf("Substract two matrix\n");
   s21_create_matrix(3, 4, &first);
   fill_in_the_matrix(&first, first_example);
@@ -120,6 +134,8 @@ int main(void) {
   s21_remove_matrix(&first);
   s21_remove_matrix(&second);
   s21_remove_matrix(&third);
+
+  printf("End of the test\n\n\n");
 
   return 0;
 }
