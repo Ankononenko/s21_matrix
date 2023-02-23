@@ -1,10 +1,109 @@
 #include "s21_matrix.h"
 #include <stdlib.h>
 #include <time.h>
+#include <check.h>
 
 void print_out_matrix(int rows, int columns, double** result);
 void fill_in_the_matrix(matrix_t* matrix, double example_array[][4]);
 void generate_random_array();
+
+// Create matrix
+START_TEST(test_s21_create_matrix_1) {
+    matrix_t A;
+    int result = s21_create_matrix(1, 1, &A);
+    ck_assert_int_eq(A.rows, 1);
+    ck_assert_int_eq(A.columns, 1);
+    ck_assert_int_eq(result, SUCCESS_ENUM);
+    s21_remove_matrix(&A);
+}
+END_TEST
+
+START_TEST(test_s21_create_matrix_2) {
+    matrix_t A;
+    int result = s21_create_matrix(5, 42, &A);
+    ck_assert_int_eq(A.rows, 5);
+    ck_assert_int_eq(A.columns, 42);
+    ck_assert_int_eq(result, SUCCESS_ENUM);
+    s21_remove_matrix(&A);
+}
+END_TEST
+
+START_TEST(test_s21_create_matrix_3) {
+    matrix_t A;
+    int result = s21_create_matrix(666, 666, &A);
+    ck_assert_int_eq(A.rows, 666);
+    ck_assert_int_eq(A.columns, 666);
+    ck_assert_int_eq(result, SUCCESS_ENUM);
+    s21_remove_matrix(&A);
+}
+END_TEST
+
+START_TEST(test_s21_create_matrix_4) {
+    matrix_t A;
+    int result = s21_create_matrix(0, 0, &A);
+    ck_assert_int_eq(result, ERROR_ENUM);
+}
+END_TEST
+
+START_TEST(test_s21_create_matrix_5) {
+    matrix_t A;
+    int result = s21_create_matrix(0, 1, &A);
+    ck_assert_int_eq(result, ERROR_ENUM);
+}
+END_TEST
+
+START_TEST(test_s21_create_matrix_6) {
+    matrix_t A;
+    int result = s21_create_matrix(1, 0, &A);
+    ck_assert_int_eq(result, ERROR_ENUM);
+}
+END_TEST
+
+// Remove matrix
+START_TEST(test_s21_remove_matrix_1) {
+    matrix_t A;
+    s21_create_matrix(5, 42, &A);
+    s21_remove_matrix(&A);
+    int result_rows = A.rows;
+    int result_columns = A.columns;
+    void* ptr_after = A.matrix;
+    ck_assert_int_eq(result_rows, 0);
+    ck_assert_int_eq(result_columns, 0);
+    ck_assert_int_eq((intmax_t)ptr_after, (intmax_t)NULL);
+}
+END_TEST
+
+START_TEST(test_s21_remove_matrix_2) {
+    matrix_t A;
+    s21_create_matrix(666, 666, &A);
+    s21_remove_matrix(&A);
+    int result_rows = A.rows;
+    int result_columns = A.columns;
+    void* ptr_after = A.matrix;
+    ck_assert_int_eq(result_rows, 0);
+    ck_assert_int_eq(result_columns, 0);
+    ck_assert_int_eq((intmax_t)ptr_after, (intmax_t)NULL);
+}
+END_TEST
+
+START_TEST(test_s21_remove_matrix_3) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    double first_example[3][4] = {
+      {0.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, 0.4396532, 0.0207605, 0.0485195},
+      {0.3382748, 0.9805113, 0.1932359, 0.1689479}
+    };
+    fill_in_the_matrix(&A, first_example);
+    s21_remove_matrix(&A);
+    int result_rows = A.rows;
+    int result_columns = A.columns;
+    void* ptr_after = A.matrix;
+    ck_assert_int_eq(result_rows, 0);
+    ck_assert_int_eq(result_columns, 0);
+    ck_assert_int_eq((intmax_t)ptr_after, (intmax_t)NULL);
+}
+END_TEST
 
 int main(void) {
 
@@ -137,7 +236,29 @@ int main(void) {
 
   printf("End of the test\n\n\n");
 
-  return 0;
+  Suite *s1 = suite_create("s21_matrix: ");
+  TCase *tc1_1 = tcase_create("s21_matrix: ");
+  SRunner *sr = srunner_create(s1);
+  int result;
+  suite_add_tcase(s1, tc1_1);
+
+  // Create_matrix
+  tcase_add_test(tc1_1, test_s21_create_matrix_1);
+  tcase_add_test(tc1_1, test_s21_create_matrix_2);
+  tcase_add_test(tc1_1, test_s21_create_matrix_3);
+  tcase_add_test(tc1_1, test_s21_create_matrix_4);
+  tcase_add_test(tc1_1, test_s21_create_matrix_5);
+  tcase_add_test(tc1_1, test_s21_create_matrix_6);
+
+  // Remove matrix
+  tcase_add_test(tc1_1, test_s21_remove_matrix_1);
+  tcase_add_test(tc1_1, test_s21_remove_matrix_2);
+  tcase_add_test(tc1_1, test_s21_remove_matrix_3);
+
+  srunner_run_all(sr, CK_ENV);
+  result = srunner_ntests_failed(sr);
+  srunner_free(sr);
+  return result == 0 ? 0 : 1;
 }
 
 void print_out_matrix(int rows, int columns, double** result) {
