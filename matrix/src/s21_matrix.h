@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define UNUSED_SHIT(fucking_unused_shit) do { (void)(fucking_unused_shit); } while (0)
 

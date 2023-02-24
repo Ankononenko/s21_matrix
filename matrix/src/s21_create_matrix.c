@@ -5,9 +5,9 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
   if (rows && columns && result) {
     result->rows = rows;
     result->columns = columns;
-    result->matrix = (double**)calloc(rows, sizeof(double));
-    for (int column_index = 0; column_index < rows; ++column_index) {
-      result->matrix[column_index] = (double*)calloc(columns, sizeof(double));
+    result->matrix = (double**)calloc(rows, sizeof(double*));
+    for (int row_index = 0; row_index < rows; ++row_index) {
+      result->matrix[row_index] = (double*)calloc(columns, sizeof(double));
     }
     if (!result->matrix) {
       printf("Memory allocation failed\n");
