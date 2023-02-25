@@ -7,8 +7,8 @@
 
 #define UNUSED_SHIT(fucking_unused_shit) do { (void)(fucking_unused_shit); } while (0)
 
-#define SUCCESS 1
 #define FAILURE 0
+#define SUCCESS 1
 #define EPSILON 1e-6
 
 enum return_codes { SUCCESS_ENUM, ERROR_ENUM, CALCULATION_ERROR_ENUM };

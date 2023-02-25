@@ -17,7 +17,7 @@ int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
       column_index = 0;
       ++row_index;
     }
-    if (row_index == A->rows - 1) {
+    if (row_index == A->rows) {
       return_code = SUCCESS_ENUM;
     }
   }
