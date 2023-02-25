@@ -2,7 +2,9 @@
 
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   int return_code;
-  if (!A || !B || !result || A->rows != B->rows || A->rows != result->rows || A->columns != B->columns || A->columns != result->columns) {
+  if (!A || !B || !result ||
+      A->rows != B->rows || A->rows != result->rows ||
+      A->columns != B->columns || A->columns != result->columns) {
       return_code = ERROR_ENUM;
   } else {
     s21_create_matrix(A->rows, A->columns, result);
