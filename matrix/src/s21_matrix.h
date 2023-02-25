@@ -9,7 +9,7 @@
 
 #define SUCCESS 1
 #define FAILURE 0
-#define EPSILON 1e-7
+#define EPSILON 1e-6
 
 enum return_codes { SUCCESS_ENUM, ERROR_ENUM, CALCULATION_ERROR_ENUM };
 

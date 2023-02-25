@@ -2,8 +2,8 @@
 
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   int return_code;
-  if (!A || !B || !result) {
-    return_code = ERROR_ENUM;
+  if (!A || !B || !result || A->rows != B->rows || A->rows != result->rows || A->columns != B->columns || A->columns != result->columns) {
+      return_code = ERROR_ENUM;
   } else {
     s21_create_matrix(A->rows, A->columns, result);
     int row_index = 0, column_index = 0;
@@ -15,7 +15,7 @@ int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
       column_index = 0;
       ++row_index;
     }
-    if (row_index == A->rows - 1) {
+    if (row_index == A->rows) {
       return_code = SUCCESS_ENUM;
     }
   }

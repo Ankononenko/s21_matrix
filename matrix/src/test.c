@@ -295,6 +295,271 @@ START_TEST(test_s21_eq_matrix_9) {
 }
 END_TEST
 
+// Sum matrix
+
+START_TEST(test_s21_sum_matrix_1) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double zero_matrix[3][4] = {
+      {0.0, 0.0, 0.0, 0.0},
+      {0.0, 0.0, 0.0, 0.0},
+      {0.0, 0.0, 0.0, 0.0}
+    };
+    fill_in_the_matrix(&C, zero_matrix);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&C);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_2) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double first_example[3][4] = {
+      {0.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, 0.4396532, 0.0207605, 0.0485195},
+      {0.3382748, 0.9805113, 0.1932359, 0.1689479}
+    };
+    fill_in_the_matrix(&B, first_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    fill_in_the_matrix(&C, first_example);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&C);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_3) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double first_example[3][4] = {
+      {0.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, 0.4396532, 0.0207605, 0.0485195},
+      {0.3382748, 0.9805113, 0.1932359, 0.1689479}
+    };
+    fill_in_the_matrix(&A, first_example);
+    fill_in_the_matrix(&B, first_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double expected_output[3][4] = {
+      {1.9182142, 0.1886732, 0.3292156, 1.0625706},
+      {0.9081060, 0.8793064, 0.0415210, 0.0970389},
+      {0.6765496, 1.9610226, 0.3864718, 0.3378958}
+    };
+    fill_in_the_matrix(&C, expected_output);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&C);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_4) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double first_example[3][4] = {
+      {0.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, 0.4396532, 0.0207605, 0.0485195},
+      {0.3382748, 0.9805113, 0.1932359, 0.1689479}
+    };
+    fill_in_the_matrix(&A, first_example);
+    double second_example[3][4] = {
+      {0.1302556, 0.6424344, 0.8785851, 0.6408750},
+      {0.6786694, 0.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&B, second_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double expected_result[3][4] = {
+      {1.0893627, 0.7367710, 1.0431930, 1.1721603},
+      {1.1327224, 0.5479353, 0.924353, 0.2015956},
+      {0.6195266, 1.2364293, 1.1469614, 0.7945692}
+    };
+    fill_in_the_matrix(&C, expected_result);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&C);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_5) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double first_example[3][4] = {
+      {111.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, -3456789.4396532, 4567890.0207605, 35467899087645678.0485195},
+      {0.3382748, -0.9805113, 9090909.1932359, 0.1689479}
+    };
+    fill_in_the_matrix(&A, first_example);
+    double second_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&B, second_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double expected_result[3][4] = {
+      {111.9591081, 0.7367710, 1.0431930, -0.1095897},
+      {0.4540530, -3461356.547935, 4567890.924353, 35467899087645678.2015957},
+      {0.6195266, -0.7245933, 9090910.1469614, 0.7945692}
+    };
+    fill_in_the_matrix(&C, expected_result);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&C);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_6) {
+    matrix_t A;
+    s21_create_matrix(2, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double first_example[2][4] = {
+      {111.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, -3456789.4396532, 4567890.0207605, 35467899087645678.0485195}
+    };
+    fill_in_the_matrix(&A, first_example);
+    double second_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&B, second_example);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_7) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double first_example[3][4] = {
+      {111.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {111.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, -3456789.4396532, 4567890.0207605, 35467899087645678.0485195}
+    };
+    fill_in_the_matrix(&A, first_example);
+    double second_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&B, second_example);
+    matrix_t D;
+    s21_create_matrix(2, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_8) {
+    matrix_t A;
+    s21_create_matrix(3, 3, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double second_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&B, second_example);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_sum_matrix_9) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    double first_example[3][4] = {
+      {111.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {111.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, -3456789.4396532, 4567890.0207605, 35467899087645678.0485195}
+    };
+    fill_in_the_matrix(&A, first_example);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double second_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&B, second_example);
+    matrix_t D;
+    s21_create_matrix(3, 6, &D);
+    int return_code_result = s21_sum_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
 int main(void) {
 
   matrix_t first;
@@ -393,6 +658,7 @@ int main(void) {
   fill_in_the_matrix(&second, second_example);
   print_out_matrix(second.rows, second.columns, second.matrix);
   matrix_t third;
+  s21_create_matrix(3, 4, &third);
   s21_sum_matrix(&first, &second, &third);
   print_out_matrix(third.rows, third.columns, third.matrix);
   printf("expected_result:\n"
@@ -426,6 +692,51 @@ int main(void) {
 
   printf("End of the test\n\n\n");
 
+
+
+
+  /// TEst teststeset 
+    printf("Sum failed tests\n");
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double t_first_example[3][4] = {
+      {111.9591071, 0.0943366, 0.1646078, 0.5312853},
+      {0.4540530, -3456789.4396532, 4567890.0207605, 35467899087645678.0485195},
+      {0.3382748, -0.9805113, 9090909.1932359, 0.1689479}
+    };
+    double t_second_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&A, t_first_example);
+    fill_in_the_matrix(&B, t_second_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double t_expected_output[3][4] = {
+      {111.9591081, 0.7367710, 1.0431930, -0.1095897},
+      {0.4540530, -3456793.5479353, 4567890.924354, 35467899087645678.2015957},
+      {0.6195266, -0.7245933, 9090910.1469614, 0.7945692}
+    };
+    fill_in_the_matrix(&C, t_expected_output);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    s21_sum_matrix(&A, &B, &D);
+    printf("\n\n\nC, expected output:\n");
+    print_out_matrix(3, 4, C.matrix);
+    printf("End of C:\n");
+    printf("D, real output:\n");
+    print_out_matrix(3, 4, D.matrix);
+    printf("End of D:\n");
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&C);
+    s21_remove_matrix(&D);
+
+  // End of etestet
+
   Suite *s1 = suite_create("s21_matrix: ");
   TCase *tc1_1 = tcase_create("s21_matrix: ");
   SRunner *sr = srunner_create(s1);
@@ -455,6 +766,18 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_eq_matrix_7);
   tcase_add_test(tc1_1, test_s21_eq_matrix_8);
   tcase_add_test(tc1_1, test_s21_eq_matrix_9);
+
+  // Sum matrix
+
+  tcase_add_test(tc1_1, test_s21_sum_matrix_1);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_2);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_3);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_4);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_5);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_6);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_7);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_8);
+  tcase_add_test(tc1_1, test_s21_sum_matrix_9);
 
 
   srunner_run_all(sr, CK_ENV);
