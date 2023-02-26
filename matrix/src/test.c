@@ -901,6 +901,114 @@ START_TEST(test_s21_mult_number_1) {
 }
 END_TEST
 
+START_TEST(test_s21_mult_number_2) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    double first_example[3][4] = {
+      {0.000001, 2.0, 0.164607, 0.531285},
+      {0.454053, 0.439653, 0.020760, 0.048519},
+      {0.338274, 0.980511, 5678909876.193235, 0.168947}
+    };
+    fill_in_the_matrix(&A, first_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double expected_result[3][4] = {
+      {0.000099, 198.000000, 16.296093, 52.597215},
+      {44.951247, 43.525647, 2.055240, 4.803381},
+      {33.489126, 97.070589, 562212077743.130249, 16.725753}
+    };
+    fill_in_the_matrix(&C, expected_result);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_mult_number(&A, 99.0, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_mult_number_3) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    double first_example[3][4] = {
+      {0.000001, 2.0, 0.164607, 0.531285},
+      {0.454053, 0.439653, 0.020760, 0.048519},
+      {0.338274, 0.980511, 5678909876.193235, 0.168947}
+    };
+    fill_in_the_matrix(&A, first_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double expected_result[3][4] = {
+      {0.000000, 0.000000, 0.000000, 0.000000},
+      {0.000000, 0.000000, 0.000000, 0.000000},
+      {0.000000, 0.000000, 0.000000, 0.000000}
+    };
+    fill_in_the_matrix(&C, expected_result);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_mult_number(&A, 0.0, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_mult_number_4) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    double first_example[3][4] = {
+      {-0.000001, -2.0, -0.164607, -0.531285},
+      {-0.454053, -0.439653, -0.020760, -0.048519},
+      {-0.338274, -0.980511, -5678909876.193235, -0.168947}
+    };
+    fill_in_the_matrix(&A, first_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double expected_result[3][4] = {
+      {-0.000042, -84.000000, -6.913494, -22.313970},
+      {-19.070226, -18.465426, -0.871920, -2.037798},
+      {-14.207508, -41.181462, -238514214800.115875, -7.095774}
+    };
+    fill_in_the_matrix(&C, expected_result);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_mult_number(&A, 42.0, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_mult_number_5) {
+    matrix_t A;
+    s21_create_matrix(0, 4, &A);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_mult_number(&A, 42.0, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_mult_number_6) {
+    matrix_t A;
+    s21_create_matrix(4, 3, &A);
+    matrix_t D;
+    s21_create_matrix(42, 4, &D);
+    int return_code_result = s21_mult_number(&A, 42.0, &D);
+    ck_assert_int_eq(return_code_result, CALCULATION_ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
 int main(void) {
 
   matrix_t first;
@@ -1042,32 +1150,32 @@ int main(void) {
     printf("Current example\n");
     matrix_t A;
     s21_create_matrix(3, 4, &A);
-    matrix_t B;
-    s21_create_matrix(3, 4, &B);
+    // matrix_t B;
+    // s21_create_matrix(3, 4, &B);
     double t_first_example[3][4] = {
-      {111.959107, 0.094336, 0.164607, 0.531285},
-      {0.454053, -3456789.439653, 4567890.020760, 35467899087645678.048519},
-      {0.338274, -0.980511, 9090909.193235, 0.168947}
+      {-0.000001, -2.0, -0.164607, -0.531285},
+      {-0.454053, -0.439653, -0.020760, -0.048519},
+      {-0.338274, -0.980511, -5678909876.193235, -0.168947}
     };
-    double t_second_example[3][4] = {
-      {0.000001, 0.642434, 0.878585, -0.640875},
-      {0.000000, -4567.108282, 0.903593, 0.153076},
-      {0.281251, 0.255918, 0.953725, 0.625621}
-    };
+    // double t_second_example[3][4] = {
+    //   {0.000001, 0.642434, 0.878585, -0.640875},
+    //   {0.000000, -4567.108282, 0.903593, 0.153076},
+    //   {0.281251, 0.255918, 0.953725, 0.625621}
+    // };
     fill_in_the_matrix(&A, t_first_example);
-    fill_in_the_matrix(&B, t_second_example);
+    // fill_in_the_matrix(&B, t_second_example);
     matrix_t C;
     s21_create_matrix(3, 4, &C);
     double t_expected_output[3][4] = {
-      {1.089362, 0.736770, 1.043192, 1.172160},
-      {1.132722, 0.547935, 0.924353, 0.201595},
-      {0.619525, 1.236429, 1.146960, 0.794568}
+      {0.000099, 9.348698, 16.312554, 52.650343},
+      {44.996652, 43.569612, 2.057316, 4.808233},
+      {33.522953, 97.168640, 562779968730.749634, 16.742648}
     };
     fill_in_the_matrix(&C, t_expected_output);
     matrix_t D;
     s21_create_matrix(3, 4, &D);
     /// !!! FUNCTION NAME
-    int result_code_print = s21_sub_matrix(&A, &B, &D);
+    int result_code_print = s21_mult_number(&A, 42.0, &D);
     printf("result_code_print = %d\n", result_code_print);
     printf("C, expected output:\n");
     print_out_matrix(3, 4, C.matrix);
@@ -1076,7 +1184,7 @@ int main(void) {
     print_out_matrix(3, 4, D.matrix);
     printf("End of D:\n");
     s21_remove_matrix(&A);
-    s21_remove_matrix(&B);
+    // s21_remove_matrix(&B);
     s21_remove_matrix(&C);
     s21_remove_matrix(&D);
   // End of current example
@@ -1137,6 +1245,11 @@ int main(void) {
 
   // Multiply matrix by number
   tcase_add_test(tc1_1, test_s21_mult_number_1);
+  tcase_add_test(tc1_1, test_s21_mult_number_2);
+  tcase_add_test(tc1_1, test_s21_mult_number_3);
+  tcase_add_test(tc1_1, test_s21_mult_number_4);
+  tcase_add_test(tc1_1, test_s21_mult_number_5);
+  tcase_add_test(tc1_1, test_s21_mult_number_6);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
@@ -1148,7 +1261,7 @@ void print_out_matrix(int rows, int columns, double** result) {
   printf("rows = %d, columns = %d\n", rows, columns);
   for (int index_r = 0; index_r < rows; ++index_r) {
     for (int index_c = 0; index_c < columns; ++index_c) {
-      printf("%f ", result[index_r][index_c]);
+      printf("%.6f ", result[index_r][index_c]);
     }
     printf("\n");
   }
