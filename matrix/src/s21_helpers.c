@@ -8,7 +8,6 @@ int cant_be_calculated_matrix(matrix_t* A, matrix_t* B, matrix_t* result) {
   return (A->rows != B->rows || A->rows != result->rows || A->columns != B->columns || A->columns != result->columns);
 }
 
-
 void count(matrix_t* A, matrix_t* B, matrix_t* result, int* row_index, int* column_index, char operand) {
   while (*row_index < A->rows) { 
     while (*column_index < A->columns) {

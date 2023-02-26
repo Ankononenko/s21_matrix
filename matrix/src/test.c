@@ -871,6 +871,36 @@ START_TEST(test_s21_sub_matrix_10) {
 }
 END_TEST
 
+// Multily by number
+
+START_TEST(test_s21_mult_number_1) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    double first_example[3][4] = {
+      {0.959107, 0.094336, 0.164607, 0.531285},
+      {0.454053, 0.439653, 0.020760, 0.048519},
+      {0.338274, 0.980511, 0.193235, 0.168947}
+    };
+    fill_in_the_matrix(&A, first_example);
+    matrix_t C;
+    s21_create_matrix(3, 4, &C);
+    double expected_result[3][4] = {
+      {1.918214, 0.188672, 0.329214, 1.062570},
+      {0.908106, 0.879306, 0.041520, 0.097038},
+      {0.676548, 1.961022, 0.386470, 0.337894}
+    };
+    fill_in_the_matrix(&C, expected_result);
+    matrix_t D;
+    s21_create_matrix(3, 4, &D);
+    int return_code_result = s21_mult_number(&A, 2.0, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&C, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
 int main(void) {
 
   matrix_t first;
@@ -1008,8 +1038,8 @@ int main(void) {
 
 
 
-  /// TEst teststeset 
-    printf("Sum failed tests\n");
+  /// Current example
+    printf("Current example\n");
     matrix_t A;
     s21_create_matrix(3, 4, &A);
     matrix_t B;
@@ -1036,6 +1066,7 @@ int main(void) {
     fill_in_the_matrix(&C, t_expected_output);
     matrix_t D;
     s21_create_matrix(3, 4, &D);
+    /// !!! FUNCTION NAME
     int result_code_print = s21_sub_matrix(&A, &B, &D);
     printf("result_code_print = %d\n", result_code_print);
     printf("C, expected output:\n");
@@ -1048,8 +1079,7 @@ int main(void) {
     s21_remove_matrix(&B);
     s21_remove_matrix(&C);
     s21_remove_matrix(&D);
-
-  // End of etestet
+  // End of current example
 
   Suite *s1 = suite_create("s21_matrix: ");
   TCase *tc1_1 = tcase_create("s21_matrix: ");
@@ -1104,6 +1134,9 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_sub_matrix_8);
   tcase_add_test(tc1_1, test_s21_sub_matrix_9);
   tcase_add_test(tc1_1, test_s21_sub_matrix_10);
+
+  // Multiply matrix by number
+  tcase_add_test(tc1_1, test_s21_mult_number_1);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
