@@ -5,6 +5,7 @@
 
 void print_out_matrix(int rows, int columns, double** result);
 void fill_in_the_matrix(matrix_t* matrix, double example_array[][4]);
+void fill_in_the_matrix_array(int rows, int columns, double** array, double example_array[][4]);
 void generate_random_array();
 
 // Create matrix
@@ -847,6 +848,29 @@ START_TEST(test_s21_sub_matrix_9) {
 }
 END_TEST
 
+START_TEST(test_s21_sub_matrix_10) {
+    matrix_t A;
+    A.rows = 0;
+    A.columns = 0;
+    A.matrix = NULL;
+    matrix_t B;
+    s21_create_matrix(3, 4, &B);
+    double second_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&B, second_example);
+    matrix_t D;
+    s21_create_matrix(3, 6, &D);
+    int return_code_result = s21_sub_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
 int main(void) {
 
   matrix_t first;
@@ -1079,6 +1103,7 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_sub_matrix_7);
   tcase_add_test(tc1_1, test_s21_sub_matrix_8);
   tcase_add_test(tc1_1, test_s21_sub_matrix_9);
+  tcase_add_test(tc1_1, test_s21_sub_matrix_10);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
@@ -1100,6 +1125,14 @@ void fill_in_the_matrix(matrix_t* matrix, double example_array[][4]) {
   for (int i = 0; i < matrix->rows; i++) {
     for (int j = 0; j < matrix->columns; j++) {
       matrix->matrix[i][j] = example_array[i][j];
+    }
+  }
+}
+
+void fill_in_the_matrix_array(int rows, int columns, double** array, double example_array[][4]) {
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < columns; j++) {
+      array[i][j] = example_array[i][j];
     }
   }
 }

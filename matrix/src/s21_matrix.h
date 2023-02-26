@@ -25,4 +25,8 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B);
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result);
 int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result);
 
+int is_invalid_matrix(matrix_t* matrix);
+int cant_be_calculated_matrix(matrix_t* A, matrix_t* B, matrix_t* result);
+void count(matrix_t* A, matrix_t* B, matrix_t* result, int* row_index, int* column_index, char operand);
+
 #endif // S21_MATRIX_H
