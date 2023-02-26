@@ -1057,6 +1057,64 @@ START_TEST(test_s21_mult_matrix_1) {
 }
 END_TEST
 
+START_TEST(test_s21_mult_matrix_2) {
+    matrix_t A;
+    s21_create_matrix(0, 3, &A);
+
+    matrix_t B;
+    s21_create_matrix(3, 2, &B);
+    
+    B.matrix[0][0] = 1.0;
+    B.matrix[0][1] = 2.0;
+    
+    B.matrix[1][0] = 1.0;
+    B.matrix[1][1] = 2.0;
+
+    B.matrix[2][0] = 1.0;
+    B.matrix[2][1] = 2.0;
+
+    matrix_t D;
+    s21_create_matrix(2, 2, &D);
+    int return_code_result = s21_mult_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_mult_matrix_3) {
+    matrix_t A;
+    s21_create_matrix(2, 2, &A);
+
+    A.matrix[0][0] = 1.0;
+    A.matrix[0][1] = 2.0;
+
+    A.matrix[1][0] = 1.0;
+    A.matrix[1][1] = 2.0;
+
+    matrix_t B;
+    s21_create_matrix(3, 2, &B);
+    
+    B.matrix[0][0] = 1.0;
+    B.matrix[0][1] = 2.0;
+    
+    B.matrix[1][0] = 1.0;
+    B.matrix[1][1] = 2.0;
+
+    B.matrix[2][0] = 1.0;
+    B.matrix[2][1] = 2.0;
+
+    matrix_t D;
+    s21_create_matrix(2, 2, &D);
+    int return_code_result = s21_mult_matrix(&A, &B, &D);
+    ck_assert_int_eq(return_code_result, CALCULATION_ERROR_ENUM);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
 int main(void) {
 
   matrix_t first;
@@ -1327,6 +1385,8 @@ int main(void) {
 
   // Multiply by matrix
   tcase_add_test(tc1_1, test_s21_mult_matrix_1);
+  tcase_add_test(tc1_1, test_s21_mult_matrix_2);
+  tcase_add_test(tc1_1, test_s21_mult_matrix_3); 
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
