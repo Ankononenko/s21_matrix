@@ -1115,6 +1115,47 @@ START_TEST(test_s21_mult_matrix_3) {
 }
 END_TEST
 
+START_TEST(test_s21_transpose_1) {
+    matrix_t A;
+    s21_create_matrix(3, 4, &A);
+    double first_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&A, first_example);
+    
+    matrix_t B;
+    s21_create_matrix(4, 3, &B);
+    B.matrix[0][0] = 0.000001;
+    B.matrix[0][1] = 0.00000001;
+    B.matrix[0][2] = 0.2812518;
+
+    B.matrix[1][0] = 0.6424344;
+    B.matrix[1][1] = -4567.1082821;
+    B.matrix[1][2] = 0.255918;
+
+    B.matrix[2][0] = 0.8785851;
+    B.matrix[2][1] = 0.903593;
+    B.matrix[2][2] = 0.9537255;
+
+    B.matrix[3][0] = -0.640875;
+    B.matrix[3][1] = 0.1530762;
+    B.matrix[3][2] = 0.6256213;
+
+    matrix_t D;
+    int return_code_result = s21_transpose(&A, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    
+    int compare_result = s21_eq_matrix(&B, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
 int main(void) {
 
   matrix_t first;
@@ -1256,68 +1297,44 @@ int main(void) {
     printf("Current example\n");
     
     matrix_t A;
-    s21_create_matrix(2, 3, &A);
-
-    A.matrix[0][0] = 1.0;
-    A.matrix[0][1] = 2.0;
-    A.matrix[0][2] = 3.0;
-
-    A.matrix[1][0] = 1.0;
-    A.matrix[1][1] = 2.0;
-    A.matrix[1][2] = 3.0;
+    s21_create_matrix(3, 4, &A);
+    double t_first_example[3][4] = {
+      {0.000001, 0.6424344, 0.8785851, -0.6408750},
+      {0.00000001, -4567.1082821, 0.9035930, 0.1530762},
+      {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+    };
+    fill_in_the_matrix(&A, t_first_example);
     
     matrix_t B;
-    s21_create_matrix(3, 2, &B);
+    s21_create_matrix(4, 3, &B);
+    B.matrix[0][0] = 0.000001;
+    B.matrix[0][1] = 0.00000001;
+    B.matrix[0][2] = 0.2812518;
 
-    B.matrix[0][0] = 1.0;
-    B.matrix[0][1] = 2.0;
-    
-    B.matrix[1][0] = 1.0;
-    B.matrix[1][1] = 2.0;
+    B.matrix[1][0] = 0.6424344;
+    B.matrix[1][1] = -4567.1082821;
+    B.matrix[1][2] = 0.255918;
 
-    B.matrix[2][0] = 1.0;
-    B.matrix[2][1] = 2.0;
+    B.matrix[2][0] = 0.8785851;
+    B.matrix[2][1] = 0.903593;
+    B.matrix[2][2] = 0.9537255;
 
-    // double t_first_example[3][4] = {
-    //   {-0.000001, -2.0, -0.164607, -0.531285},
-    //   {-0.454053, -0.439653, -0.020760, -0.048519},
-    //   {-0.338274, -0.980511, -5678909876.193235, -0.168947}
-    // };
-    // double t_second_example[3][4] = {
-    //   {0.000001, 0.642434, 0.878585, -0.640875},
-    //   {0.000000, -4567.108282, 0.903593, 0.153076},
-    //   {0.281251, 0.255918, 0.953725, 0.625621}
-    // };
-    // fill_in_the_matrix(&A, t_first_example);
-    // fill_in_the_matrix(&B, t_second_example);
-    matrix_t C;
-    s21_create_matrix(2, 2, &C);
+    B.matrix[3][0] = -0.640875;
+    B.matrix[3][1] = 0.1530762;
+    B.matrix[3][2] = 0.6256213;
 
-    C.matrix[0][0] = 6.0;
-    C.matrix[0][1] = 12.0;
-    
-    C.matrix[1][0] = 6.0;
-    C.matrix[1][1] = 12.0;
-    // double t_expected_output[3][4] = {
-    //   {0.000099, 9.348698, 16.312554, 52.650343},
-    //   {44.996652, 43.569612, 2.057316, 4.808233},
-    //   {33.522953, 97.168640, 562779968730.749634, 16.742648}
-    // };
-    // fill_in_the_matrix(&C, t_expected_output);
     matrix_t D;
-    s21_create_matrix(2, 2, &D);
     /// !!! FUNCTION NAME
-    int result_code_print = s21_mult_matrix(&A, &B, &D);
+    int result_code_print = s21_transpose(&A, &D);
     printf("result_code_print = %d\n", result_code_print);
-    printf("C, expected output:\n");
-    print_out_matrix(2, 2, C.matrix);
+    printf("B, expected output:\n");
+    print_out_matrix(4, 3, B.matrix);
     printf("End of C:\n");
     printf("D, real output:\n");
-    print_out_matrix(2, 2, D.matrix);
+    print_out_matrix(4, 3, D.matrix);
     printf("End of D:\n");
     s21_remove_matrix(&A);
     s21_remove_matrix(&B);
-    s21_remove_matrix(&C);
     s21_remove_matrix(&D);
   // End of current example
 
@@ -1386,7 +1403,10 @@ int main(void) {
   // Multiply by matrix
   tcase_add_test(tc1_1, test_s21_mult_matrix_1);
   tcase_add_test(tc1_1, test_s21_mult_matrix_2);
-  tcase_add_test(tc1_1, test_s21_mult_matrix_3); 
+  tcase_add_test(tc1_1, test_s21_mult_matrix_3);
+
+  // Transpose matrix
+  tcase_add_test(tc1_1, test_s21_transpose_1);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
