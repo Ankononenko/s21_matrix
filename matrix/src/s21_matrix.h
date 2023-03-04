@@ -33,6 +33,8 @@ int is_invalid_matrix(matrix_t* matrix);
 int cant_be_calculated_matrix(matrix_t* A, matrix_t* B, matrix_t* result);
 void count(matrix_t* A, matrix_t* B, matrix_t* result, int* row_index, int* column_index, char operand);
 void remove_row_and_column(matrix_t *A, matrix_t *result, int* curr_elem_row_i, int* curr_elem_column_i);
+void add_extra_rows(matrix_t* resized_temp);
+void temp_to_resized(matrix_t* resized_temp, matrix_t* temp);
 
 // TODO: Used for testing. Remove later!!!
 void print_out_matrix(int rows, int columns, double** result);
