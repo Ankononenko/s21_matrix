@@ -35,6 +35,7 @@ void count(matrix_t* A, matrix_t* B, matrix_t* result, int* row_index, int* colu
 void remove_row_and_column(matrix_t *A, matrix_t *result, int* curr_elem_row_i, int* curr_elem_column_i);
 void add_extra_rows(matrix_t* resized_temp);
 void temp_to_resized(matrix_t* resized_temp, matrix_t* temp);
+int count_sum_sub_diagonal(matrix_t* resized_temp, int start_row);
 
 // TODO: Used for testing. Remove later!!!
 void print_out_matrix(int rows, int columns, double** result);

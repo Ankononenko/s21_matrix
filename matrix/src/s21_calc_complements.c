@@ -27,6 +27,9 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
 
 
       int curr_elem_row_i = 0, curr_elem_column_i = 0;
+
+      int sum = 0, sub = 0;
+
       for (int current_elem = 0; current_elem < total_num_elem; ++current_elem) {
         printf("Current element = %d\n", current_elem + 1);
         remove_row_and_column(A, &temp, &curr_elem_row_i, &curr_elem_column_i);
@@ -34,6 +37,11 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
         add_extra_rows(&resized_temp);
 
         // TODO: Count diagonal front and back (minors)
+        sum = count_sum_sub_diagonal(&resized_temp, 0);
+        printf("Sum: %d\n", sum);
+
+        sub = count_sum_sub_diagonal(&resized_temp, resized_temp.rows - 1);
+        printf("Sub: %d\n", sub);
 
         print_out_matrix(resized_temp.rows, resized_temp.columns, resized_temp.matrix);
         printf("\n");
@@ -45,6 +53,33 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
     return_code = SUCCESS_ENUM;
     }
   return return_code;
+}
+
+int count_sum_sub_diagonal(matrix_t* resized_temp, int start_row) {
+  int sum = 0, mult = 0, outer_col_i = 0, row_i = start_row;
+  
+  for (int row_repetitions = 0; row_repetitions < resized_temp->rows; ++row_repetitions) {
+    row_i = start_row;
+    for (int col_i = outer_col_i; col_i < outer_col_i + resized_temp->rows; ++col_i) {
+      // printf("index = %d, %d ", row_i, col_i);
+      if (col_i == outer_col_i) {
+        mult = resized_temp->matrix[row_i][col_i];
+        // printf("mult element = %f\n", resized_temp->matrix[row_i][col_i]);
+      } else {
+        mult *= resized_temp->matrix[row_i][col_i];
+        // printf("mult element = %f\n", resized_temp->matrix[row_i][col_i]);
+      }
+      if (!start_row) {
+        ++row_i;
+      } else {
+        --row_i;
+      }
+    }
+    // printf("mult = %d\n", mult);
+    ++outer_col_i;
+    sum += mult;
+  }
+  return sum;
 }
 
 void temp_to_resized(matrix_t* resized_temp, matrix_t* temp) {
