@@ -1170,7 +1170,7 @@ END_TEST
 // A = 0 4 2
 //     5 2 1
 
-START_TEST(test_s21_calc_complements_0) {
+START_TEST(test_s21_calc_complements_00) {
     matrix_t A;
     s21_create_matrix(3, 3, &A);
     A.matrix[0][0] = 1.0;
@@ -1182,11 +1182,66 @@ START_TEST(test_s21_calc_complements_0) {
     A.matrix[2][0] = 5.0;
     A.matrix[2][1] = 2.0;
     A.matrix[2][2] = 1.0;
+    matrix_t B;
+    s21_create_matrix(3, 3, &B);
+    B.matrix[0][0] = 0.0;
+    B.matrix[0][1] = 10.0;
+    B.matrix[0][2] = -20.0;
+    B.matrix[1][0] = 4.0;
+    B.matrix[1][1] = -14.0;
+    B.matrix[1][2] = 8.0;
+    B.matrix[2][0] = -8.0;
+    B.matrix[2][1] = -2.0;
+    B.matrix[2][2] = 4.0;
     matrix_t D;
     int return_code_result = s21_calc_complements(&A, &D);
     ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
-    // TODO: Element of the matrix comparison
+    printf("B:\n");
+    print_out_matrix(B.rows, B.columns, B.matrix);
+    printf("D:\n");
+    print_out_matrix(D.rows, D.columns, D.matrix);
+    // int compare_result = s21_eq_matrix(&A, &B);
+    // ck_assert_int_eq(compare_result, SUCCESS);
     s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_calc_complements_0) {
+    matrix_t A;
+    s21_create_matrix(3, 3, &A);
+    A.matrix[0][0] = 1.0;
+    A.matrix[0][1] = 2.0;
+    A.matrix[0][2] = 3.0;
+    A.matrix[1][0] = 1.0;
+    A.matrix[1][1] = 3.0;
+    A.matrix[1][2] = 2.0;
+    A.matrix[2][0] = 5.0;
+    A.matrix[2][1] = 2.0;
+    A.matrix[2][2] = 1.0;
+    matrix_t B;
+    s21_create_matrix(3, 3, &B);
+    B.matrix[0][0] = -1.0;
+    B.matrix[0][1] = 9.0;
+    B.matrix[0][2] = -13.0;
+    B.matrix[1][0] = 4.0;
+    B.matrix[1][1] = -14.0;
+    B.matrix[1][2] = 8.0;
+    B.matrix[2][0] = -5.0;
+    B.matrix[2][1] = 1.0;
+    B.matrix[2][2] = 1.0;
+    matrix_t D;
+    int return_code_result = s21_calc_complements(&A, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    printf("B:\n");
+    print_out_matrix(B.rows, B.columns, B.matrix);
+    printf("D:\n");
+    print_out_matrix(D.rows, D.columns, D.matrix);
+    // int compare_result = s21_eq_matrix(&A, &B);
+    // ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
     s21_remove_matrix(&D);
 }
 END_TEST
@@ -1541,6 +1596,7 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_transpose_2);
 
   // Minor of matrix and matrix of algebraic complements
+  tcase_add_test(tc1_1, test_s21_calc_complements_00);
   tcase_add_test(tc1_1, test_s21_calc_complements_0);
   tcase_add_test(tc1_1, test_s21_calc_complements_1);
   tcase_add_test(tc1_1, test_s21_calc_complements_2);
