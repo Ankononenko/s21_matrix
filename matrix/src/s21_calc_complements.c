@@ -28,24 +28,29 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
 
       int curr_elem_row_i = 0, curr_elem_column_i = 0;
 
-      int sum = 0, sub = 0;
+      int sum = 0, sub = 0, res = 0;
+
+      int insert_row_i = 0, insert_col_i = 0;
 
       for (int current_elem = 0; current_elem < total_num_elem; ++current_elem) {
-        printf("Current element = %d\n", current_elem + 1);
+        // printf("Current element = %d\n", current_elem + 1);
         remove_row_and_column(A, &temp, &curr_elem_row_i, &curr_elem_column_i);
         temp_to_resized(&resized_temp, &temp);
         add_extra_rows(&resized_temp);
-
-        // TODO: Count diagonal front and back (minors)
         sum = count_sum_sub_diagonal(&resized_temp, 0);
-        printf("Sum: %d\n", sum);
-
         sub = count_sum_sub_diagonal(&resized_temp, resized_temp.rows - 1);
-        printf("Sub: %d\n", sub);
-
-        print_out_matrix(resized_temp.rows, resized_temp.columns, resized_temp.matrix);
-        printf("\n");
+        res = sum - sub;
+        // TODO: Implement the sign based on the indexes
+        result->matrix[insert_row_i][insert_col_i] = res;
+        if (insert_col_i == result->columns - 1) {
+          ++insert_row_i;
+          insert_col_i = -1;
+        }
+        ++insert_col_i;
+        // printf("\n");
       }
+
+      print_out_matrix(result->rows, result->columns, result->matrix);
 
       s21_remove_matrix(&temp);
       s21_remove_matrix(&resized_temp);
