@@ -5,6 +5,7 @@
 
 // void print_out_matrix(int rows, int columns, double** result);
 void fill_in_the_matrix(matrix_t* matrix, double example_array[][4]);
+void fill_in_the_matrix_five(matrix_t* matrix, double example_array[][5]);
 void fill_in_the_matrix_array(int rows, int columns, double** array, double example_array[][4]);
 void generate_random_array();
 
@@ -1196,12 +1197,8 @@ START_TEST(test_s21_calc_complements_00) {
     matrix_t D;
     int return_code_result = s21_calc_complements(&A, &D);
     ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
-    printf("B:\n");
-    print_out_matrix(B.rows, B.columns, B.matrix);
-    printf("D:\n");
-    print_out_matrix(D.rows, D.columns, D.matrix);
-    // int compare_result = s21_eq_matrix(&A, &B);
-    // ck_assert_int_eq(compare_result, SUCCESS);
+    int compare_result = s21_eq_matrix(&B, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
     s21_remove_matrix(&A);
     s21_remove_matrix(&B);
     s21_remove_matrix(&D);
@@ -1234,12 +1231,8 @@ START_TEST(test_s21_calc_complements_0) {
     matrix_t D;
     int return_code_result = s21_calc_complements(&A, &D);
     ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
-    printf("B:\n");
-    print_out_matrix(B.rows, B.columns, B.matrix);
-    printf("D:\n");
-    print_out_matrix(D.rows, D.columns, D.matrix);
-    // int compare_result = s21_eq_matrix(&A, &B);
-    // ck_assert_int_eq(compare_result, SUCCESS);
+    int compare_result = s21_eq_matrix(&B, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
     s21_remove_matrix(&A);
     s21_remove_matrix(&B);
     s21_remove_matrix(&D);
@@ -1256,11 +1249,23 @@ START_TEST(test_s21_calc_complements_1) {
       {13.0, 14.0, 15.0, 16.0}
     };
     fill_in_the_matrix(&A, first_example);
+    matrix_t B;
+    s21_create_matrix(4, 4, &B);
+    double second_example[4][4] = {
+      {0.0, 0.0, 0.0, 0.0},
+      {0.0, 0.0, 0.0, 0.0},
+      {0.0, 0.0, 0.0, 0.0},
+      {0.0, 0.0, 0.0, 0.0}
+    };
+    fill_in_the_matrix(&B, second_example);
     matrix_t D;
     int return_code_result = s21_calc_complements(&A, &D);
     ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
-    // TODO: Element of the matrix comparison
+    int compare_result = s21_eq_matrix(&B, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    print_out_matrix(D.rows, D.columns, D.matrix);
     s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
     s21_remove_matrix(&D);
 }
 END_TEST
@@ -1331,18 +1336,60 @@ START_TEST(test_s21_calc_complements_5) {
       {5.0, 2.0, 6.0, 7.0},
       {1.0, 3.0, 7.0, 6.0},
       {45.0, 8.0, 15.0, 4.0}
-
-      
     };
     fill_in_the_matrix(&A, first_example);
+    matrix_t B;
+    s21_create_matrix(4, 4, &B);
+    double second_example[4][4] = {
+      {15.0, 814.0, -537.0, 217.0},
+      {571.0, -15770.0, 6707.0, -35.0},
+      {-948.0, 9640.0, -2260.0, -140.0},
+      {209.0, 1538.0, -695.0, 7.0}
+    };
+    fill_in_the_matrix(&B, second_example);
     matrix_t D;
     int return_code_result = s21_calc_complements(&A, &D);
     ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
-    // TODO: Element of the matrix comparison
+    int compare_result = s21_eq_matrix(&B, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
     s21_remove_matrix(&A);
+    s21_remove_matrix(&B);
     s21_remove_matrix(&D);
 }
 END_TEST
+
+// START_TEST(test_s21_calc_complements_6) {
+//     matrix_t A;
+//     s21_create_matrix(5, 5, &A);
+//     double first_example[5][5] = {
+//       {0.0, 2.0, 5.0, 57.0, 10.0},
+//       {5.0, 2.0, 6.0, 7.0, 15.0},
+//       {1.0, 3.0, 7.0, 6.0, 20.0},
+//       {45.0, 8.0, 15.0, 4.0, 25.0},
+//       {8.0, 10.0, 12.0, 16.0, 30.0}
+//     };
+//     fill_in_the_matrix_five(&A, first_example);
+//     matrix_t B;
+//     s21_create_matrix(5, 5, &B);
+//     double second_example[5][5] = {
+//       {64.0, -2368.0, -506.0, 3073.0, 1516.0},
+//       {4595.0, -2635.0, -2365.0, -7275.0, -1438.0},
+//       {-2491.0, 11439.0, 6804.0, 12541.0, -2162.0},
+//       {-1090.0, -1485.0, -865.0, 4045.0, 1100.0},
+//       {-4575.0, -4195.0, -6284.0, -6455.0, 3335.0}
+//     };
+//     fill_in_the_matrix_five(&B, second_example);
+//     matrix_t D;
+//     int return_code_result = s21_calc_complements(&A, &D);
+//     printf("%d", return_code_result);
+//     // ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+//     // int compare_result = s21_eq_matrix(&B, &D);
+//     // ck_assert_int_eq(compare_result, SUCCESS);
+//     s21_remove_matrix(&A);
+//     s21_remove_matrix(&B);
+//     s21_remove_matrix(&D);
+// }
+// END_TEST
 
 int main(void) {
 
@@ -1603,6 +1650,7 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_calc_complements_3);
   tcase_add_test(tc1_1, test_s21_calc_complements_4);
   tcase_add_test(tc1_1, test_s21_calc_complements_5);
+  // tcase_add_test(tc1_1, test_s21_calc_complements_6);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
@@ -1621,6 +1669,14 @@ void print_out_matrix(int rows, int columns, double** result) {
 }
 
 void fill_in_the_matrix(matrix_t* matrix, double example_array[][4]) {
+  for (int i = 0; i < matrix->rows; i++) {
+    for (int j = 0; j < matrix->columns; j++) {
+      matrix->matrix[i][j] = example_array[i][j];
+    }
+  }
+}
+
+void fill_in_the_matrix_five(matrix_t* matrix, double example_array[][5]) {
   for (int i = 0; i < matrix->rows; i++) {
     for (int j = 0; j < matrix->columns; j++) {
       matrix->matrix[i][j] = example_array[i][j];
