@@ -1166,6 +1166,31 @@ START_TEST(test_s21_transpose_2) {
 }
 END_TEST
 
+//     1 2 3
+// A = 0 4 2
+//     5 2 1
+
+START_TEST(test_s21_calc_complements_0) {
+    matrix_t A;
+    s21_create_matrix(3, 3, &A);
+    A.matrix[0][0] = 1.0;
+    A.matrix[0][1] = 2.0;
+    A.matrix[0][2] = 3.0;
+    A.matrix[1][0] = 0.0;
+    A.matrix[1][1] = 4.0;
+    A.matrix[1][2] = 2.0;
+    A.matrix[2][0] = 5.0;
+    A.matrix[2][1] = 2.0;
+    A.matrix[2][2] = 1.0;
+    matrix_t D;
+    int return_code_result = s21_calc_complements(&A, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    // TODO: Element of the matrix comparison
+    s21_remove_matrix(&A);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
 START_TEST(test_s21_calc_complements_1) {
     matrix_t A;
     s21_create_matrix(4, 4, &A);
@@ -1239,6 +1264,27 @@ START_TEST(test_s21_calc_complements_4) {
     ck_assert_int_eq(compare_result, SUCCESS);
     s21_remove_matrix(&A);
     s21_remove_matrix(&B);
+    s21_remove_matrix(&D);
+}
+END_TEST
+
+START_TEST(test_s21_calc_complements_5) {
+    matrix_t A;
+    s21_create_matrix(4, 4, &A);
+    double first_example[4][4] = {
+      {0.0, 2.0, 5.0, 57.0},
+      {5.0, 2.0, 6.0, 7.0},
+      {1.0, 3.0, 7.0, 6.0},
+      {45.0, 8.0, 15.0, 4.0}
+
+      
+    };
+    fill_in_the_matrix(&A, first_example);
+    matrix_t D;
+    int return_code_result = s21_calc_complements(&A, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    // TODO: Element of the matrix comparison
+    s21_remove_matrix(&A);
     s21_remove_matrix(&D);
 }
 END_TEST
@@ -1495,10 +1541,12 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_transpose_2);
 
   // Minor of matrix and matrix of algebraic complements
+  tcase_add_test(tc1_1, test_s21_calc_complements_0);
   tcase_add_test(tc1_1, test_s21_calc_complements_1);
   tcase_add_test(tc1_1, test_s21_calc_complements_2);
   tcase_add_test(tc1_1, test_s21_calc_complements_3);
   tcase_add_test(tc1_1, test_s21_calc_complements_4);
+  tcase_add_test(tc1_1, test_s21_calc_complements_5);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
