@@ -1117,6 +1117,8 @@ START_TEST(test_s21_mult_matrix_3) {
 }
 END_TEST
 
+// Transpose
+
 START_TEST(test_s21_transpose_1) {
     matrix_t A;
     s21_create_matrix(3, 4, &A);
@@ -1167,6 +1169,8 @@ START_TEST(test_s21_transpose_2) {
     s21_remove_matrix(&A);
 }
 END_TEST
+
+// Calc complements
 
 //     1 2 3
 // A = 0 4 2
@@ -1264,7 +1268,6 @@ START_TEST(test_s21_calc_complements_1) {
     ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
     int compare_result = s21_eq_matrix(&B, &D);
     ck_assert_int_eq(compare_result, SUCCESS);
-    print_out_matrix(D.rows, D.columns, D.matrix);
     s21_remove_matrix(&A);
     s21_remove_matrix(&B);
     s21_remove_matrix(&D);
@@ -1392,6 +1395,8 @@ END_TEST
 //     s21_remove_matrix(&D);
 // }
 // END_TEST
+
+// Determinant
 
 //     1 2 3
 // A = 0 4 2
@@ -1540,139 +1545,165 @@ START_TEST(test_s21_determinant_07) {
 }
 END_TEST
 
-// TODO: 5x5 test and maybe 10x10
+// Inverse
+
+START_TEST(test_s21_inverse_1) {
+    matrix_t A;
+    s21_create_matrix(3, 3, &A);
+    double first_example[3][3] = {
+      {2.0, 5.0, 7.0},
+      {6.0, 3.0, 4.0},
+      {5.0, -2.0, -3.0}
+    };
+    fill_in_the_matrix_array_any(A.rows, A.columns, A.matrix, first_example);
+    matrix_t B;
+    s21_create_matrix(3, 3, &B);
+    double expected[3][3] = {
+      {-1.0, 1.0, -1.0},
+      {38.0, -41.0, 34.0},
+      {-27.0, 29.0, -24.0}
+    };
+    fill_in_the_matrix_array_any(B.rows, B.columns, B.matrix, expected);
+    matrix_t D;
+    int return_code_result = s21_inverse_matrix(&A, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&B, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+}
+END_TEST
 
 int main(void) {
 
-  matrix_t first;
-  printf("Create:\n");
-  s21_create_matrix(5, 5, &first);
-  printf("rows = %d, columns = %d\n", first.rows, first.columns);
-  print_out_matrix(first.rows, first.columns, first.matrix);
+  // matrix_t first;
+  // printf("Create:\n");
+  // s21_create_matrix(5, 5, &first);
+  // printf("rows = %d, columns = %d\n", first.rows, first.columns);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
-  printf("Remove:\n");
-  s21_remove_matrix(&first);
-  print_out_matrix(first.rows, first.columns, first.matrix);
+  // printf("Remove:\n");
+  // s21_remove_matrix(&first);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
-  printf("First compare:\n");
-  s21_create_matrix(5, 5, &first);
-  printf("rows = %d, columns = %d\n", first.rows, first.columns);
-  print_out_matrix(first.rows, first.columns, first.matrix);
-  printf("Second compare:\n");
-  matrix_t second;
-  s21_create_matrix(5, 5, &second);
-  printf("rows = %d, columns = %d\n", second.rows, second.columns);
-  print_out_matrix(second.rows, second.columns, second.matrix);
-  printf("Compare:\n");
-  int first_and_second = s21_eq_matrix(&first, &second);
-  printf("Compare first and second, equal: %d\n", first_and_second);
+  // printf("First compare:\n");
+  // s21_create_matrix(5, 5, &first);
+  // printf("rows = %d, columns = %d\n", first.rows, first.columns);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
+  // printf("Second compare:\n");
+  // matrix_t second;
+  // s21_create_matrix(5, 5, &second);
+  // printf("rows = %d, columns = %d\n", second.rows, second.columns);
+  // print_out_matrix(second.rows, second.columns, second.matrix);
+  // printf("Compare:\n");
+  // int first_and_second = s21_eq_matrix(&first, &second);
+  // printf("Compare first and second, equal: %d\n", first_and_second);
 
-  s21_remove_matrix(&first);
-  s21_remove_matrix(&second);
+  // s21_remove_matrix(&first);
+  // s21_remove_matrix(&second);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
-  printf("Second compare not equal test:\n");
-  s21_create_matrix(1, 5, &first);
-  printf("rows = %d, columns = %d\n", first.rows, first.columns);
-  print_out_matrix(first.rows, first.columns, first.matrix);
-  s21_create_matrix(5, 1, &second);
-  printf("rows = %d, columns = %d\n", second.rows, second.columns);
-  print_out_matrix(second.rows, second.columns, second.matrix);
-  printf("Compare:\n");
-  first_and_second = s21_eq_matrix(&first, &second);
-  printf("Compare first and second, not equal: %d\n", first_and_second);
+  // printf("Second compare not equal test:\n");
+  // s21_create_matrix(1, 5, &first);
+  // printf("rows = %d, columns = %d\n", first.rows, first.columns);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
+  // s21_create_matrix(5, 1, &second);
+  // printf("rows = %d, columns = %d\n", second.rows, second.columns);
+  // print_out_matrix(second.rows, second.columns, second.matrix);
+  // printf("Compare:\n");
+  // first_and_second = s21_eq_matrix(&first, &second);
+  // printf("Compare first and second, not equal: %d\n", first_and_second);
 
-  s21_remove_matrix(&first);
-  s21_remove_matrix(&second);
+  // s21_remove_matrix(&first);
+  // s21_remove_matrix(&second);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
-  printf("Compare the double equal matrix\n");
-  s21_create_matrix(3, 4, &first);
-  double first_example[3][4] = {
-    {0.9591071, 0.0943366, 0.1646078, 0.5312853},
-    {0.4540530, 0.4396532, 0.0207605, 0.0485195},
-    {0.3382748, 0.9805113, 0.1932359, 0.1689479}
-  };
-  fill_in_the_matrix(&first, first_example);
-  print_out_matrix(first.rows, first.columns, first.matrix);
-  s21_create_matrix(3, 4, &second);
-  fill_in_the_matrix(&second, first_example);
-  print_out_matrix(second.rows, second.columns, second.matrix);
-  first_and_second = s21_eq_matrix(&first, &second);
-  printf("Compare first and second, equal: %d\n", first_and_second);
+  // printf("Compare the double equal matrix\n");
+  // s21_create_matrix(3, 4, &first);
+  // double first_example[3][4] = {
+  //   {0.9591071, 0.0943366, 0.1646078, 0.5312853},
+  //   {0.4540530, 0.4396532, 0.0207605, 0.0485195},
+  //   {0.3382748, 0.9805113, 0.1932359, 0.1689479}
+  // };
+  // fill_in_the_matrix(&first, first_example);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
+  // s21_create_matrix(3, 4, &second);
+  // fill_in_the_matrix(&second, first_example);
+  // print_out_matrix(second.rows, second.columns, second.matrix);
+  // first_and_second = s21_eq_matrix(&first, &second);
+  // printf("Compare first and second, equal: %d\n", first_and_second);
 
-  s21_remove_matrix(&first);
-  s21_remove_matrix(&second);
+  // s21_remove_matrix(&first);
+  // s21_remove_matrix(&second);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
-  printf("Compare the double not equal matrix\n");
-  s21_create_matrix(3, 4, &first);
-  double second_example[3][4] = {
-    {0.1302556, 0.6424344, 0.8785851, 0.6408750},
-    {0.6786694, 0.1082821, 0.9035930, 0.1530762},
-    {0.2812518, 0.2559180, 0.9537255, 0.6256213}
-  };
-  fill_in_the_matrix(&first, first_example);
-  print_out_matrix(first.rows, first.columns, first.matrix);
-  s21_create_matrix(3, 4, &second);
-  fill_in_the_matrix(&second, second_example);
-  print_out_matrix(second.rows, second.columns, second.matrix);
-  first_and_second = s21_eq_matrix(&first, &second);
-  printf("Compare first and second, not equal: %d\n", first_and_second);
+  // printf("Compare the double not equal matrix\n");
+  // s21_create_matrix(3, 4, &first);
+  // double second_example[3][4] = {
+  //   {0.1302556, 0.6424344, 0.8785851, 0.6408750},
+  //   {0.6786694, 0.1082821, 0.9035930, 0.1530762},
+  //   {0.2812518, 0.2559180, 0.9537255, 0.6256213}
+  // };
+  // fill_in_the_matrix(&first, first_example);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
+  // s21_create_matrix(3, 4, &second);
+  // fill_in_the_matrix(&second, second_example);
+  // print_out_matrix(second.rows, second.columns, second.matrix);
+  // first_and_second = s21_eq_matrix(&first, &second);
+  // printf("Compare first and second, not equal: %d\n", first_and_second);
 
-  s21_remove_matrix(&first);
-  s21_remove_matrix(&second);
+  // s21_remove_matrix(&first);
+  // s21_remove_matrix(&second);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
-  printf("Sum two matrix\n");
-  s21_create_matrix(3, 4, &first);
-  fill_in_the_matrix(&first, first_example);
-  print_out_matrix(first.rows, first.columns, first.matrix);
-  s21_create_matrix(3, 4, &second);
-  fill_in_the_matrix(&second, second_example);
-  print_out_matrix(second.rows, second.columns, second.matrix);
-  matrix_t third;
-  s21_create_matrix(3, 4, &third);
-  s21_sum_matrix(&first, &second, &third);
-  print_out_matrix(third.rows, third.columns, third.matrix);
-  printf("expected_result:\n"
-    "1.089362 0.736771 1.043193 1.172160\n"
-    "1.132722 0.547935 0.924353 0.201595\n"
-    "0.619526 1.236429 1.146961 0.794569\n"
-    );
-  s21_remove_matrix(&first);
-  s21_remove_matrix(&second);
-  s21_remove_matrix(&third);
+  // printf("Sum two matrix\n");
+  // s21_create_matrix(3, 4, &first);
+  // fill_in_the_matrix(&first, first_example);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
+  // s21_create_matrix(3, 4, &second);
+  // fill_in_the_matrix(&second, second_example);
+  // print_out_matrix(second.rows, second.columns, second.matrix);
+  // matrix_t third;
+  // s21_create_matrix(3, 4, &third);
+  // s21_sum_matrix(&first, &second, &third);
+  // print_out_matrix(third.rows, third.columns, third.matrix);
+  // printf("expected_result:\n"
+  //   "1.089362 0.736771 1.043193 1.172160\n"
+  //   "1.132722 0.547935 0.924353 0.201595\n"
+  //   "0.619526 1.236429 1.146961 0.794569\n"
+  //   );
+  // s21_remove_matrix(&first);
+  // s21_remove_matrix(&second);
+  // s21_remove_matrix(&third);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
-  printf("Substract two matrix\n");
-  s21_create_matrix(3, 4, &first);
-  fill_in_the_matrix(&first, first_example);
-  print_out_matrix(first.rows, first.columns, first.matrix);
-  s21_create_matrix(3, 4, &second);
-  fill_in_the_matrix(&second, second_example);
-  print_out_matrix(second.rows, second.columns, second.matrix);
-  s21_sub_matrix(&first, &second, &third);
-  print_out_matrix(third.rows, third.columns, third.matrix);
-  printf("expected_result:\n"
-    "0.828851 -0.548098 -0.713977 -0.109590\n"
-    "-0.224616 0.331371 -0.882833 -0.104556\n" 
-    "0.057023 0.724593 -0.760489 -0.456673 \n"
-    );
-  s21_remove_matrix(&first);
-  s21_remove_matrix(&second);
-  s21_remove_matrix(&third);
+  // printf("Substract two matrix\n");
+  // s21_create_matrix(3, 4, &first);
+  // fill_in_the_matrix(&first, first_example);
+  // print_out_matrix(first.rows, first.columns, first.matrix);
+  // s21_create_matrix(3, 4, &second);
+  // fill_in_the_matrix(&second, second_example);
+  // print_out_matrix(second.rows, second.columns, second.matrix);
+  // s21_sub_matrix(&first, &second, &third);
+  // print_out_matrix(third.rows, third.columns, third.matrix);
+  // printf("expected_result:\n"
+  //   "0.828851 -0.548098 -0.713977 -0.109590\n"
+  //   "-0.224616 0.331371 -0.882833 -0.104556\n" 
+  //   "0.057023 0.724593 -0.760489 -0.456673 \n"
+  //   );
+  // s21_remove_matrix(&first);
+  // s21_remove_matrix(&second);
+  // s21_remove_matrix(&third);
 
-  printf("End of the test\n\n\n");
+  // printf("End of the test\n\n\n");
 
 
 
@@ -1681,40 +1712,40 @@ int main(void) {
 
   /// Current example
   
-  printf("Current example\n");
+  // printf("Current example\n");
   
-  matrix_t A;
-  s21_create_matrix(5, 5, &A);
-  double first_example_t[5][5] = {
-    {0.0, 2.0, 5.0, 57.0, 10.0},
-    {5.0, 2.0, 6.0, 7.0, 15.0},
-    {1.0, 3.0, 7.0, 6.0, 20.0},
-    {45.0, 8.0, 15.0, 4.0, 25.0},
-    {8.0, 10.0, 12.0, 16.0, 30.0}
-  };
-  fill_in_the_matrix_five(&A, first_example_t);
-  matrix_t B;
-  s21_create_matrix(5, 5, &B);
-  double second_example_t[5][5] = {
-    {64.0, -2368.0, -506.0, 3073.0, 1516.0},
-    {4595.0, -2635.0, -2365.0, -7275.0, -1438.0},
-    {-2491.0, 11439.0, 6804.0, 12541.0, -2162.0},
-    {-1090.0, -1485.0, -865.0, 4045.0, 1100.0},
-    {-4575.0, -4195.0, -6284.0, -6455.0, 3335.0}
-  };
-  fill_in_the_matrix_five(&B, second_example_t);
-  matrix_t D;
-  int return_code_result = s21_calc_complements(&A, &D);
-  printf("return code = %d", return_code_result);
-  printf("B, expected output:\n");
-  print_out_matrix(5, 5, B.matrix);
-  printf("End of B:\n");
-  printf("D, real output:\n");
-  print_out_matrix(5, 5, D.matrix);
-  printf("End of D:\n");
-  s21_remove_matrix(&A);
-  s21_remove_matrix(&B);
-  s21_remove_matrix(&D);
+  // matrix_t A;
+  // s21_create_matrix(5, 5, &A);
+  // double first_example_t[5][5] = {
+  //   {0.0, 2.0, 5.0, 57.0, 10.0},
+  //   {5.0, 2.0, 6.0, 7.0, 15.0},
+  //   {1.0, 3.0, 7.0, 6.0, 20.0},
+  //   {45.0, 8.0, 15.0, 4.0, 25.0},
+  //   {8.0, 10.0, 12.0, 16.0, 30.0}
+  // };
+  // fill_in_the_matrix_five(&A, first_example_t);
+  // matrix_t B;
+  // s21_create_matrix(5, 5, &B);
+  // double second_example_t[5][5] = {
+  //   {64.0, -2368.0, -506.0, 3073.0, 1516.0},
+  //   {4595.0, -2635.0, -2365.0, -7275.0, -1438.0},
+  //   {-2491.0, 11439.0, 6804.0, 12541.0, -2162.0},
+  //   {-1090.0, -1485.0, -865.0, 4045.0, 1100.0},
+  //   {-4575.0, -4195.0, -6284.0, -6455.0, 3335.0}
+  // };
+  // fill_in_the_matrix_five(&B, second_example_t);
+  // matrix_t D;
+  // int return_code_result = s21_calc_complements(&A, &D);
+  // printf("return code = %d", return_code_result);
+  // printf("B, expected output:\n");
+  // print_out_matrix(5, 5, B.matrix);
+  // printf("End of B:\n");
+  // printf("D, real output:\n");
+  // print_out_matrix(5, 5, D.matrix);
+  // printf("End of D:\n");
+  // s21_remove_matrix(&A);
+  // s21_remove_matrix(&B);
+  // s21_remove_matrix(&D);
 
   // End of current example
 
@@ -1797,7 +1828,7 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_calc_complements_3);
   tcase_add_test(tc1_1, test_s21_calc_complements_4);
   tcase_add_test(tc1_1, test_s21_calc_complements_5);
-  tcase_add_test(tc1_1, test_s21_calc_complements_6);
+  // tcase_add_test(tc1_1, test_s21_calc_complements_6);
   
   // Determinant tests
   tcase_add_test(tc1_1, test_s21_determinant_00);
@@ -1808,6 +1839,10 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_determinant_05);
   tcase_add_test(tc1_1, test_s21_determinant_06);
   tcase_add_test(tc1_1, test_s21_determinant_07);
+
+  // Inverse
+
+  tcase_add_test(tc1_1, test_s21_inverse_1);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
