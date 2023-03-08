@@ -38,6 +38,7 @@ void add_extra_rows(matrix_t* resized_temp);
 void temp_to_resized(matrix_t* resized_temp, matrix_t* temp);
 int count_sum_sub_diagonal(matrix_t* resized_temp, int start_row);
 void get_algebraic_complement(int row, int col, int* res);
+void get_cofactor(double** matrix, double** temp, int skip_row, int skip_column, int size);
 
 // TODO: Used for testing. Remove later!!!
 void print_out_matrix(int rows, int columns, double** result);

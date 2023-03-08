@@ -16,19 +16,28 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
       result->matrix[1][0] = A->matrix[0][1];
       result->matrix[1][1] = A->matrix[0][0];
     }
-    if (total_num_elem == 9) {
+    if (total_num_elem >= 9) {
       matrix_t temp;
       s21_create_matrix(A->rows, A->columns, &temp);
       matrix_t resized_temp;
-      s21_create_matrix(A->rows - 1, A->columns - 1, &resized_temp);
+      if (total_num_elem == 9) {
+        s21_create_matrix(A->rows - 1, A->columns - 1, &resized_temp);
+      } else {
+        s21_create_matrix(A->rows - 1, A->columns + 1, &resized_temp);
+      }
       int curr_elem_row_i = 0, curr_elem_column_i = 0;
       int sum = 0, sub = 0, res = 0;
       int insert_row_i = 0, insert_col_i = 0;
       for (int current_elem = 0; current_elem < total_num_elem; ++current_elem) {
         remove_row_and_column(A, &temp, &curr_elem_row_i, &curr_elem_column_i);
         temp_to_resized(&resized_temp, &temp);
+        if (total_num_elem == 9) {
+          sub = count_sum_sub_diagonal(&resized_temp, temp.rows - 2);
+        } else {
+          add_extra_rows(&resized_temp);
+          sub = count_sum_sub_diagonal(&resized_temp, resized_temp.rows - 1);
+        }
         sum = count_sum_sub_diagonal(&resized_temp, 0);
-        sub = count_sum_sub_diagonal(&resized_temp, temp.rows - 2);
         res = sum - sub;
         get_algebraic_complement(insert_row_i + 1, insert_col_i + 1, &res);
         result->matrix[insert_row_i][insert_col_i] = res;
@@ -38,34 +47,6 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
         }
         ++insert_col_i;
       }
-      // print_out_matrix(result->rows, result->columns, result->matrix);
-      s21_remove_matrix(&temp);
-      s21_remove_matrix(&resized_temp);
-    }
-    if (total_num_elem > 9) {
-      matrix_t temp;
-      s21_create_matrix(A->rows, A->columns, &temp);
-      matrix_t resized_temp;
-      s21_create_matrix(A->rows - 1, A->columns + 1, &resized_temp);
-      int curr_elem_row_i = 0, curr_elem_column_i = 0;
-      int sum = 0, sub = 0, res = 0;
-      int insert_row_i = 0, insert_col_i = 0;
-      for (int current_elem = 0; current_elem < total_num_elem; ++current_elem) {
-        remove_row_and_column(A, &temp, &curr_elem_row_i, &curr_elem_column_i);
-        temp_to_resized(&resized_temp, &temp);
-        add_extra_rows(&resized_temp);
-        sum = count_sum_sub_diagonal(&resized_temp, 0);
-        sub = count_sum_sub_diagonal(&resized_temp, resized_temp.rows - 1);
-        res = sum - sub;
-        get_algebraic_complement(insert_row_i + 1, insert_col_i + 1, &res);
-        result->matrix[insert_row_i][insert_col_i] = res;
-        if (insert_col_i == result->columns - 1) {
-          ++insert_row_i;
-          insert_col_i = -1;
-        }
-        ++insert_col_i;
-      }
-      // print_out_matrix(result->rows, result->columns, result->matrix);
       s21_remove_matrix(&temp);
       s21_remove_matrix(&resized_temp);
     }
@@ -140,5 +121,4 @@ void remove_row_and_column(matrix_t *A, matrix_t *temp, int* curr_elem_row_i, in
   } else {
     ++(*curr_elem_column_i);
   }
-
 }
