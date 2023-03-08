@@ -8,6 +8,7 @@ int s21_determinant(matrix_t *A, double *result) {
     return_code = CALCULATION_ERROR_ENUM;
   } else {
     if (A->rows == 1) {
+      return_code = SUCCESS_ENUM;
       *result = A->matrix[0][0];
     } else {
       return_code = SUCCESS_ENUM;
