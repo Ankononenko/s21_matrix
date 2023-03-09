@@ -1573,6 +1573,64 @@ START_TEST(test_s21_inverse_1) {
 }
 END_TEST
 
+START_TEST(test_s21_inverse_2) {
+    matrix_t A;
+    s21_create_matrix(1, 1, &A);
+    A.matrix[0][0] = 1.0;
+    matrix_t B;
+    s21_create_matrix(1, 1, &B);
+    B.matrix[0][0] = 1.0;
+    matrix_t D;
+    int return_code_result = s21_inverse_matrix(&A, &D);
+    ck_assert_int_eq(return_code_result, SUCCESS_ENUM);
+    int compare_result = s21_eq_matrix(&B, &D);
+    ck_assert_int_eq(compare_result, SUCCESS);
+    s21_remove_matrix(&A);
+}
+END_TEST
+
+START_TEST(test_s21_inverse_3) {
+    matrix_t A;
+    s21_create_matrix(0, 3, &A);
+    matrix_t D;
+    int return_code_result = s21_inverse_matrix(&A, &D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+    s21_remove_matrix(&A);
+}
+END_TEST
+
+START_TEST(test_s21_inverse_4) {
+    matrix_t A;
+    s21_create_matrix(2, 3, &A);
+    double first_example[2][3] = {
+      {2.0, 5.0, 7.0},
+      {6.0, 3.0, 4.0}
+    };
+    fill_in_the_matrix_array_any(A.rows, A.columns, A.matrix, first_example);
+    matrix_t D;
+    int return_code_result = s21_inverse_matrix(&A, &D);
+    ck_assert_int_eq(return_code_result, CALCULATION_ERROR_ENUM);
+    s21_remove_matrix(&A);
+}
+END_TEST
+
+START_TEST(test_s21_inverse_5) {
+    matrix_t A;
+    s21_create_matrix(4, 4, &A);
+    double first_example[4][4] = {
+      {1.0, 2.0, 3.0, 4.0},
+      {5.0, 6.0, 7.0, 8.0},
+      {9.0, 10.0, 11.0, 12.0},
+      {13.0, 14.0, 15.0, 16.0},
+    };
+    fill_in_the_matrix_array_any(A.rows, A.columns, A.matrix, first_example);
+    matrix_t D;
+    int return_code_result = s21_inverse_matrix(&A, &D);
+    ck_assert_int_eq(return_code_result, CALCULATION_ERROR_ENUM);
+    s21_remove_matrix(&A);
+}
+END_TEST
+
 int main(void) {
 
   // matrix_t first;
@@ -1705,11 +1763,6 @@ int main(void) {
 
   // printf("End of the test\n\n\n");
 
-
-
-
-
-
   /// Current example
   
   // printf("Current example\n");
@@ -1841,8 +1894,11 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_determinant_07);
 
   // Inverse
-
   tcase_add_test(tc1_1, test_s21_inverse_1);
+  tcase_add_test(tc1_1, test_s21_inverse_2);
+  tcase_add_test(tc1_1, test_s21_inverse_3);
+  tcase_add_test(tc1_1, test_s21_inverse_4);
+  tcase_add_test(tc1_1, test_s21_inverse_5);
 
   srunner_run_all(sr, CK_ENV);
   result = srunner_ntests_failed(sr);
