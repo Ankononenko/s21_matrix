@@ -11,6 +11,29 @@ void fill_in_the_matrix_array(int rows, int columns, double** array, double exam
 void generate_random_array();
 
 // Create matrix
+START_TEST(test_s21_create_matrix_0) {
+  int rows = 10;
+  int columns = 10;
+  matrix_t matrix = {0};
+  int code = s21_create_matrix(rows, columns, &matrix);
+
+  if (matrix.matrix) {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < columns; j++) {
+        ck_assert_double_eq_tol(matrix.matrix[i][j], 0, 1e-6);
+      }
+    }
+    ck_assert_int_eq(matrix.rows, rows);
+    ck_assert_int_eq(matrix.columns, columns);
+    ck_assert_int_eq(code, 0);
+  } else {
+    ck_assert_int_eq(code, 2);
+  }
+
+  if (code == 0) s21_remove_matrix(&matrix);
+}
+END_TEST
+
 START_TEST(test_s21_create_matrix_1) {
     matrix_t A;
     int result = s21_create_matrix(1, 1, &A);
@@ -1396,6 +1419,14 @@ END_TEST
 // }
 // END_TEST
 
+START_TEST(test_s21_calc_complements_7) {
+    matrix_t *A = NULL;
+    matrix_t *D = NULL;
+    int return_code_result = s21_calc_complements(A, D);
+    ck_assert_int_eq(return_code_result, ERROR_ENUM);
+}
+END_TEST
+
 // Determinant
 
 //     1 2 3
@@ -1809,6 +1840,7 @@ int main(void) {
   suite_add_tcase(s1, tc1_1);
 
   // Create_matrix
+  tcase_add_test(tc1_1, test_s21_create_matrix_0);
   tcase_add_test(tc1_1, test_s21_create_matrix_1);
   tcase_add_test(tc1_1, test_s21_create_matrix_2);
   tcase_add_test(tc1_1, test_s21_create_matrix_3);
@@ -1820,6 +1852,8 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_remove_matrix_1);
   tcase_add_test(tc1_1, test_s21_remove_matrix_2);
   tcase_add_test(tc1_1, test_s21_remove_matrix_3);
+
+
 
   // Compare matrix
   tcase_add_test(tc1_1, test_s21_eq_matrix_1);
@@ -1882,6 +1916,7 @@ int main(void) {
   tcase_add_test(tc1_1, test_s21_calc_complements_4);
   tcase_add_test(tc1_1, test_s21_calc_complements_5);
   // tcase_add_test(tc1_1, test_s21_calc_complements_6);
+  tcase_add_test(tc1_1, test_s21_calc_complements_7);
   
   // Determinant tests
   tcase_add_test(tc1_1, test_s21_determinant_00);
