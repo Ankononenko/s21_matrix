@@ -4,8 +4,8 @@ int is_invalid_matrix(matrix_t* matrix) {
   return (matrix == NULL || matrix->matrix == NULL || matrix->rows < 1 || matrix->columns < 1);
 }
 
-int cant_be_calculated_matrix(matrix_t* A, matrix_t* B, matrix_t* result) {
-  return (A->rows != B->rows || A->rows != result->rows || A->columns != B->columns || A->columns != result->columns);
+int cant_be_calculated_matrix(matrix_t* A, matrix_t* B) {
+  return (A->rows != B->rows || A->columns != B->columns);
 }
 
 void count(matrix_t* A, matrix_t* B, matrix_t* result, int* row_index, int* column_index, char operand) {

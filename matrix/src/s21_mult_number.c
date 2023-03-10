@@ -4,8 +4,6 @@ int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
   int return_code;
   if (is_invalid_matrix(A)) {
       return_code = ERROR_ENUM;
-  } else if (A->rows != result->rows || A->columns != result->columns) {
-      return_code = CALCULATION_ERROR_ENUM;
   } else {
     if (s21_create_matrix(A->rows, A->columns, result) == SUCCESS_ENUM) {
       int row_index = 0, column_index = 0;

@@ -4,7 +4,7 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   int return_code;
   if (is_invalid_matrix(A) || is_invalid_matrix(B)) {
       return_code = ERROR_ENUM;
-  } else if (A->columns != B->rows) {
+  } else if ((A->columns != B->rows) || (A->rows != B->columns)) {
       return_code = CALCULATION_ERROR_ENUM;
   } else {
       int result_rows = A->rows, result_columns = B->columns;

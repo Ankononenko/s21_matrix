@@ -33,7 +33,7 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result);
 
 // Helpers
 int is_invalid_matrix(matrix_t* matrix);
-int cant_be_calculated_matrix(matrix_t* A, matrix_t* B, matrix_t* result);
+int cant_be_calculated_matrix(matrix_t* A, matrix_t* B);
 void count(matrix_t* A, matrix_t* B, matrix_t* result, int* row_index, int* column_index, char operand);
 void get_algebraic_complement(int row, int col, double* res);
 void get_cofactor(double** matrix, double** temp, int skip_row, int skip_column, int size);

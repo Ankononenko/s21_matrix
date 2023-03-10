@@ -41,5 +41,5 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
 }
 
 void get_algebraic_complement(int row, int col, double* res) {
-  *res *= pow(-1.0, row + col);
+  *res *= pow(-1.0, row + col + 2);
 }
