@@ -10,10 +10,12 @@ RUN apk update && \
     dos2unix \
     gcovr \
     musl-dev \
-    llvm-dev
+    llvm-dev \
+    bash \
+    && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing lcov
 
 COPY . project/
 
 WORKDIR /project/
 
-RUN make
+RUN make gcov_report
