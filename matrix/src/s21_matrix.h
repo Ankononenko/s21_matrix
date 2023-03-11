@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 #define UNUSED_SHIT(fucking_unused_shit) do { (void)(fucking_unused_shit); } while (0)
 
@@ -39,7 +40,9 @@ void get_algebraic_complement(int row, int col, double* res);
 void get_cofactor(double** matrix, double** temp, int skip_row, int skip_column, int size);
 double get_determinant(double** matrix, int size);
 
-// TODO: Used for testing. Remove later!!!
+// For testing
 void print_out_matrix(int rows, int columns, double** result);
+void fill_in_the_matrix_array_any(int rows, int columns, double** array, double (*example_array)[columns]);
+void generate_random_array();
 
 #endif // S21_MATRIX_H
