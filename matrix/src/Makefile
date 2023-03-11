@@ -1,5 +1,6 @@
 CC = gcc
-FLAGS = -Wall -Werror -Wextra
+FLAG = -Wall -Werror -Wextra -g
+FLAGS = -g -Wall -Wextra
 LIBS = -lcheck
 ALL_FILES = s21_helpers.c s21_create_matrix.c s21_remove_matrix.c s21_eq_matrix.c s21_sum_matrix.c s21_sub_matrix.c s21_mult_number.c s21_mult_matrix.c s21_transpose.c s21_calc_complements.c s21_determinant.c s21_inverse_matrix.c
 
@@ -10,7 +11,7 @@ s21_matrix.a:
 	ar rcs s21_matrix.a *.o
 
 test: s21_matrix.a
-	$(CC) test.c s21_matrix.a $(FLAGS) -o test.a $(LIBS)
+	$(CC) test.c s21_matrix.a $(FLAG) -o test.a $(LIBS)
 	./test.a
 
 gcov_report:
@@ -19,6 +20,13 @@ gcov_report:
 	lcov -t s21_matrix_tests -o s21_matrix_tests.info -c -d .
 	genhtml -o report s21_matrix_tests.info
 
+cppcheck:
+	cppcheck --enable=all --suppress=missingIncludeSystem .
+
+style:
+	clang-format -i *.c --style=Google
+	clang-format -i *.h --style=Google
+
 clean:
 	rm -f *.a
 	rm -f *.o
@@ -26,4 +34,3 @@ clean:
 	rm -f *.gcdo
 	rm -f *.gcno
 	rm -f *.info
-	

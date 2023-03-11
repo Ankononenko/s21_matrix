@@ -11,6 +11,7 @@ RUN apk update && \
     gcovr \
     musl-dev \
     llvm-dev \
+    cppcheck \
     bash \
     && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing lcov
 
@@ -18,4 +19,4 @@ COPY . project/
 
 WORKDIR /project/
 
-RUN make gcov_report
+RUN make test
