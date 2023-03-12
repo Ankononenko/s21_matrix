@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ $bg1_is_default = 2 ]
+then
+	echo "Column 1 background = $column1_background ($bg1_text)"
+else
+	echo "Column 1 background = default ($bg1_text)"
+fi
+
+
+if [ $f1_is_default = 2 ]
+then
+	echo "Column 1 font color = $column1_font_color ($f1_text)"
+else
+	echo "Column 1 font color = default ($f1_text)"
+fi
+
+if [ $bg2_is_default = 2 ]
+then
+	echo "Column 2 background = $column2_background ($bg2_text)"
+else
+	echo "Column 2 background = default ($bg2_text)"
+fi
+if [ $f2_is_default = 2 ]
+then
+	echo "Column 2 font color = $column2_font_color ($f2_text)"
+else
+	echo "Column 2 font color = default ($f2_text)"
+fi
