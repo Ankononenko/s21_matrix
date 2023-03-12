@@ -1,8 +1,7 @@
 #include "s21_matrix.h"
 
 int is_invalid_matrix(matrix_t* matrix) {
-  return (matrix == NULL || matrix->matrix == NULL || matrix->rows < 1 ||
-          matrix->columns < 1);
+  return (matrix == NULL || matrix->matrix == NULL || matrix->rows < 1 || matrix->columns < 1);
 }
 
 int cant_be_calculated_matrix(matrix_t* A, matrix_t* B) {
@@ -14,14 +13,10 @@ void count(matrix_t* A, matrix_t* B, matrix_t* result, int* row_index,
   while (*row_index < A->rows) {
     while (*column_index < A->columns) {
       if (operand == '+') {
-        result->matrix[*row_index][*column_index] =
-            A->matrix[*row_index][*column_index] +
-            B->matrix[*row_index][*column_index];
+        result->matrix[*row_index][*column_index] = A->matrix[*row_index][*column_index] + B->matrix[*row_index][*column_index];
       }
       if (operand == '-') {
-        result->matrix[*row_index][*column_index] =
-            A->matrix[*row_index][*column_index] -
-            B->matrix[*row_index][*column_index];
+        result->matrix[*row_index][*column_index] = A->matrix[*row_index][*column_index] - B->matrix[*row_index][*column_index];
       }
       ++(*column_index);
     }
@@ -46,8 +41,7 @@ double get_determinant(double** matrix, int size) {
       int sign = 1;
       for (int col_index = 0; col_index < size; ++col_index) {
         get_cofactor(matrix, temp.matrix, 0, col_index, size);
-        result += sign * matrix[0][col_index] *
-                  get_determinant(temp.matrix, size - 1);
+        result += sign * matrix[0][col_index] * get_determinant(temp.matrix, size - 1);
         sign *= -1;
       }
       s21_remove_matrix(&temp);
@@ -56,8 +50,7 @@ double get_determinant(double** matrix, int size) {
   return result;
 }
 
-void get_cofactor(double** matrix, double** temp, int skip_row, int skip_column,
-                  int size) {
+void get_cofactor(double** matrix, double** temp, int skip_row, int skip_column, int size) {
   for (int temp_row_i = 0, read_row_i = 0; read_row_i < size; ++read_row_i) {
     if (read_row_i == skip_row) {
       continue;
@@ -116,8 +109,7 @@ void get_cofactor(double** matrix, double** temp, int skip_row, int skip_column,
 //   }
 // }
 
-void fill_in_the_matrix_array_any(int rows, int columns, double** array,
-                                  double (*example_array)[columns]) {
+void fill_in_the_matrix_array_any(int rows, int columns, double** array, double (*example_array)[columns]) {
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < columns; j++) {
       array[i][j] = (*example_array)[i * columns + j];

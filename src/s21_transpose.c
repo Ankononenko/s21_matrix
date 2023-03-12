@@ -9,10 +9,8 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
     s21_create_matrix(result_rows, result_columns, result);
     int read_row_i = 0, read_column_i = 0;
     for (int row_index = 0; row_index < result_rows; ++row_index) {
-      for (int column_index = 0; column_index < result_columns;
-           ++column_index) {
-        result->matrix[row_index][column_index] =
-            A->matrix[read_column_i][read_row_i];
+      for (int column_index = 0; column_index < result_columns; ++column_index) {
+        result->matrix[row_index][column_index] = A->matrix[read_column_i][read_row_i];
         ++read_column_i;
       }
       ++read_row_i;
